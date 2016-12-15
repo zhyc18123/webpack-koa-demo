@@ -1,0 +1,29 @@
+#!/bin/sh
+
+ip='192.168.1.253'
+
+case "$1" in
+    "debug")
+        debug=*
+        if [ 'n'$2 != 'n' ]; then
+            debug=$2
+        fi
+        echo 'dev 开发环境启动服务 debug='$debug
+        DEBUG=$debug supervisor --harmony --debug-brk server.js;;
+    'chrome')
+        echo "chrome 调试模式"
+        node-inspector --web-host $ip --web-port 8080 & ;;
+    'test')
+        echo 'test 开发环境启动服务'
+        debug=*
+        if [ 'n'$2 != 'n' ]; then
+            debug=$2
+            DEBUG=$debug supervisor -w .. --harmony server.js 
+        else
+            supervisor -w config,controllers,filter,middlewares,public,router,utils,views,package.json,app.js,server.js -e node,js,json -i src/res,src/res2 --harmony server 
+        fi
+        ;;
+    *)
+        echo '启动服务..'
+        node --harmony server.js release;;
+esac

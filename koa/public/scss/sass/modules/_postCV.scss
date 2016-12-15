@@ -1,0 +1,193 @@
+.post-cv-bg{
+  position: fixed;
+  width: 900px;
+  height: 536px;
+  background: #646464;
+  z-index: 9999;
+  left: 50%;
+  margin-left: -450px;
+  top: 50%;
+  margin-top: -265px;
+}
+.post-cv{
+  width: 876px;
+  height: 512px;
+  background: #f9f9f9;
+  color: black;
+  margin: 12px;
+  text-align: center;
+  .post-cancel-i{
+    position: absolute;
+    top: 22px;
+    right: 22px;
+    @extend %inline-block;
+    @include cvlist-sprite(modalcanceldefault);
+  }
+  .post-cancel-i-active{
+    @extend %inline-block;
+    @include cvlist-sprite(modalcancelactive);
+  }
+  h1{
+    font-size: 32px;
+    font-weight: normal;
+    display: inline-block;
+    margin-top: 80px;
+    color: $font-midcol;
+  }
+  .post-tip2{
+    font-size: 14px;
+    margin-top: 20px;
+  }
+  .upload{
+    width: 260px;
+    height: 118px;
+    margin-top: 30px;
+    display: inline-block;
+    border: 1px dotted $font-midcol;
+    label{
+      margin: 0;
+      margin-top: 20px;
+      color: #fff;
+      background: #00b0ef;
+      font-size: 14px;
+      width: 120px;
+      height: 40px;
+      line-height: 40px;
+      border-radius: 3px;
+    }
+    label:hover{
+      background: $act-hover-col;
+    }
+    form{
+      display: inline-block !important;
+    }
+    .or{
+      display: none !important;
+    }
+    .upload-span1, .upload-span2 {
+      display: inline-block;
+      line-height: 16px;
+      top: 0;
+      margin: 0;
+    }
+    .upload-span1{
+      margin-top: 13px;
+    }
+    span{
+      color: $font-midcol;
+    }
+  }
+  .deal{
+    color: #003df6;
+  }
+  .default{
+    color: $font-midcol;
+  }
+  .agree{
+    margin-top: 18px;
+    font-size: 12px;
+  }
+  .experence-check{
+    margin-top: 76px;
+    font-size: 14px;
+    a{
+      color: $font-midcol;
+      border-bottom: 1px solid $font-midcol;
+    }
+    a:hover{
+      color: #00a0e9;
+      border-bottom: 1px solid #00a0e9;
+    }
+  }
+}
+
+  .upload-cv{
+    .uploadBtn{
+      @extend %inline-block;
+      position: relative;
+      width: 235px;
+      height: 64px;
+      background: #15b9f9;
+      color: $whi-col;
+      font-size: 20px;
+      overflow: hidden;
+      input{
+        width: 240px;
+        height:90px;
+        position: relative;
+        top: -25px;
+      }
+      span{
+        position: absolute;
+        top: 17px;
+        font-size: 22px;
+        left: 0;
+      }
+    }
+    .submit{
+      @include full-transparent;
+    }
+  }
+
+.write-index {
+  .upload-cv{
+    //margin-top: 60px;
+    margin-top: 337px;
+    border-radius: 3px;
+    width: 100%;
+    min-width: 1100px;
+    .uploadBtn{
+      span{
+        width: 100%;
+      }
+    }
+    .uploadBtn{
+      border-radius: 3px;
+      span{
+        z-index: 2;
+      }
+      input{
+        z-index: 99;
+        cursor: pointer;
+        font-size: 10000px; /* This is the main part. */
+        @include full-transparent;
+      }
+    }
+  }
+  .uploadbtn-bg{
+    position: absolute;
+    display: block;
+    width: 117.5px;
+    height: 64px;
+    left: 50%;
+    background: #05B0F1;
+    bottom: 92px;
+    border-bottom-right-radius: 3px;
+    border-top-right-radius: 3px;
+  }
+}
+.uploadBottom{
+  .upload-cv {
+    margin-top: 46px;
+    .uploadBtn{
+      width: 150px;
+      height: 50px;
+      span{
+        top: 13px;
+        font-size: 18px;
+        width: 100%;
+        z-index: 2;
+      }
+      input{
+        z-index: 3;
+        cursor: pointer;
+        font-size: 10000px; /* This is the main part. */
+        @include full-transparent;
+      }
+    }
+    .uploadBtn:hover{
+      cursor: pointer;
+      background: $act-hover-col;
+    }
+  }
+}

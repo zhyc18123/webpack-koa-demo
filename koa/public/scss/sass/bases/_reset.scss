@@ -1,0 +1,77 @@
+@charset "utf-8";
+html, body {
+        height: 100%;
+}
+body{
+        font-family: "Microsoft YaHei", Helvetica, "Nimbus Sans L", Arial, "Liberation Sans", "Hiragino Sans GB", "Source Han Sans CN Normal", "Microsoft YaHei", "Wenquanyi Micro Hei", "WenQuanYi Zen Hei", "ST Heiti", SimHei, "WenQuanYi Zen Hei Sharp", sans-serif;
+        font-size: 12px;
+        background-color: whitespace;
+        color: $main-col;
+}
+body,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,textarea,p,blockquote,th,td,hr,button,article,aside,details,figcaption,figure,footer,header,menu,nav,section{
+        margin: 0;padding: 0;
+}
+ul,ol{
+        list-style: none;
+}
+table{
+        border-collapse: collapse;
+        border-spacing: 0;
+}
+th{
+        text-align:inherit;
+}
+iframe{
+        display:block;
+}
+input,img,fieldset,textarea{
+        border: none;
+}
+img{
+        max-width: 100%;
+        height: auto;
+        vertical-align: top;
+}
+strong,b{
+        font-weight: bold;
+}
+caption,em,i,th{
+        font-style: normal;
+        font-weight: 400;
+}
+button,input,select,textarea,h1,h2,h3,h4,h5,h6{
+        font-size: 100%;
+}
+input,textarea{
+        font-size: 14px;
+        font-family: "Microsoft YaHei";
+}
+select,input{
+        vertical-align:middle;
+}
+input{
+        background: transparent;
+}
+select,a,input[type="text"],input[type="password"],input[type=submit],button,input[type=button],textarea{
+        outline-style:none;
+        -webkit-appearance:none;
+        border-radius: 0;
+}
+audio,canvas,video{
+        display: inline-block;
+}
+del{
+        text-decoration: line-through;
+}
+hr{
+        border: none;
+        border-bottom: 1px solid #cfcfcf;
+        margin-bottom: 8px;height: 10px;
+}
+a,a:hover{
+        text-decoration: none;
+}
+a:focus{
+        outline:none;
+}
+

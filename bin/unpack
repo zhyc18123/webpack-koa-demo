@@ -1,0 +1,13 @@
+#!/bin/bash
+
+TODAY=`date +"%Y_%m_%d"`
+mv lopan backup/lopan_$TODAY
+tar zxvf /tmp/lopan.tar.gz
+rm /tmp/lopan.tar.gz
+cp backup/lopan_$TODAY/koa/node_modules lopan/koa/ -a
+cp backup/lopan_$TODAY/search-engine/004_search/vendor lopan/search-engine/004_search/ -a
+rm lopan/search-engine/vect
+ln -s /v01/jd_search lopan/search-engine/vect
+cd lopan/search-engine/004_search
+rm db_config.php
+ln -s ../config/db_config_prepare.php db_config.php

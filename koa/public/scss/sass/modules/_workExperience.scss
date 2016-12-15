@@ -1,0 +1,161 @@
+.work-experience-bg{
+  position: fixed;
+  width: 900px;
+  height: 534px;
+  background: #646464;
+  z-index: 9999;
+  left: 50%;
+  margin-left: -450px;
+  top: 50%;
+  margin-top: -267px;
+}
+.work-experience{
+  width: 876px;
+  height: 510px;
+  background: #f9f9f9;
+  color: black;
+  margin: 12px;
+  text-align: center;
+  .work-ex-cancel-i{
+    position: absolute;
+    top: 22px;
+    right: 22px;
+    @extend %inline-block;
+    @include cvlist-sprite(modalcanceldefault);
+    cursor: pointer;
+  }
+  .work-ex-cancel-i-active{
+    @extend %inline-block;
+    @include cvlist-sprite(modalcancelactive);
+  }
+  .work-ex-tip{
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    margin-top: 84px;
+    font-size: 26px;
+    font-weight: normal;
+    color: $font-midcol;
+  }
+  .work-ex-pos{
+    position: relative;
+    display: inline-block;
+    width: 300px;
+    margin-top: 33px;
+    margin-right: 22px;
+    font-size: 14px;
+    color: $font-midcol;
+    text-align: left;
+    p{
+      color: $black;
+      span{
+        color: red;
+      }
+    }
+    input{
+      display: inline-block;
+      width: 100%;
+      border: 1px solid $font-ligcol;
+      height: 34px;
+      line-height: 34px;
+      padding-left: 5px;
+      margin-top: 5px;
+      color: $font-heicol;
+      font-size: 14px;
+    }
+
+  }
+  .work-ex-inc{
+    @extend .work-ex-pos;
+    margin-right: 0;
+    margin-left: 22px;
+    color: $font-midcol;
+    p{
+      color: $black;
+    }
+    input{
+      display: inline-block;
+      width: 100%;
+      border: 1px solid $font-ligcol;
+      height: 34px;
+      line-height: 34px;
+      padding-left: 5px;
+      margin-top: 5px;
+      color: $font-heicol;
+      font-size: 14px;
+    }
+  }
+  .work-ex-duty{
+    position: relative;
+    width: 650px;
+    margin:32px auto 0 auto;
+    ul{
+      display: inline-block;
+      width: 100%;
+      position: relative;
+      margin: 0 auto;
+      text-align: left;
+      font-size: 14px;
+    }
+    .duty-l{
+      display: inline-block;
+      width: 48%;
+      height: 20px;
+      line-height: 20px;
+      position: relative;
+      margin: 0 auto;
+      text-align: left;
+      span{
+        color: red;
+      }
+    }
+    .duty-r{
+      position: absolute;
+      width: 50%;
+      height: 20px;
+      line-height: 20px;
+      display: inline-block;
+      right: -26px;
+      text-align: right;
+    }
+  }
+  .textinputwrap{
+    width: 100%;
+    position: relative;
+    margin-top: 5px;
+    textarea{
+      display: inline-block;
+      width: 100%;
+      height: 72px;
+      border: 1px solid $font-ligcol;
+      padding: 6px 0 0 5px;
+      background: #f9f9f9;
+      color: $font-heicol;
+    }
+  }
+  .work-ex-ok-btn{
+    display: inline-block;
+    width: 122px;
+    height: 42px;
+    background: #00b0ef;
+    margin-top: 46px;
+    border-radius: 4px;
+    color: $whi-col;
+  }
+  .work-ex-ok-btn:hover{
+    cursor: pointer;
+    background: $act-hover-col;
+  }
+  .work-ex-cancel-btn{
+    display: inline-block;
+    vertical-align: bottom;
+    position: relative;
+    left: 30px;
+    bottom: 10px;
+    color: #666666;
+  }
+  .work-ex-cancel-btn:hover{
+    cursor: pointer;
+    color: #555555;
+  }
+}

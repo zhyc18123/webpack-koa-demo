@@ -1,0 +1,155 @@
+.header {
+  @include full-width;
+  // min-width: 1100px;
+  background: $whi-col;
+  a{
+    color: $font-midcol;
+    text-decoration: none;
+  }
+}
+.header-con {
+  position: relative;
+  //width: percentage(1100/1300);
+  max-width: 1170px;
+  height: 78px;
+  margin: 0 auto;
+}
+.header-l {
+  position: relative;
+  height: 78px;
+  display: inline-block;
+  text-align: left;
+  .logo {
+    position: absolute;
+    display: inline-block;
+    height: 78px;
+    line-height: 78px;
+    a{
+      display: inline-block;
+    }
+    i{
+      display: inline-block;
+      width: 110px;
+      height: 42px;
+      background: url(../images/logo.png) no-repeat center top;
+      margin-top: 19px;
+    }
+  }
+}
+
+.navigation-l {
+  position: relative;
+  height: 100%;
+  margin-left: 250px;
+  display: inline-block;
+  vertical-align: top;
+  @include font-size(1.6);
+  color: $font-midcol;
+  .job-want,.plugin,.status{
+    display: inline-block;
+    height: 78px;
+    line-height: 78px;
+    margin: 0 27px;
+    a{
+      display: inline-block;
+      height: 100%;
+    }
+    a:hover{
+      text-decoration: none;
+      color: #666666;
+    }
+  }
+  .plugin{
+    text-align: center;
+  }
+  .status{
+    text-align: right;
+  }
+}
+
+.header-r {
+  position: relative;
+  height: 78px;
+  display: inline-block;
+  float: right;
+  text-align: right;
+}
+
+.navigation-r {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: inline-block;
+  @include font-size(1.2);
+  color: $font-midcol;
+  .my-cv,.reg,.log-in{
+    display: inline-block;
+    height: 78px;
+    line-height: 78px;
+    text-align: center;
+    border-left: 1px solid #f0f0f0;
+    padding: 0 17px;
+  }
+  .my-cv{
+    width: 84px;
+  }
+  .reg{
+    width: 60px;
+  }
+  .log-in{
+    width: 60px;
+    border-right: 1px solid #f0f0f0;
+  }
+}
+
+#header-r-logout, #header-r-login{
+  line-height: 78px;
+  position: relative;
+  @extend %pull-right;
+  .logOutPop {
+    line-height: 24px !important;
+    margin-top: 15px;
+    margin-left: 25px;
+    z-index: 10;
+  }
+  li {
+    float: left;
+    border-left: 1px solid $bor-col;
+    border-right: 1px solid $bor-col;
+    @extend %inline-block;
+    padding: 0 25px;
+    text-align: center;
+    a {
+      color: $font-midcol;
+      @extend %inline-block;
+      height: 100%;
+      &:hover {
+        text-decoration: none;
+        color: $font-heicol;
+      }
+    }
+    .usernameBtn{
+      float: left;
+      @include font-size(1.4);
+    }
+    .user-img-a{
+      overflow: hidden;
+      zoom: 1;
+      width: 40px;
+      height: auto;
+      display: inline-block;
+      margin-left: 10px;
+    }
+    .user-img{
+      display: inline-block;
+      width: 40px;
+      height: 40px;
+      vertical-align: middle;
+      line-height: 0;
+      margin-top: -10px;
+    }
+  }
+  .regLi {
+    border-left: none;
+  }
+}

@@ -1,0 +1,5 @@
+#!/bin/bash
+cd ~
+tar czvf /tmp/lopan.tar.gz ~/lopan/bin/docker.sh lopan/koa/config lopan/search-engine/Applications/Search/Config
+scp /tmp/lopan.tar.gz luyi@webtest:/tmp/
+rm /tmp/lopan.tar.gz

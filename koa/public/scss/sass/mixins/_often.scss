@@ -1,0 +1,228 @@
+@charset "utf-8";
+// ................................................................................................often sassMixin................................................
+@mixin size($width, $height:$width){
+        width: $width;
+        height: $height;
+}
+//@extend %ellipsis;
+@mixin ellipsis{
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        // display: block;
+}
+%ellipsis{
+        @include ellipsis;
+}
+//@include float;
+@mixin float($direction: left,$support-for-ie:false){
+        float: $direction;
+        @if $support-for-ie{
+                _display: inline;
+        }
+}
+@mixin pull-left{
+        @include float(left);
+}
+%pull-left{
+        @include float(left);
+}
+@mixin pull-right{
+        @include float(right);
+}
+%pull-right{
+        @include float(right);
+}
+//@include inline-block;
+@mixin inline-block($alignment: middle,$support-for-ie:true) {
+        display: inline-block;
+        @if $alignment and $alignment != none {
+                vertical-align: $alignment;
+        }
+        @if $support-for-ie {
+                *vertical-align: auto;
+                *display: inline;
+                zoom: 1;
+        }
+}
+%inline-block{
+        @include inline-block;
+}
+//@include position(absolute,top 10px right 20px bottom 20px left 20px);  suitable no width/no height
+@mixin position($position,$args){
+        @each $o in top right bottom left {
+                $i: index($args, $o);
+                        @if $i and $i + 1 <= length($args) and type-of(nth($args, $i + 1)) == number {
+                        #{$o}: nth($args, $i + 1);
+                }
+        }
+        position: $position;
+}
+// @extend %clearfix;
+$legacy-support-for-ie: true !default;
+@mixin clearfix {
+        @if $legacy-support-for-ie {
+                *zoom: 1;
+        }
+        &:before,
+        &:after {
+                content: "";
+                display: table;
+        }
+        &:after {
+                clear: both;
+                overflow: hidden;
+        }
+}
+%clearfix {
+        @include clearfix;
+}
+@mixin min-height($height){
+        min-height: $height;
+        height: auto !important;
+        @if $legacy-support-for-ie {
+                _height: $height;
+        }
+}
+@mixin h-center{
+        margin-left: auto;
+        margin-right: auto;
+}
+%h-center{
+        @include h-center;
+}
+// ............................................................................often class...........................................................................
+.textwrap,.textwrap td,.textwrap th{
+        word-wrap: break-word;
+        word-break: break-all;
+}
+.textwrap-table{
+        table-layout: fixed;
+}
+.hide{
+        display: none!important;
+}
+.show{
+        display: block!important;
+}
+.no-visible{
+        visibility: hidden!important;
+}
+.overy-auto{
+        overflow: auto!important;
+}
+.hei-auto{
+        height: auto!important;
+}
+.fl{
+        float: left;
+}
+.fr{
+        float: right;
+}
+.txt-cen{
+        text-align: center;
+}
+.txt-rig{
+        text-align: right;
+}
+.v-middle{
+        vertical-align: middle;
+}
+.yel{
+        color: $yellow;
+}
+.blu{
+        color: $ligh-col;
+}
+.main-col{
+        color: $main-col;
+}
+.gray{
+        color: $gray-col
+}
+.gray-low{
+        color: $tip-col!important;
+        cursor:default;
+}
+.wid-l{
+        width: $l-wid;
+}
+.mar-l8{
+        margin-left: 5px;
+}
+.mar-r8{
+        margin-right: 8px;
+}
+.mar-t0{
+        margin-top: 0!important;
+}
+.mar-t5{
+        margin-top: 5px;
+}
+.mar-r50{
+        margin-right: 50px!important;
+}
+.padd-20{
+        padding: 20px;
+}
+.font-24{
+        font-size: $font-24;
+}
+.font-14{
+        font-size: $font-14;
+}
+// ....................................解决ie7问题所需样式......................
+.z-index67{
+        z-index: 66;
+}
+.z-index66{
+        z-index: 66;
+}
+.z-index65{
+        z-index: 65;
+}
+.z-index64{
+        z-index: 64;
+}
+.z-index63{
+        z-index: 63;
+}
+.z-index62{
+        z-index: 62;
+}
+.z-index61{
+        z-index: 61;
+}
+.z-index60{
+        z-index: 60;
+}
+// .................................................................................often style...................................................................
+@mixin shadow1{
+        box-shadow: 0 1px 4px 0 rgba(0,0,0,.15);
+}
+%shadow1{
+        @include shadow1;
+}
+@mixin shadow2{
+        box-shadow: 0 1px 3px 0 rgba(0,0,0,.05);
+}
+%shadow2{
+        @include shadow2;
+}
+@mixin shadow3{
+        box-shadow: 0 6px 20px 0 rgba(0,0,0,.2);
+}
+%shadow3{
+        @include shadow3;
+}
+%border-radius4{
+        @include border-radius(4px);
+}
+%border-radius2{
+        @include border-radius(2px);
+}
+%border-half{
+        @include border-radius(50%);
+}
+

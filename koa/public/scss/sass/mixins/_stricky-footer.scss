@@ -1,0 +1,16 @@
+@mixin sticky-footer($footer-height, $main-selector: unquote("#main"), $main-footer-selector: unquote("#main_footer"), $footer-selector: unquote("#footer")) {
+        #{$main-selector} {
+                clear: both;
+                min-height: 100%;
+                height: auto !important;
+                // height: 100%;
+                #{$main-footer-selector} {
+                        height: $footer-height;
+                }
+        }
+        #{$footer-selector} {
+                clear: both;
+                position: relative;
+                height: $footer-height;
+        }
+}

@@ -1,0 +1,54 @@
+.footer{
+	@include define-div(100%, 180px, #f4f4f4, none);
+	// min-width: 1100px;
+	.foot-cont{
+		// @include define-div(1100px, auto, auto, none);
+		//width: percentage(1100/1300);
+		max-width: 1170px;
+		margin: 0 auto;
+	}
+}
+.footer-l{
+	position: relative;
+	display: inline-block;
+	margin-top: 56px;
+}
+.footer-r{
+	@extend .footer-l;
+	margin-top: 40px;
+	text-align: center;
+	vertical-align: top;
+	float: right;
+	p{
+		text-align: center;
+		color: $font-midcol;
+	}
+	i{
+		@extend %inline-block;
+		@include cvlist-sprite(erweima);
+	}
+}
+
+.list-link{
+	width: 100%;
+	li{
+		position: relative;
+		width: (475/5 *1px);
+		display: inline-block;
+		text-align: left;
+		color: $black;
+		@include font-size(1.4);
+	}
+	a{
+		color: $black;
+	}
+}
+.copyright{
+	width: 100%;
+	margin-top: 26px;
+	@include font-size(1.2);
+	color: $font-midcol;
+	.warn{
+		margin-top: 8px;
+	}
+}

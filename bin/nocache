@@ -1,0 +1,14 @@
+#!/bin/bash
+host=$1
+cmd=$2
+
+if [ $cmd == "list" ]
+then
+	sudo grep -lr "KEY: httpGET$host/*" /tmp/nginx/
+elif [ $cmd == "delete" ]
+then
+	sudo grep -lr "KEY: httpGET$host/*" /tmp/nginx/ | sudo xargs rm -rf
+else
+	echo "Usage: nocache host [list|delete]."
+fi
+

@@ -1,0 +1,82 @@
+.query-cv-bg{
+  position: fixed;
+  width: 638px;
+  height: 414px;
+  background: #646464;
+  z-index: 9999;
+  left: 50%;
+  margin-left: -319px;
+  top: 50%;
+  margin-top: -212px;
+}
+.query-cv{
+  width: 614px;
+  height: 390px;
+  background: #f9f9f9;
+  color: black;
+  margin: 12px;
+  text-align: center;
+  .queryCV-cancel-i{
+    position: absolute;
+    top: 22px;
+    right: 22px;
+    @extend %inline-block;
+    @include cvlist-sprite(modalcanceldefault);
+  }
+  .queryCV-cancel-i-active{
+    @extend %inline-block;
+    @include cvlist-sprite(modalcancelactive);
+  }
+  .img-word{
+    padding-top: 56px;
+    i{
+      @extend %inline-block;
+      @include cvlist-sprite(keywordout);
+    }
+  }
+  .query-tip1{
+    position: relative;
+    display: inline-block;
+    margin-left: 14px;
+    vertical-align: bottom;
+    font-size: 24px;
+    font-weight: normal;
+    color: $font-midcol;
+  }
+  .query-tip2{
+    margin-top: 15px;
+    font-size: 24px;
+    color: gray;
+  }
+  .query-sure{
+    margin-top: 68px;
+    font-size: 14px;
+    color: #527585;
+  }
+  input{
+    display: inline-block;
+    font-size: 16px;
+    color: white;
+    background: #00a0e9;
+    width: 130px;
+    height: 40px;
+    border-radius: 4px;
+    margin-top: 18px;
+  }
+  input:hover{
+    cursor: pointer;
+    background: $act-hover-col;
+  }
+  .queryCancel{
+    margin-top: 26px;
+    font-size: 14px;
+    a{
+      font-size: 14px;
+      color: $font-midcol;
+      border-bottom: 1px solid;
+    }
+    a:hover{
+      color: #00a0e9;
+    }
+  }
+}

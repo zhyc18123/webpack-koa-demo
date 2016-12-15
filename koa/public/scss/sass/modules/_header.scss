@@ -1,0 +1,25 @@
+.header{
+	height: 80px;
+	background-color: #fff;
+	@extend %shadow1;
+	font-size: $font-14;
+	border-bottom: 1px solid $bor-col;
+	.header-con{
+		width: $p-wid;
+		@extend %h-center;
+	}
+	.logo{
+		@extend %pull-left;
+		margin-top: 23px;
+		@extend %inline-block;
+		@include cvlist-sprite(logo);
+		height: 37px;
+		width: 160px;
+	}
+}
+#main{
+    text-align: center;
+    min-width: 1150px;
+    overflow: hidden;
+}
+
