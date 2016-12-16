@@ -1,6 +1,12 @@
 import $ from './utils/jquery.min';
 
 $(function(){
-    console.log($(document));
-    console.log("xxx");
-});
+	var init=function(){
+		var xinSwiper = new Swiper ('.xin-con', {
+			noSwiping:true
+
+		});
+		console.log(xinSwiper)
+	};
+	init();
+})

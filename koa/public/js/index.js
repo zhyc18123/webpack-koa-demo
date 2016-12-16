@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 7);
+/******/ 	return __webpack_require__(__webpack_require__.s = 3);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -2467,7 +2467,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     });
   }), m.fn.size = function () {
     return this.length;
-  }, m.fn.andSelf = m.fn.addBack, "function" == "function" && __webpack_require__(5) && !(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = function () {
+  }, m.fn.andSelf = m.fn.addBack, "function" == "function" && __webpack_require__(1) && !(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = function () {
     return m;
   }.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));var ec = a.jQuery,
       fc = a.$;return m.noConflict = function (b) {
@@ -2475,14 +2475,10 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
   }, (typeof b === "undefined" ? "undefined" : _typeof(b)) === K && (a.jQuery = a.$ = m), m;
 });
 //# sourceMappingURL=jquery.min.map
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)(module)))
 
 /***/ },
-/* 1 */,
-/* 2 */,
-/* 3 */,
-/* 4 */,
-/* 5 */
+/* 1 */
 /***/ function(module, exports) {
 
 /* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {module.exports = __webpack_amd_options__;
@@ -2490,7 +2486,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 /* WEBPACK VAR INJECTION */}.call(exports, {}))
 
 /***/ },
-/* 6 */
+/* 2 */
 /***/ function(module, exports) {
 
 module.exports = function(module) {
@@ -2516,11 +2512,11 @@ module.exports = function(module) {
 
 
 /***/ },
-/* 7 */
+/* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
-"use strict";
+'use strict';
 
 var _jquery = __webpack_require__(0);
 
@@ -2529,8 +2525,14 @@ var _jquery2 = _interopRequireDefault(_jquery);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 (0, _jquery2.default)(function () {
-    console.log((0, _jquery2.default)(document));
-    console.log("xxx");
+	var init = function init() {
+		var xinSwiper = new Swiper('.xin-con', {
+			noSwiping: true
+
+		});
+		console.log(xinSwiper);
+	};
+	init();
 });
 
 /***/ }
