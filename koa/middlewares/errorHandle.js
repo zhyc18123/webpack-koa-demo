@@ -50,11 +50,8 @@ function* pageNotFound(next) {
     var body = "<p>404 页面未找到！</p>";
 
     if (true) {
-        yield robot.myRender("/404", {
-            userName: this.response.userName,
-            isLogin: this.response.isLogin,
-            isWeiChatScanedAndHaveAccount: this.response.weichatScanedAndHaveAccount
-        }, this, config.society);
+        yield this.render("/404", {
+        });
     } else {
         switch (this.accepts('html', 'json')) {
             case 'html':
