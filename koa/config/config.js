@@ -34,7 +34,7 @@ var getHostIpAddress = function() {
 var config = {
     "name": "新东方",
     hosts: getHostIpAddress() || "0.0.0.0",
-    port: 4300, // 端口
+    port: 3005, // 端口
     numCPUs: numCPUs,
     debug: debug,
     "cookieKey": "sf8dsfasd8sd7fsda8a123bbrc23ch41", //cookie 签名
