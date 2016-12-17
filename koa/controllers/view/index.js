@@ -4,7 +4,11 @@ module.exports = function*() {
 		scripts:["/js/index.js"]
 	};
 	console.log("........................",robot.utils.mixin(config.res, data))
-	yield this.render("/index",robot.utils.mixin(config.res, data));
+	try{
+		yield this.render("/index",robot.utils.mixin(config.res, data));
+	}catch(err){
+		console.log(err)
+	}
 
 	
 };
