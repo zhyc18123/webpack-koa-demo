@@ -1,12 +1,12 @@
-import $ from './utils/jquery.min';
 
+require("./utils/swiper/swiper-3.3.1.jquery.min");
 $(function(){
 	var init=function(){
-		var xinSwiper = new Swiper ('.xin-con', {
-			noSwiping:true
+		var xinSwiper = new Swiper ('.swiper-container', {
+			// noSwiping:true
 
 		});
-		console.log(xinSwiper)
+		console.log(Swiper)
 	};
 	init();
 })
