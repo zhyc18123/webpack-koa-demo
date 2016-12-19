@@ -19,7 +19,7 @@ $yellowCol:#f9be00;
 		display: inline-block;
 		width: 100%;
 		height: auto;
-		max-width: 640px;
+		max-width: $m-width;
 	}
 }
 .data-origin-header{
@@ -118,7 +118,7 @@ $yellowCol:#f9be00;
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 	i{
 		vertical-align: top;
-		zoom: 0.8;
+		@include my-transform(0.6)
 	}
 	span{
 		margin-left: percentage(16/620);
@@ -149,14 +149,14 @@ i.id-third{
 .rectangular-title{
 	position: relative;
 	width: percentage(448/750);
-	height: 50px;
-	line-height: 50px;
+	height: 40px;
+	line-height: 40px;
 	margin-top: percentage(65/750);
 	margin-left: percentage(((750-448)/2)/750);
 	background: #3e3a39;
 	background: linear-gradient(135deg, transparent 0px, #3e3a39 0) top left,
 	linear-gradient(225deg, transparent 0px, #3e3a39 0) top right,
-	linear-gradient(-45deg, transparent 15px, #3e3a39 0) bottom right,
+	linear-gradient(-45deg, transparent 13px, #3e3a39 0) bottom right,
 	linear-gradient(45deg, transparent 0px, #3e3a39 0) bottom left;
 	background-size: 50% 50%;
 	background-repeat: no-repeat;
@@ -185,7 +185,7 @@ i.id-third{
 .line-chart-wrap {
 	position: relative;
 	width: percentage(712/750);
-	max-width: 640px;
+	max-width: $m-width;
 	min-height: 300px;
 	background: #f3f3f3;
 	text-align: center;
@@ -233,7 +233,7 @@ i.id-third{
 .school-list-wrap {
 	position: relative;
 	width: 100%;
-	max-width: 640px;
+	max-width: $m-width;
 	display: inline-block;
 	background: $whi-col;
 	margin: percentage(18/750) auto 0 auto;
@@ -294,11 +294,11 @@ i.id-third{
 
 .school-rank-probability .dot {
 	position: relative;
-	bottom: 3px;
 	display: inline-block;
-	width: 10px;
-	height: 10px;
-	margin-right: 5px;
+	bottom: 1px;
+	width: 8px;
+	height: 8px;
+	margin-right: 8px;
 	border-radius: 50%;
 	background: #999999;
 	vertical-align: middle;
@@ -315,6 +315,10 @@ i.id-third{
 
 .rank-num {
 	color: #666666;
+	@include font-size(3.0);
+}
+.probability-num{
+	color: $yellowCol;
 	@include font-size(3.0);
 }
 .data-origin{
@@ -341,7 +345,7 @@ i.id-third{
 	i{
 		position: relative;
 		bottom: 2px;
-		zoom: 0.5;
+		@include my-transform(0.5);
 		@extend %inline-block;
 		@include cvlist-sprite(black-hexagon-icon);
 	}
@@ -403,12 +407,14 @@ i.id-third{
 }
 .major-examinee-detail {
 	.valid-bg{
+		position: relative;
 		display: inline-block;
-		height: 20px;
+		vertical-align: middle;
+		bottom: 1px;
+		height: 14px;
 		width: 50%;
 		margin-left: 3px;
 		background: #f9be00;
-		vertical-align: bottom;
 	}
 	.invalid-bg{
 		position: absolute;
@@ -435,7 +441,7 @@ i.id-third{
 .school-list-modal{
 	position: absolute;
 	width: percentage(718/750);
-	top: 0;
+	top:percentage(55/750);;
 	left: percentage(((750-718)/2)/750);
 	background: $whi-col;
 	z-index: 10;
@@ -448,7 +454,7 @@ i.id-third{
 	top:percentage(20/718);
 	right: percentage(20/718);
 	i{
-		zoom: 0.5;
+		@include my-transform(0.5);
 		@extend %inline-block;
 		@include cvlist-sprite(close-modal-icon);
 	}
@@ -461,6 +467,9 @@ i.id-third{
 		border: 1px solid #e0e0e0;
 	}
 }
+.school-label-2{
+	margin: 0 4px;
+}
 
 
 @media (min-width: 320px) and (max-width: 374px) {
@@ -469,9 +478,14 @@ i.id-third{
 	}
 }
 
-@media (min-width: 375px) and (max-width: 640px) {
+@media (min-width: 375px) and (max-width: 413px) {
 	html{
-		font-size: 6px;
+		font-size: (375/640)*10+px;
+	}
+}
+@media (min-width: 414px) and (max-width: 640px) {
+	html{
+		font-size: (414/640)*10+px;
 	}
 }
 @media (max-width: 414px) {
