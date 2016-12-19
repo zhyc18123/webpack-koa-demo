@@ -53,16 +53,16 @@ $line-low:#edf1f5;
 
 $whi-col:#fff;
 $black:#000;
-$bg-col:#FFFFFF;
-$bor-col:#ebebeb;
+$bg-col:#f4f4f4;
+$bor-col:#dfdfdf;
 $bor-heicol:#cccccc;
 $one-bor:1px solid $bor-col;
 $act-col:#00aff0;
 $ligact-col:#0096cc;
 $font-col:#8CD595;
 $font-xs-ligcol:#e9e9e9;
-$font-ligcol:#aaaaaa;
-$font-midcol:#888888;
+$font-ligcol:#999999;
+$font-midcol:#666666;
 $font-heicol:#333333;
 $font-errcol:#ff6a00;
 $gray-bgcol:#fafafa;
@@ -74,3 +74,6 @@ $staff-col:#5baf3f;
   font-size: ($sizeVal * 10) + px;
   font-size: $sizeVal + rem;
 }
+
+$red-col:#de614c;
+$yellow-col:#f9be00;

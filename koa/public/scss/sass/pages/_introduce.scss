@@ -1,0 +1,76 @@
+.introduce{
+	background:$bg-col;
+}
+.you-can{
+	img{
+		width: 100%
+	}
+}
+.other-funciton{
+	background: $whi-col;
+	padding: 0 10px;
+	margin-bottom:10px;
+	.title-p{
+		font-size: 13px;
+		padding:10px 0;
+	}
+	ul{
+		li{
+			border-top: 1px solid #f0f0f0;
+			padding:10px 0;
+			p{
+				font-size: $font-12;
+				color: $font-midcol;
+				margin-left: 30px;
+			}
+			i{
+				margin: 0 5px;
+			}
+			.test-i{
+				@include cvlist-sprite(test-i);
+			}
+			.intel-i{
+				@include cvlist-sprite(intel-i);
+			}
+			.big-i{
+				@include cvlist-sprite(big-i);
+			}
+		}
+	}
+
+}
+.four-reason{
+	margin-bottom:10px;
+	background: $whi-col;
+	padding-top:20px;
+	// .reason-title{
+	// 	font-size: 17px;
+	// 	color: $yellow-col;
+	// 	text-align: center;
+	// 	i{
+	// 		@include cvlist-sprite(reason-title);
+	// 	}
+	// }
+}
+.get-intro{
+	background:#3e3a39;
+	padding:10px 10px;
+	color:$whi-col;
+	font-size:13px;
+	line-height:20px;
+	p{
+		margin: 10px 0;
+	}
+	em{
+		color: $yellow-col;
+	}
+}
+.get-vip{
+	@extend %inline-block;
+	height:50px;
+	width:100%;
+	line-height:50px;
+	color:$whi-col;
+	text-align:center;
+	background:$red-col;
+}

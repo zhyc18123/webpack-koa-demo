@@ -45,7 +45,7 @@ var config = {
     "staticDir": path.join(__dirname, "..", "/public/"), // 静态文件所在的目录
     "faviconDir": path.join(__dirname, "..", "/public/favicon.ico"), // logo icon 所在目录
     "interfaceStatus": "online", // 接口状态
-    "localIp": "http://127.0.0.1:8888",
+    "localIp": "http://127.0.0.1:28086",
     "res": {
         "title": "新东方",
         "keywords": "",
