@@ -3,14 +3,15 @@ var request = require("co-request");
 module.exports = function* req(url, data, parent, ignore) {
     var reqOpt = {
         "url": url, //URL to hit
-        "qs": data, //Query string data
+        "qs": "", //Query string data
         "method": 'POST', //Specify the method
-        "headers": { //We can define headers too
-            'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        "body": ""
+        "body": JSON.stringify(data)
     };
-    var data = yield request(reqOpt);
+    try{
+        var data = yield request(reqOpt);
+    }catch(err){
+        console.log(err);
+    }
 
     if(data.statusCode==404){
             if(ignore){

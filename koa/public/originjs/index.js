@@ -1,12 +1,11 @@
 
 require("./utils/swiper/swiper-3.3.1.jquery.min");
+var getVip=require("./get-vip");
 $(function(){
 	var init=function(){
 		var xinSwiper = new Swiper ('.swiper-container', {
-			// noSwiping:true
-
 		});
-		console.log(Swiper)
+		getVip.init(xinSwiper);
 	};
 	init();
 })
