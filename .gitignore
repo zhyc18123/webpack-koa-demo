@@ -141,28 +141,10 @@ build/Release
 # JIRA plugin
 atlassian-ide-plugin.xml
 
-# Crashlytics plugin (for Android Studio and IntelliJ)
-com_crashlytics_export_strings.xml
-crashlytics.properties
-crashlytics-build.properties
-fabric.properties
-.swp
-*.sass-cache/*
-.sass-cache/*
-*.out
-node/src/*.js
-node/src/*/*.js
-
 koa/node_modules/*
 koa/log/*
 koa/logs/*
 koa/node_modules.tar
-koa/config/config_local.js
-koa/public/package.json
-koa/public/node_modules/*
-koa/public/node_modules.tar
 koa/public/gulpfile.js
 koa/public/scss/.sass-cache/.*
 
-search-engine/vendor/
-search-engine/Applications/Search/Web/Resources/uploads/
