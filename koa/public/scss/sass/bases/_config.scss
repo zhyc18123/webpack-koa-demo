@@ -13,6 +13,7 @@ $l-wid:920px;
 $left-width:250px;
 
 $p-bootstrap-l-width: 1170px;
+$m-width:750px;
 
 // .........................font-size...............................................................
 $font-42: 42px;
@@ -73,6 +74,11 @@ $staff-col:#5baf3f;
 @mixin font-size($sizeVal:1) {
   font-size: ($sizeVal * 10) + px;
   font-size: $sizeVal + rem;
+}
+@mixin my-transform($scale:1) {
+  transform: scale($scale);
+  -webkit-transform: scale($scale);
+  -ms-transform: scale($scale);
 }
 
 $red-col:#de614c;

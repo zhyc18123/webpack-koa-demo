@@ -1,4 +1,5 @@
-import anaReport from "./";
+
+var swiperToAyalysisReport = require('./swiper-to-analysis-report');
 var init=function(xinSwiper){
 	$("#get-report").on("click",function(){
 		var data={
@@ -9,7 +10,7 @@ var init=function(xinSwiper){
 			exp_sch_id:"",
 			batch:"",
 		};
-
+	swiperToAyalysisReport.getAnalysisReportData(data,xinSwiper);
 	});
 };
 module.exports = {
