@@ -1,4 +1,4 @@
-
+var config = require('../config/config');
 var webpack = require('webpack');
 var path=require('path');
 module.exports = {
@@ -22,8 +22,6 @@ module.exports = {
               },
             ]
     },
-    plugins: [
-    ]
     /*
      *
      * */
@@ -35,4 +33,12 @@ module.exports = {
         //     'd3': 'd3/d3.min.js'
         // }
     // }　　
-}
+
+    plugins: config.debug ? [
+        new webpack.optimize.UglifyJsPlugin({
+            compress: { warnings: true, evaluate: false, drop_console: true, properties: false},
+            output: {comments: false, quote_keys: true, keep_quoted_props: true},
+            sourceMap: false,
+            mangle: false
+        })] : []
+};
