@@ -1,11 +1,15 @@
 var co = require("co");
 var request = require("co-request");
-module.exports = function* req(url, data, parent, ignore) {
+module.exports = function* req(url, data, parent, ignore,ContentType) {
     var reqOpt = {
         "url": url, //URL to hit
         "qs": "", //Query string data
         "method": 'POST', //Specify the method
+        "headers":{},
         "body": JSON.stringify(data)
+    };
+    if(ContentType){
+        reqOpt.headers["Content-Type"]=ContentType;
     };
     try{
         var data = yield request(reqOpt);
