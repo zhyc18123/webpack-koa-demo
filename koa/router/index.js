@@ -10,5 +10,6 @@ router.get("/", view.index);
 //api
 router.post("/get-auto-code", api.get_auto_code.getAutoCode);
 router.post("/get-vip", api.get_auto_code.getVip);
+router.post("/guest-school", api.input.guestSchool);
 
 module.exports = router;

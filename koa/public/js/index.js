@@ -48,8 +48,8 @@
 
 	__webpack_require__(1);
 	__webpack_require__(2);
-	var getVip = __webpack_require__(3);
-	var input = __webpack_require__(5);
+	var getVip = __webpack_require__(4);
+	var input = __webpack_require__(6);
 	$(function () {
 		var init = function init() {
 			// var swiperHeight=[];
@@ -858,7 +858,7 @@
 
 	'use strict';
 
-	var drawCanvas = __webpack_require__(6);
+	var drawCanvas = __webpack_require__(3);
 
 	var renderAnalysisReportPage = function renderAnalysisReportPage(reportData) {
 		// 概率圆环
@@ -971,182 +971,6 @@
 
 /***/ },
 /* 3 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	var _url = __webpack_require__(4);
-
-	var _url2 = _interopRequireDefault(_url);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var init = function init(xinSwiper) {
-		// 监听获取vip体验卡按钮
-		$("#vip-btn").on("click", function () {
-			getVip(xinSwiper);
-		});
-		// 监听获取验证码按钮
-		$(document).on("click", ".get-auto-code", function () {
-			console.log("xdd");
-			getAutoCode(xinSwiper);
-		});
-	};
-	///检查输入的手机号码
-	var checkMobile = function checkMobile(mobile) {
-		if (!mobile) {
-			alert("请先输入手机号码！");
-			return false;
-		} else if (!/^1[34578]\d{9}$/.test(mobile)) {
-			alert("手机号码格式不正确，请检查");
-			return false;
-		} else {
-			return true;
-		};
-	};
-	// 改变获取验证码按钮
-	var countdown = 120,
-	    $getAutoCode = $("#get-auto-code");
-	var changeAutoCode = function changeAutoCode() {
-		if (countdown === 0) {
-			$getAutoCode.addClass('get-auto-code');
-			$getAutoCode.text("发送验证码");
-			countdown = 120;
-		} else {
-			$getAutoCode.removeClass("get-auto-code");
-			$getAutoCode.text("重新发送(" + countdown + ")");
-			countdown--;
-			setTimeout(function () {
-				changeAutoCode();
-			}, 1000);
-		};
-	};
-	var getAutoCode = function getAutoCode(xinSwiper) {
-		var mobile = $("#mobile").val();
-		if (!checkMobile(mobile)) {
-			return;
-		};
-		changeAutoCode();
-		$.ajax({
-			type: "post",
-			cache: false,
-			url: _url2.default.autoUrl,
-			data: $(".vip-form").serialize(),
-			success: function success(data) {
-				console.log(data);
-				switch (data.code) {
-					case 0:
-						break;
-					case 11007:
-						alert("短信验证码已经发送");
-						break;
-					case 12001:
-						alert("手机号码格式错误");
-						break;
-					case 11301:
-						alert("您已领取过体验卡");
-						break;
-					default:
-						break;
-				}
-			},
-			error: function error(request, _error) {
-				alert("服务器错误！");
-			}
-		});
-	};
-	var getVip = function getVip(xinSwiper) {
-		var mobile = $("#mobile").val(),
-		    autoCode = $("#auto-code").val();
-		if (!checkMobile(mobile)) {
-			return;
-		};
-		if (!autoCode) {
-			alert("请输入验证码！");
-			return;
-		};
-		$.ajax({
-			type: "post",
-			cache: false,
-			url: _url2.default.vipUrl,
-			data: $(".vip-form").serialize(),
-			success: function success(data) {
-				console.log(data);
-				switch (data.code) {
-					case 0:
-						$(".result-text .text").text("领取成功！");
-						xinSwiper.slideNext();
-						break;
-					case 11301:
-						alert("您已领取过体验卡");
-					case 11302:
-						alert("体验卡已经被领取完了");
-					case 10005:
-						alert("短信验证码不合法");
-					default:
-						break;
-				}
-			},
-			error: function error(request, _error2) {
-				alert("服务器错误！");
-			}
-		});
-	};
-	module.exports = {
-		init: init
-	};
-
-/***/ },
-/* 4 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	module.exports = {
-		autoUrl: "/get-auto-code",
-		vipUrl: "/get-vip",
-		analysisReportUrl: "/score/analysis"
-	};
-
-/***/ },
-/* 5 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	var swiperToAyalysisReport = __webpack_require__(7);
-	var init = function init(xinSwiper) {
-		// 初始化省份列表
-		createProv();
-		//监听选择省份
-		$("#prov-down").on("click", function () {
-			selectProv();
-		});
-		// 监听生成报告
-		$("#get-report").on("click", function () {
-
-			var data = {
-				req_id: "1111",
-				exam_no: "XDF234324",
-				province_id: "440000000000",
-				score: "600",
-				exp_sch_id: "52ac2e98747aec013fcf4c46",
-				batch: 1,
-				wenli: 2
-			};
-			swiperToAyalysisReport.getAnalysisReportData(data, xinSwiper);
-		});
-	};
-	var createProv = function createProv() {
-		var data = {};
-	};
-	var selectProv = function selectProv() {};
-	module.exports = {
-		init: init
-	};
-
-/***/ },
-/* 6 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -1587,12 +1411,838 @@
 	};
 
 /***/ },
-/* 7 */
+/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
-	var _url = __webpack_require__(4);
+	var _url = __webpack_require__(5);
+
+	var _url2 = _interopRequireDefault(_url);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var init = function init(xinSwiper) {
+		// 监听获取vip体验卡按钮
+		$("#vip-btn").on("click", function () {
+			getVip(xinSwiper);
+		});
+		// 监听获取验证码按钮
+		$(document).on("click", ".get-auto-code", function () {
+			console.log("xdd");
+			getAutoCode(xinSwiper);
+		});
+	};
+	///检查输入的手机号码
+	var checkMobile = function checkMobile(mobile) {
+		if (!mobile) {
+			alert("请先输入手机号码！");
+			return false;
+		} else if (!/^1[34578]\d{9}$/.test(mobile)) {
+			alert("手机号码格式不正确，请检查");
+			return false;
+		} else {
+			return true;
+		};
+	};
+	// 改变获取验证码按钮
+	var countdown = 120,
+	    $getAutoCode = $("#get-auto-code");
+	var changeAutoCode = function changeAutoCode() {
+		if (countdown === 0) {
+			$getAutoCode.addClass('get-auto-code');
+			$getAutoCode.text("发送验证码");
+			countdown = 120;
+		} else {
+			$getAutoCode.removeClass("get-auto-code");
+			$getAutoCode.text("重新发送(" + countdown + ")");
+			countdown--;
+			setTimeout(function () {
+				changeAutoCode();
+			}, 1000);
+		};
+	};
+	var getAutoCode = function getAutoCode(xinSwiper) {
+		var mobile = $("#mobile").val();
+		if (!checkMobile(mobile)) {
+			return;
+		};
+		changeAutoCode();
+		$.ajax({
+			type: "post",
+			cache: false,
+			url: _url2.default.autoUrl,
+			data: $(".vip-form").serialize(),
+			success: function success(data) {
+				console.log(data);
+				switch (data.code) {
+					case 0:
+						break;
+					case 11007:
+						alert("短信验证码已经发送");
+						break;
+					case 12001:
+						alert("手机号码格式错误");
+						break;
+					case 11301:
+						alert("您已领取过体验卡");
+						break;
+					default:
+						break;
+				}
+			},
+			error: function error(request, _error) {
+				alert("服务器错误！");
+			}
+		});
+	};
+	var getVip = function getVip(xinSwiper) {
+		var mobile = $("#mobile").val(),
+		    autoCode = $("#auto-code").val();
+		if (!checkMobile(mobile)) {
+			return;
+		};
+		if (!autoCode) {
+			alert("请输入验证码！");
+			return;
+		};
+		$.ajax({
+			type: "post",
+			cache: false,
+			url: _url2.default.vipUrl,
+			data: $(".vip-form").serialize(),
+			success: function success(data) {
+				console.log(data);
+				switch (data.code) {
+					case 0:
+						$(".result-text .text").text("领取成功！");
+						xinSwiper.slideNext();
+						break;
+					case 11301:
+						alert("您已领取过体验卡");
+					case 11302:
+						alert("体验卡已经被领取完了");
+					case 10005:
+						alert("短信验证码不合法");
+					default:
+						break;
+				}
+			},
+			error: function error(request, _error2) {
+				alert("服务器错误！");
+			}
+		});
+	};
+	module.exports = {
+		init: init
+	};
+
+/***/ },
+/* 5 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	module.exports = {
+		autoUrl: "/get-auto-code",
+		vipUrl: "/get-vip",
+		analysisReportUrl: "/score/analysis",
+		guestSchool: "/guest-school"
+	};
+
+/***/ },
+/* 6 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	var _url = __webpack_require__(5);
+
+	var _url2 = _interopRequireDefault(_url);
+
+	var _loc = __webpack_require__(7);
+
+	var _loc2 = _interopRequireDefault(_loc);
+
+	var _queryString = __webpack_require__(8);
+
+	var _queryString2 = _interopRequireDefault(_queryString);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var swiperToAyalysisReport = __webpack_require__(9);
+	var init = function init(xinSwiper) {
+		//获取url参数，初始化页面
+		initPage();
+		// 初始化省份列表
+		createProv();
+		//监听打开选择省份
+		$(document).on("click", ".js-open", function () {
+			openProv(this);
+		});
+		//监听关闭选择省份
+		$(document).on("click", ".js-close", function () {
+			closeProv(this);
+		});
+		//监听选择省份
+		$(document).on("click", ".prov-list li", function () {
+			selectProv(this);
+		});
+		// 文理科监听
+		$(".subject-type span").on("click", function () {
+			selectSubject(this);
+		});
+		// 监听学校联想
+		$("#school-input").on("input porpertychange", function () {
+			guestSchool(this);
+		});
+		//监听选择学校
+		$(document).on("click", ".school-list li", function () {
+			selectSchool(this);
+		});
+		// 监听生成报告
+		$("#get-report").on("click", function () {
+			var provId = $("#prov-name").data("val"),
+			    score = $("#score").val();
+			if (!provId) {
+				alert("请选择省份！");
+				return;
+			};
+			if (!score) {
+				alert("请输入你的联考成绩！");
+				return;
+			};
+			var examNum = $("#exam-no").val();
+			var data = {
+				req_id: examNum + Date.parse(new Date()),
+				exam_no: examNum,
+				province_id: provId,
+				score: score,
+				exp_sch_id: $("#school-input").val(),
+				batch: 1,
+				wenli: $(".subject-type .active").data("val")
+			};
+			console.log(data);
+			swiperToAyalysisReport.getAnalysisReportData(data, xinSwiper);
+		});
+	};
+	var setProvByName = function setProvByName(provName) {
+		var provObj = _loc2.default.getProvInfoByName(provName);
+		$("#prov-name").data("val", provObj.loc_id).val(provObj.name);
+	};
+	var initPage = function initPage() {
+		var provName = _queryString2.default.getQueryString("prev_name") || "",
+		    score = _queryString2.default.getQueryString("score"),
+		    examNo = _queryString2.default.getQueryString("exam_no");
+		// 设置省份
+		if (provName) {
+			setProvByName(provName);
+		} else {
+			// 百度地图API功能
+			if (typeof BMap != "undefined") {
+				///浏览器和经纬度定位
+				var geolocation = new BMap.Geolocation();
+				geolocation.getCurrentPosition(function (r) {
+					if (this.getStatus() == BMAP_STATUS_SUCCESS) {
+						var point = new BMap.Point(r.point.lng, r.point.lat);
+						var gc = new BMap.Geocoder();
+						gc.getLocation(point, function (rs) {
+							//getLocation函数用来解析地址信息，分别返回省市区街等
+							var addComp = rs.addressComponents;
+							var province = addComp.province; //获取省份
+							setProvByName(province);
+						});
+					};
+				});
+			};
+		};
+		// 设置分数
+		if (score) {
+			$("#score").val(score);
+		};
+		//设置准考证号
+		if (examNo) {
+			$("#exam-no").val(examNo);
+		};
+	};
+	var selectSchool = function selectSchool(that) {
+		$("#school-input").data("val", $(that).data("val")).val($(that).text());
+		$(".school-list").hide();
+	};
+	var createSchoolList = function createSchoolList(list) {
+		var schHtml = "";
+		$.each(list, function (i, item) {
+			schHtml += '<li data-batch=' + item.bacth + 'data-val=' + item.sch_id + '>' + item.sch_name + '</li>';
+		});
+		$(".school-list").hide().html(schHtml).show();
+		if (!schHtml) {
+			$(".school-list").hide();
+		};
+	};
+	var guestSchool = function guestSchool(that) {
+		var schString = $(that).val();
+		if (!schString) {
+			return;
+		};
+		var data = {
+			req_id: $("#exam-no").val() + Date.parse(new Date()),
+			search_key: schString,
+			wenli: $(".subject-type .active").data("val")
+		};
+		$.ajax({
+			type: "post",
+			cache: false,
+			url: _url2.default.guestSchool,
+			data: data,
+			success: function success(data) {
+				console.log(data);
+				switch (data.code) {
+					case 0:
+						createSchoolList(data.sch_list);
+					case -1:
+						createSchoolList(data.sch_list);
+						break;
+					default:
+						break;
+				}
+			},
+			error: function error(request, _error) {
+				// alert("服务器错误！")
+			}
+		});
+		$(".school-list").show();
+		$(".school-input").addClass('school-input-active');
+	};
+	var selectSubject = function selectSubject(that) {
+		$(that).parent().find("span").removeClass("active");
+		$(that).addClass('active');
+	};
+	var createProv = function createProv() {
+		var provHtml = "";
+		$.each(_loc2.default.province, function (i, item) {
+			provHtml += '<li data-val=' + item.loc_id + '>' + item.name + '</li>';
+		});
+		$(".prov-list").html(provHtml);
+	};
+	var openProv = function openProv(that) {
+		$(that).addClass("js-close").removeClass("js-open").parent().addClass("prov-input-active").end().closest('.prov-input-list').find('.prov-list').show();
+	};
+	var closeProv = function closeProv(that) {
+		$(that).addClass("js-open").removeClass("js-close").parent().removeClass("prov-input-active").end().closest('.prov-input-list').find('.prov-list').hide();
+	};
+	var selectProv = function selectProv(that) {
+		$("#prov-name").data("val", $(that).data("val")).val($.trim($(that).text()));
+		$(".js-close").click();
+	};
+	module.exports = {
+		init: init
+	};
+
+/***/ },
+/* 7 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	module.exports = {
+	    _data: { "441600000000": { "loc_id": "441600000000", "loc_namecn": "河源市", "loc_x": 114.697802, "loc_y": 23.746266 }, "350500000000": { "loc_id": "350500000000", "loc_namecn": "泉州市", "loc_x": 118.589421, "loc_y": 24.908853 }, "429000000000": { "loc_id": "429000000000", "loc_namecn": "省直辖县级行政区划", "loc_x": null, "loc_y": null }, "340800000000": { "loc_id": "340800000000", "loc_namecn": "安庆市", "loc_x": 117.053571, "loc_y": 30.524816 }, "340000000000": { "loc_id": "340000000000", "loc_namecn": "安徽", "loc_x": null, "loc_y": null }, "350100000000": { "loc_id": "350100000000", "loc_namecn": "福州市", "loc_x": 119.306239, "loc_y": 26.075302 }, "460200000000": { "loc_id": "460200000000", "loc_namecn": "三亚市", "loc_x": 109.508268, "loc_y": 18.247872 }, "653000000000": { "loc_id": "653000000000", "loc_namecn": "克孜勒苏柯尔克孜自治州", "loc_x": 76.172825, "loc_y": 39.713431 }, "530000000000": { "loc_id": "530000000000", "loc_namecn": "云南", "loc_x": null, "loc_y": null }, "522700000000": { "loc_id": "522700000000", "loc_namecn": "黔南布依族苗族自治州", "loc_x": 107.517156, "loc_y": 26.258219 }, "360600000000": { "loc_id": "360600000000", "loc_namecn": "鹰潭市", "loc_x": 117.033838, "loc_y": 28.238638 }, "330500000000": { "loc_id": "330500000000", "loc_namecn": "湖州市", "loc_x": 120.102398, "loc_y": 30.867198 }, "210700000000": { "loc_id": "210700000000", "loc_namecn": "锦州市", "loc_x": 121.135742, "loc_y": 41.119269 }, "450200000000": { "loc_id": "450200000000", "loc_namecn": "柳州市", "loc_x": 109.411703, "loc_y": 24.314617 }, "440300000000": { "loc_id": "440300000000", "loc_namecn": "深圳市", "loc_x": 114.085947, "loc_y": 22.547 }, "500100000000": { "loc_id": "500100000000", "loc_namecn": "市辖区", "loc_x": null, "loc_y": null }, "220300000000": { "loc_id": "220300000000", "loc_namecn": "四平市", "loc_x": 124.370785, "loc_y": 43.170344 }, "130000000000": { "loc_id": "130000000000", "loc_namecn": "河北", "loc_x": null, "loc_y": null }, "410500000000": { "loc_id": "410500000000", "loc_namecn": "安阳市", "loc_x": 114.352482, "loc_y": 36.103442 }, "110100000000": { "loc_id": "110100000000", "loc_namecn": "市辖区", "loc_x": null, "loc_y": null }, "610300000000": { "loc_id": "610300000000", "loc_namecn": "宝鸡市", "loc_x": 107.14487, "loc_y": 34.369315 }, "232700000000": { "loc_id": "232700000000", "loc_namecn": "大兴安岭地区", "loc_x": 124.711526, "loc_y": 52.335262 }, "320100000000": { "loc_id": "320100000000", "loc_namecn": "南京市", "loc_x": 118.767413, "loc_y": 32.041544 }, "331000000000": { "loc_id": "331000000000", "loc_namecn": "台州市", "loc_x": 121.428599, "loc_y": 28.661378 }, "330100000000": { "loc_id": "330100000000", "loc_namecn": "杭州市", "loc_x": 120.153576, "loc_y": 30.287459 }, "450600000000": { "loc_id": "450600000000", "loc_namecn": "防城港市", "loc_x": 108.345478, "loc_y": 21.614631 }, "341100000000": { "loc_id": "341100000000", "loc_namecn": "滁州市", "loc_x": 118.316264, "loc_y": 32.303627 }, "542400000000": { "loc_id": "542400000000", "loc_namecn": "那曲地区", "loc_x": 92.060214, "loc_y": 31.476004 }, "310100000000": { "loc_id": "310100000000", "loc_namecn": "市辖区", "loc_x": null, "loc_y": null }, "350900000000": { "loc_id": "350900000000", "loc_namecn": "宁德市", "loc_x": 119.527082, "loc_y": 26.65924 }, "511300000000": { "loc_id": "511300000000", "loc_namecn": "南充市", "loc_x": 106.082974, "loc_y": 30.795281 }, "331100000000": { "loc_id": "331100000000", "loc_namecn": "丽水市", "loc_x": 119.921786, "loc_y": 28.451993 }, "220200000000": { "loc_id": "220200000000", "loc_namecn": "吉林市", "loc_x": 126.55302, "loc_y": 43.843577 }, "511600000000": { "loc_id": "511600000000", "loc_namecn": "广安市", "loc_x": 106.633369, "loc_y": 30.456398 }, "610900000000": { "loc_id": "610900000000", "loc_namecn": "安康市", "loc_x": 109.029273, "loc_y": 32.6903 }, "360400000000": { "loc_id": "360400000000", "loc_namecn": "九江市", "loc_x": 115.992811, "loc_y": 29.712034 }, "140500000000": { "loc_id": "140500000000", "loc_namecn": "晋城市", "loc_x": 112.851274, "loc_y": 35.497553 }, "450900000000": { "loc_id": "450900000000", "loc_namecn": "玉林市", "loc_x": 110.154393, "loc_y": 22.63136 }, "341500000000": { "loc_id": "341500000000", "loc_namecn": "六安市", "loc_x": 116.507676, "loc_y": 31.752889 }, "110200000000": { "loc_id": "110200000000", "loc_namecn": "县", "loc_x": null, "loc_y": null }, "520400000000": { "loc_id": "520400000000", "loc_namecn": "安顺市", "loc_x": 105.932188, "loc_y": 26.245544 }, "451300000000": { "loc_id": "451300000000", "loc_namecn": "来宾市", "loc_x": 109.229772, "loc_y": 23.733766 }, "532800000000": { "loc_id": "532800000000", "loc_namecn": "西双版纳傣族自治州", "loc_x": 100.797941, "loc_y": 22.001724 }, "410100000000": { "loc_id": "410100000000", "loc_namecn": "郑州市", "loc_x": 113.665412, "loc_y": 34.757975 }, "510800000000": { "loc_id": "510800000000", "loc_namecn": "广元市", "loc_x": 105.829757, "loc_y": 32.433668 }, "350600000000": { "loc_id": "350600000000", "loc_namecn": "漳州市", "loc_x": 117.661801, "loc_y": 24.510897 }, "220000000000": { "loc_id": "220000000000", "loc_namecn": "吉林", "loc_x": null, "loc_y": null }, "211000000000": { "loc_id": "211000000000", "loc_namecn": "辽阳市", "loc_x": 123.18152, "loc_y": 41.269402 }, "652800000000": { "loc_id": "652800000000", "loc_namecn": "巴音郭楞蒙古自治州", "loc_x": 86.150969, "loc_y": 41.768552 }, "510100000000": { "loc_id": "510100000000", "loc_namecn": "成都市", "loc_x": 104.065735, "loc_y": 30.659462 }, "371000000000": { "loc_id": "371000000000", "loc_namecn": "威海市", "loc_x": 122.116394, "loc_y": 37.509691 }, "620400000000": { "loc_id": "620400000000", "loc_namecn": "白银市", "loc_x": 104.173606, "loc_y": 36.54568 }, "330900000000": { "loc_id": "330900000000", "loc_namecn": "舟山市", "loc_x": 122.106863, "loc_y": 30.016028 }, "440700000000": { "loc_id": "440700000000", "loc_namecn": "江门市", "loc_x": 113.094942, "loc_y": 22.590431 }, "360300000000": { "loc_id": "360300000000", "loc_namecn": "萍乡市", "loc_x": 113.852186, "loc_y": 27.622946 }, "321100000000": { "loc_id": "321100000000", "loc_namecn": "镇江市", "loc_x": 119.452753, "loc_y": 32.204402 }, "220700000000": { "loc_id": "220700000000", "loc_namecn": "松原市", "loc_x": 124.823608, "loc_y": 45.118243 }, "652900000000": { "loc_id": "652900000000", "loc_namecn": "阿克苏地区", "loc_x": 80.265068, "loc_y": 41.170712 }, "210800000000": { "loc_id": "210800000000", "loc_namecn": "营口市", "loc_x": 122.235151, "loc_y": 40.667432 }, "450100000000": { "loc_id": "450100000000", "loc_namecn": "南宁市", "loc_x": 108.320004, "loc_y": 22.82402 }, "522300000000": { "loc_id": "522300000000", "loc_namecn": "黔西南布依族苗族自治州", "loc_x": 104.897971, "loc_y": 25.08812 }, "441500000000": { "loc_id": "441500000000", "loc_namecn": "汕尾市", "loc_x": 115.364238, "loc_y": 22.774485 }, "510500000000": { "loc_id": "510500000000", "loc_namecn": "泸州市", "loc_x": 105.443348, "loc_y": 28.889138 }, "530500000000": { "loc_id": "530500000000", "loc_namecn": "保山市", "loc_x": 99.167133, "loc_y": 25.111802 }, "469000000000": { "loc_id": "469000000000", "loc_namecn": "省直辖县级行政区划", "loc_x": null, "loc_y": null }, "431200000000": { "loc_id": "431200000000", "loc_namecn": "怀化市", "loc_x": 109.97824, "loc_y": 27.550082 }, "211100000000": { "loc_id": "211100000000", "loc_namecn": "盘锦市", "loc_x": 122.06957, "loc_y": 41.124484 }, "422800000000": { "loc_id": "422800000000", "loc_namecn": "恩施土家族苗族自治州", "loc_x": 109.48699, "loc_y": 30.283114 }, "340700000000": { "loc_id": "340700000000", "loc_namecn": "铜陵市", "loc_x": 117.816576, "loc_y": 30.929935 }, "610700000000": { "loc_id": "610700000000", "loc_namecn": "汉中市", "loc_x": 107.028621, "loc_y": 33.077668 }, "350200000000": { "loc_id": "350200000000", "loc_namecn": "厦门市", "loc_x": 118.11022, "loc_y": 24.490474 }, "230500000000": { "loc_id": "230500000000", "loc_namecn": "双鸭山市", "loc_x": 131.157304, "loc_y": 46.643442 }, "511800000000": { "loc_id": "511800000000", "loc_namecn": "雅安市", "loc_x": 103.001033, "loc_y": 29.987722 }, "542300000000": { "loc_id": "542300000000", "loc_namecn": "日喀则地区", "loc_x": 88.885148, "loc_y": 29.267519 }, "341200000000": { "loc_id": "341200000000", "loc_namecn": "阜阳市", "loc_x": 115.819729, "loc_y": 32.896969 }, "321000000000": { "loc_id": "321000000000", "loc_namecn": "扬州市", "loc_x": 119.421003, "loc_y": 32.393159 }, "630100000000": { "loc_id": "630100000000", "loc_namecn": "西宁市", "loc_x": 101.778916, "loc_y": 36.623178 }, "520000000000": { "loc_id": "520000000000", "loc_namecn": "贵州", "loc_x": null, "loc_y": null }, "653100000000": { "loc_id": "653100000000", "loc_namecn": "喀什地区", "loc_x": 75.989138, "loc_y": 39.467664 }, "530100000000": { "loc_id": "530100000000", "loc_namecn": "昆明市", "loc_x": 102.712251, "loc_y": 25.040609 }, "130600000000": { "loc_id": "130600000000", "loc_namecn": "保定市", "loc_x": 115.482331, "loc_y": 38.867657 }, "450500000000": { "loc_id": "450500000000", "loc_namecn": "北海市", "loc_x": 109.119254, "loc_y": 21.473343 }, "451400000000": { "loc_id": "451400000000", "loc_namecn": "崇左市", "loc_x": 107.353926, "loc_y": 22.404108 }, "433100000000": { "loc_id": "433100000000", "loc_namecn": "湘西土家族苗族自治州", "loc_x": 109.739735, "loc_y": 28.314296 }, "421000000000": { "loc_id": "421000000000", "loc_namecn": "荆州市", "loc_x": 112.23813, "loc_y": 30.326857 }, "360200000000": { "loc_id": "360200000000", "loc_namecn": "景德镇市", "loc_x": 117.214664, "loc_y": 29.29256 }, "411300000000": { "loc_id": "411300000000", "loc_namecn": "南阳市", "loc_x": 112.540918, "loc_y": 32.999082 }, "654200000000": { "loc_id": "654200000000", "loc_namecn": "塔城地区", "loc_x": 82.985732, "loc_y": 46.746301 }, "211300000000": { "loc_id": "211300000000", "loc_namecn": "朝阳市", "loc_x": 120.451176, "loc_y": 41.576758 }, "513300000000": { "loc_id": "513300000000", "loc_namecn": "甘孜藏族自治州", "loc_x": 101.963815, "loc_y": 30.050663 }, "210600000000": { "loc_id": "210600000000", "loc_namecn": "丹东市", "loc_x": 124.383044, "loc_y": 40.124296 }, "341600000000": { "loc_id": "341600000000", "loc_namecn": "亳州市", "loc_x": 115.782939, "loc_y": 33.869338 }, "340300000000": { "loc_id": "340300000000", "loc_namecn": "蚌埠市", "loc_x": 117.36237, "loc_y": 32.934037 }, "430400000000": { "loc_id": "430400000000", "loc_namecn": "衡阳市", "loc_x": 112.607693, "loc_y": 26.900358 }, "540100000000": { "loc_id": "540100000000", "loc_namecn": "拉萨市", "loc_x": 91.132212, "loc_y": 29.660361 }, "210100000000": { "loc_id": "210100000000", "loc_namecn": "沈阳市", "loc_x": 123.429096, "loc_y": 41.796767 }, "632700000000": { "loc_id": "632700000000", "loc_namecn": "玉树藏族自治州", "loc_x": 97.008522, "loc_y": 33.004049 }, "510900000000": { "loc_id": "510900000000", "loc_namecn": "遂宁市", "loc_x": 105.571331, "loc_y": 30.513311 }, "533400000000": { "loc_id": "533400000000", "loc_namecn": "迪庆藏族自治州", "loc_x": 99.706463, "loc_y": 27.826853 }, "650200000000": { "loc_id": "650200000000", "loc_namecn": "克拉玛依市", "loc_x": 84.873946, "loc_y": 45.595886 }, "530900000000": { "loc_id": "530900000000", "loc_namecn": "临沧市", "loc_x": 100.08697, "loc_y": 23.886567 }, "610500000000": { "loc_id": "610500000000", "loc_namecn": "渭南市", "loc_x": 109.502882, "loc_y": 34.499381 }, "451000000000": { "loc_id": "451000000000", "loc_namecn": "百色市", "loc_x": 106.616285, "loc_y": 23.897742 }, "654300000000": { "loc_id": "654300000000", "loc_namecn": "阿勒泰地区", "loc_x": 88.13963, "loc_y": 47.848393 }, "421200000000": { "loc_id": "421200000000", "loc_namecn": "咸宁市", "loc_x": 114.328963, "loc_y": 29.832798 }, "420300000000": { "loc_id": "420300000000", "loc_namecn": "十堰市", "loc_x": 110.785239, "loc_y": 32.647017 }, "140900000000": { "loc_id": "140900000000", "loc_namecn": "忻州市", "loc_x": 112.733538, "loc_y": 38.41769 }, "620200000000": { "loc_id": "620200000000", "loc_namecn": "嘉峪关市", "loc_x": 98.277304, "loc_y": 39.786529 }, "511900000000": { "loc_id": "511900000000", "loc_namecn": "巴中市", "loc_x": 106.753669, "loc_y": 31.858809 }, "522600000000": { "loc_id": "522600000000", "loc_namecn": "黔东南苗族侗族自治州", "loc_x": 107.977488, "loc_y": 26.583352 }, "659000000000": { "loc_id": "659000000000", "loc_namecn": "自治区直辖县级行政区划", "loc_x": null, "loc_y": null }, "430700000000": { "loc_id": "430700000000", "loc_namecn": "常德市", "loc_x": 111.691347, "loc_y": 29.040225 }, "360500000000": { "loc_id": "360500000000", "loc_namecn": "新余市", "loc_x": 114.930835, "loc_y": 27.810834 }, "420200000000": { "loc_id": "420200000000", "loc_namecn": "黄石市", "loc_x": 115.077048, "loc_y": 30.220074 }, "370000000000": { "loc_id": "370000000000", "loc_namecn": "山东", "loc_x": null, "loc_y": null }, "653200000000": { "loc_id": "653200000000", "loc_namecn": "和田地区", "loc_x": 79.92533, "loc_y": 37.110687 }, "652700000000": { "loc_id": "652700000000", "loc_namecn": "博尔塔拉蒙古自治州", "loc_x": 82.074778, "loc_y": 44.903258 }, "230100000000": { "loc_id": "230100000000", "loc_namecn": "哈尔滨市", "loc_x": 126.642464, "loc_y": 45.756967 }, "530600000000": { "loc_id": "530600000000", "loc_namecn": "昭通市", "loc_x": 103.717216, "loc_y": 27.336999 }, "360000000000": { "loc_id": "360000000000", "loc_namecn": "江西", "loc_x": null, "loc_y": null }, "640400000000": { "loc_id": "640400000000", "loc_namecn": "固原市", "loc_x": 106.285241, "loc_y": 36.004561 }, "420100000000": { "loc_id": "420100000000", "loc_namecn": "武汉市", "loc_x": 114.298572, "loc_y": 30.584355 }, "411700000000": { "loc_id": "411700000000", "loc_namecn": "驻马店市", "loc_x": 114.024736, "loc_y": 32.980169 }, "430900000000": { "loc_id": "430900000000", "loc_namecn": "益阳市", "loc_x": 112.355042, "loc_y": 28.570066 }, "610200000000": { "loc_id": "610200000000", "loc_namecn": "铜川市", "loc_x": 108.963122, "loc_y": 34.90892 }, "441800000000": { "loc_id": "441800000000", "loc_namecn": "清远市", "loc_x": 113.036779, "loc_y": 23.704188 }, "370600000000": { "loc_id": "370600000000", "loc_namecn": "烟台市", "loc_x": 121.391382, "loc_y": 37.539297 }, "350800000000": { "loc_id": "350800000000", "loc_namecn": "龙岩市", "loc_x": 117.02978, "loc_y": 25.091603 }, "532900000000": { "loc_id": "532900000000", "loc_namecn": "大理白族自治州", "loc_x": 100.240037, "loc_y": 25.592765 }, "620600000000": { "loc_id": "620600000000", "loc_namecn": "武威市", "loc_x": 102.634697, "loc_y": 37.929996 }, "340600000000": { "loc_id": "340600000000", "loc_namecn": "淮北市", "loc_x": 116.794664, "loc_y": 33.971707 }, "610600000000": { "loc_id": "610600000000", "loc_namecn": "延安市", "loc_x": 109.49081, "loc_y": 36.596537 }, "350700000000": { "loc_id": "350700000000", "loc_namecn": "南平市", "loc_x": 118.178459, "loc_y": 26.635627 }, "210400000000": { "loc_id": "210400000000", "loc_namecn": "抚顺市", "loc_x": 123.921109, "loc_y": 41.875956 }, "152500000000": { "loc_id": "152500000000", "loc_namecn": "锡林郭勒盟", "loc_x": 116.090996, "loc_y": 43.944018 }, "652300000000": { "loc_id": "652300000000", "loc_namecn": "昌吉回族自治州", "loc_x": 87.304012, "loc_y": 44.014577 }, "360800000000": { "loc_id": "360800000000", "loc_namecn": "吉安市", "loc_x": 114.986373, "loc_y": 27.111699 }, "120200000000": { "loc_id": "120200000000", "loc_namecn": "县", "loc_x": null, "loc_y": null }, "500200000000": { "loc_id": "500200000000", "loc_namecn": "县", "loc_x": null, "loc_y": null }, "530700000000": { "loc_id": "530700000000", "loc_namecn": "丽江市", "loc_x": 100.233026, "loc_y": 26.872108 }, "130100000000": { "loc_id": "130100000000", "loc_namecn": "石家庄市", "loc_x": 114.502461, "loc_y": 38.045474 }, "420700000000": { "loc_id": "420700000000", "loc_namecn": "鄂州市", "loc_x": 114.890593, "loc_y": 30.396536 }, "150200000000": { "loc_id": "150200000000", "loc_namecn": "包头市", "loc_x": 109.840405, "loc_y": 40.658168 }, "340200000000": { "loc_id": "340200000000", "loc_namecn": "芜湖市", "loc_x": 118.376451, "loc_y": 31.326319 }, "320600000000": { "loc_id": "320600000000", "loc_namecn": "南通市", "loc_x": 120.864608, "loc_y": 32.016212 }, "321300000000": { "loc_id": "321300000000", "loc_namecn": "宿迁市", "loc_x": 118.293328, "loc_y": 33.945154 }, "330400000000": { "loc_id": "330400000000", "loc_namecn": "嘉兴市", "loc_x": 120.750865, "loc_y": 30.762653 }, "152900000000": { "loc_id": "152900000000", "loc_namecn": "阿拉善盟", "loc_x": 105.706422, "loc_y": 38.844814 }, "440000000000": { "loc_id": "440000000000", "loc_namecn": "广东", "loc_x": null, "loc_y": null }, "310200000000": { "loc_id": "310200000000", "loc_namecn": "县", "loc_x": null, "loc_y": null }, "210300000000": { "loc_id": "210300000000", "loc_namecn": "鞍山市", "loc_x": 122.995632, "loc_y": 41.110626 }, "445200000000": { "loc_id": "445200000000", "loc_namecn": "揭阳市", "loc_x": 116.355733, "loc_y": 23.543778 }, "632100000000": { "loc_id": "632100000000", "loc_namecn": "海东地区", "loc_x": 102.10327, "loc_y": 36.502916 }, "441400000000": { "loc_id": "441400000000", "loc_namecn": "梅州市", "loc_x": 116.117582, "loc_y": 24.299112 }, "542200000000": { "loc_id": "542200000000", "loc_namecn": "山南地区", "loc_x": 91.766529, "loc_y": 29.236023 }, "320200000000": { "loc_id": "320200000000", "loc_namecn": "无锡市", "loc_x": 120.301663, "loc_y": 31.574729 }, "330200000000": { "loc_id": "330200000000", "loc_namecn": "宁波市", "loc_x": 121.549792, "loc_y": 29.868388 }, "460000000000": { "loc_id": "460000000000", "loc_namecn": "海南", "loc_x": null, "loc_y": null }, "520300000000": { "loc_id": "520300000000", "loc_namecn": "遵义市", "loc_x": 106.937265, "loc_y": 27.706626 }, "442000000000": { "loc_id": "442000000000", "loc_namecn": "中山市", "loc_x": 113.382391, "loc_y": 22.521113 }, "120000000000": { "loc_id": "120000000000", "loc_namecn": "天津", "loc_x": 117.190182, "loc_y": 39.125596 }, "320900000000": { "loc_id": "320900000000", "loc_namecn": "盐城市", "loc_x": 120.139998, "loc_y": 33.377631 }, "130300000000": { "loc_id": "130300000000", "loc_namecn": "秦皇岛市", "loc_x": 119.586579, "loc_y": 39.942531 }, "140700000000": { "loc_id": "140700000000", "loc_namecn": "晋中市", "loc_x": 112.736465, "loc_y": 37.696495 }, "532500000000": { "loc_id": "532500000000", "loc_namecn": "红河哈尼族彝族自治州", "loc_x": 103.384182, "loc_y": 23.366775 }, "350300000000": { "loc_id": "350300000000", "loc_namecn": "莆田市", "loc_x": 119.007558, "loc_y": 25.431011 }, "230400000000": { "loc_id": "230400000000", "loc_namecn": "鹤岗市", "loc_x": 130.277487, "loc_y": 47.332085 }, "431000000000": { "loc_id": "431000000000", "loc_namecn": "郴州市", "loc_x": 113.032067, "loc_y": 25.793589 }, "371700000000": { "loc_id": "371700000000", "loc_namecn": "菏泽市", "loc_x": 115.469381, "loc_y": 35.246531 }, "210200000000": { "loc_id": "210200000000", "loc_namecn": "大连市", "loc_x": 121.618622, "loc_y": 38.91459 }, "371300000000": { "loc_id": "371300000000", "loc_namecn": "临沂市", "loc_x": 118.326443, "loc_y": 35.065282 }, "340500000000": { "loc_id": "340500000000", "loc_namecn": "马鞍山市", "loc_x": 118.507906, "loc_y": 31.689362 }, "610100000000": { "loc_id": "610100000000", "loc_namecn": "西安市", "loc_x": 108.948024, "loc_y": 34.263161 }, "320300000000": { "loc_id": "320300000000", "loc_namecn": "徐州市", "loc_x": 117.184811, "loc_y": 34.261792 }, "460300000000": { "loc_id": "460300000000", "loc_namecn": "三沙市", "loc_x": 112.257433, "loc_y": 30.315895 }, "632500000000": { "loc_id": "632500000000", "loc_namecn": "海南藏族自治州", "loc_x": 100.619542, "loc_y": 36.280353 }, "630000000000": { "loc_id": "630000000000", "loc_namecn": "青海", "loc_x": null, "loc_y": null }, "230000000000": { "loc_id": "230000000000", "loc_namecn": "黑龙江", "loc_x": null, "loc_y": null }, "130400000000": { "loc_id": "130400000000", "loc_namecn": "邯郸市", "loc_x": 114.490686, "loc_y": 36.612273 }, "511100000000": { "loc_id": "511100000000", "loc_namecn": "乐山市", "loc_x": 103.761263, "loc_y": 29.582024 }, "421300000000": { "loc_id": "421300000000", "loc_namecn": "随州市", "loc_x": 113.37377, "loc_y": 31.717497 }, "654000000000": { "loc_id": "654000000000", "loc_namecn": "伊犁哈萨克自治州", "loc_x": 81.317946, "loc_y": 43.92186 }, "510000000000": { "loc_id": "510000000000", "loc_namecn": "四川", "loc_x": null, "loc_y": null }, "411000000000": { "loc_id": "411000000000", "loc_namecn": "许昌市", "loc_x": 113.826063, "loc_y": 34.022956 }, "431100000000": { "loc_id": "431100000000", "loc_namecn": "永州市", "loc_x": 111.608019, "loc_y": 26.434516 }, "500000000000": { "loc_id": "500000000000", "loc_namecn": "重庆", "loc_x": 106.504962, "loc_y": 29.533155 }, "371500000000": { "loc_id": "371500000000", "loc_namecn": "聊城市", "loc_x": 115.980367, "loc_y": 36.456013 }, "620800000000": { "loc_id": "620800000000", "loc_namecn": "平凉市", "loc_x": 106.684691, "loc_y": 35.54279 }, "652200000000": { "loc_id": "652200000000", "loc_namecn": "哈密地区", "loc_x": 93.51316, "loc_y": 42.833248 }, "410400000000": { "loc_id": "410400000000", "loc_namecn": "平顶山市", "loc_x": 113.307718, "loc_y": 33.735241 }, "542600000000": { "loc_id": "542600000000", "loc_namecn": "林芝地区", "loc_x": 94.362348, "loc_y": 29.654693 }, "210000000000": { "loc_id": "210000000000", "loc_namecn": "辽宁", "loc_x": null, "loc_y": null }, "510600000000": { "loc_id": "510600000000", "loc_namecn": "德阳市", "loc_x": 104.398651, "loc_y": 31.127991 }, "340100000000": { "loc_id": "340100000000", "loc_namecn": "合肥市", "loc_x": 117.283042, "loc_y": 31.86119 }, "231200000000": { "loc_id": "231200000000", "loc_namecn": "绥化市", "loc_x": 126.99293, "loc_y": 46.637393 }, "420800000000": { "loc_id": "420800000000", "loc_namecn": "荆门市", "loc_x": 112.204251, "loc_y": 31.03542 }, "620300000000": { "loc_id": "620300000000", "loc_namecn": "金昌市", "loc_x": 102.187888, "loc_y": 38.514238 }, "440400000000": { "loc_id": "440400000000", "loc_namecn": "珠海市", "loc_x": 113.552724, "loc_y": 22.255899 }, "222400000000": { "loc_id": "222400000000", "loc_namecn": "延边朝鲜族自治州", "loc_x": 129.513228, "loc_y": 42.904823 }, "370900000000": { "loc_id": "370900000000", "loc_namecn": "泰安市", "loc_x": 117.129063, "loc_y": 36.194968 }, "530800000000": { "loc_id": "530800000000", "loc_namecn": "普洱市", "loc_x": 100.972344, "loc_y": 22.777321 }, "130500000000": { "loc_id": "130500000000", "loc_namecn": "邢台市", "loc_x": 114.508851, "loc_y": 37.0682 }, "220600000000": { "loc_id": "220600000000", "loc_namecn": "白山市", "loc_x": 126.427839, "loc_y": 41.942505 }, "141000000000": { "loc_id": "141000000000", "loc_namecn": "临汾市", "loc_x": 111.517973, "loc_y": 36.08415 }, "150900000000": { "loc_id": "150900000000", "loc_namecn": "乌兰察布市", "loc_x": 113.114543, "loc_y": 41.034126 }, "150400000000": { "loc_id": "150400000000", "loc_namecn": "赤峰市", "loc_x": 118.956806, "loc_y": 42.275317 }, "520600000000": { "loc_id": "520600000000", "loc_namecn": "铜仁市", "loc_x": 109.192117, "loc_y": 27.718745 }, "451100000000": { "loc_id": "451100000000", "loc_namecn": "贺州市", "loc_x": 111.552056, "loc_y": 24.414141 }, "120100000000": { "loc_id": "120100000000", "loc_namecn": "市辖区", "loc_x": null, "loc_y": null }, "231100000000": { "loc_id": "231100000000", "loc_namecn": "黑河市", "loc_x": 127.499023, "loc_y": 50.249585 }, "230800000000": { "loc_id": "230800000000", "loc_namecn": "佳木斯市", "loc_x": 130.361634, "loc_y": 46.809606 }, "622900000000": { "loc_id": "622900000000", "loc_namecn": "临夏回族自治州", "loc_x": 103.212006, "loc_y": 35.599446 }, "623000000000": { "loc_id": "623000000000", "loc_namecn": "甘南藏族自治州", "loc_x": 102.911008, "loc_y": 34.986354 }, "411400000000": { "loc_id": "411400000000", "loc_namecn": "商丘市", "loc_x": 115.650497, "loc_y": 34.437054 }, "140800000000": { "loc_id": "140800000000", "loc_namecn": "运城市", "loc_x": 111.003957, "loc_y": 35.022778 }, "420500000000": { "loc_id": "420500000000", "loc_namecn": "宜昌市", "loc_x": 111.290843, "loc_y": 30.702636 }, "520200000000": { "loc_id": "520200000000", "loc_namecn": "六盘水市", "loc_x": 104.846743, "loc_y": 26.584643 }, "620000000000": { "loc_id": "620000000000", "loc_namecn": "甘肃", "loc_x": null, "loc_y": null }, "621100000000": { "loc_id": "621100000000", "loc_namecn": "定西市", "loc_x": 104.626294, "loc_y": 35.579578 }, "320400000000": { "loc_id": "320400000000", "loc_namecn": "常州市", "loc_x": 119.946973, "loc_y": 31.772752 }, "141100000000": { "loc_id": "141100000000", "loc_namecn": "吕梁市", "loc_x": 111.134335, "loc_y": 37.524366 }, "532600000000": { "loc_id": "532600000000", "loc_namecn": "文山壮族苗族自治州", "loc_x": 104.24401, "loc_y": 23.36951 }, "533300000000": { "loc_id": "533300000000", "loc_namecn": "怒江傈僳族自治州", "loc_x": 98.854304, "loc_y": 25.850949 }, "230700000000": { "loc_id": "230700000000", "loc_namecn": "伊春市", "loc_x": 128.899396, "loc_y": 47.724775 }, "410800000000": { "loc_id": "410800000000", "loc_namecn": "焦作市", "loc_x": 113.238266, "loc_y": 35.23904 }, "410000000000": { "loc_id": "410000000000", "loc_namecn": "河南", "loc_x": null, "loc_y": null }, "150000000000": { "loc_id": "150000000000", "loc_namecn": "内蒙古", "loc_x": null, "loc_y": null }, "450000000000": { "loc_id": "450000000000", "loc_namecn": "广西", "loc_x": null, "loc_y": null }, "410900000000": { "loc_id": "410900000000", "loc_namecn": "濮阳市", "loc_x": 115.041299, "loc_y": 35.768234 }, "620700000000": { "loc_id": "620700000000", "loc_namecn": "张掖市", "loc_x": 100.455472, "loc_y": 38.932897 }, "220800000000": { "loc_id": "220800000000", "loc_namecn": "白城市", "loc_x": 122.841114, "loc_y": 45.619026 }, "320500000000": { "loc_id": "320500000000", "loc_namecn": "苏州市", "loc_x": 120.619585, "loc_y": 31.299379 }, "431300000000": { "loc_id": "431300000000", "loc_namecn": "娄底市", "loc_x": 112.008497, "loc_y": 27.728136 }, "430600000000": { "loc_id": "430600000000", "loc_namecn": "岳阳市", "loc_x": 113.132855, "loc_y": 29.37029 }, "341300000000": { "loc_id": "341300000000", "loc_namecn": "宿州市", "loc_x": 116.984084, "loc_y": 33.633891 }, "530300000000": { "loc_id": "530300000000", "loc_namecn": "曲靖市", "loc_x": 103.797851, "loc_y": 25.501557 }, "640300000000": { "loc_id": "640300000000", "loc_namecn": "吴忠市", "loc_x": 106.199409, "loc_y": 37.986165 }, "511700000000": { "loc_id": "511700000000", "loc_namecn": "达州市", "loc_x": 107.502262, "loc_y": 31.209484 }, "130200000000": { "loc_id": "130200000000", "loc_namecn": "唐山市", "loc_x": 118.175393, "loc_y": 39.635113 }, "140600000000": { "loc_id": "140600000000", "loc_namecn": "朔州市", "loc_x": 112.433387, "loc_y": 39.331261 }, "652100000000": { "loc_id": "652100000000", "loc_namecn": "吐鲁番地区", "loc_x": 89.184078, "loc_y": 42.947613 }, "445100000000": { "loc_id": "445100000000", "loc_namecn": "潮州市", "loc_x": 116.632301, "loc_y": 23.661701 }, "520500000000": { "loc_id": "520500000000", "loc_namecn": "毕节市", "loc_x": 105.284852, "loc_y": 27.302085 }, "620100000000": { "loc_id": "620100000000", "loc_namecn": "兰州市", "loc_x": 103.823557, "loc_y": 36.058039 }, "230300000000": { "loc_id": "230300000000", "loc_namecn": "鸡西市", "loc_x": 130.975966, "loc_y": 45.300046 }, "320700000000": { "loc_id": "320700000000", "loc_namecn": "连云港市", "loc_x": 119.178821, "loc_y": 34.600018 }, "130700000000": { "loc_id": "130700000000", "loc_namecn": "张家口市", "loc_x": 114.884091, "loc_y": 40.811901 }, "140100000000": { "loc_id": "140100000000", "loc_namecn": "太原市", "loc_x": 112.549248, "loc_y": 37.857014 }, "460100000000": { "loc_id": "460100000000", "loc_namecn": "海口市", "loc_x": 110.33119, "loc_y": 20.031971 }, "420900000000": { "loc_id": "420900000000", "loc_namecn": "孝感市", "loc_x": 113.926655, "loc_y": 30.926423 }, "411100000000": { "loc_id": "411100000000", "loc_namecn": "漯河市", "loc_x": 114.026405, "loc_y": 33.575855 }, "440100000000": { "loc_id": "440100000000", "loc_namecn": "广州市", "loc_x": 113.280637, "loc_y": 23.125178 }, "320800000000": { "loc_id": "320800000000", "loc_namecn": "淮安市", "loc_x": 119.021265, "loc_y": 33.597506 }, "320000000000": { "loc_id": "320000000000", "loc_namecn": "江苏", "loc_x": null, "loc_y": null }, "620500000000": { "loc_id": "620500000000", "loc_namecn": "天水市", "loc_x": 105.724998, "loc_y": 34.578529 }, "450700000000": { "loc_id": "450700000000", "loc_namecn": "钦州市", "loc_x": 108.624175, "loc_y": 21.967127 }, "441300000000": { "loc_id": "441300000000", "loc_namecn": "惠州市", "loc_x": 114.412599, "loc_y": 23.079404 }, "371200000000": { "loc_id": "371200000000", "loc_namecn": "莱芜市", "loc_x": 117.677736, "loc_y": 36.214397 }, "370300000000": { "loc_id": "370300000000", "loc_namecn": "淄博市", "loc_x": 118.047648, "loc_y": 36.814939 }, "513200000000": { "loc_id": "513200000000", "loc_namecn": "阿坝藏族羌族自治州", "loc_x": 102.221374, "loc_y": 31.899792 }, "210500000000": { "loc_id": "210500000000", "loc_namecn": "本溪市", "loc_x": 123.770519, "loc_y": 41.297909 }, "450400000000": { "loc_id": "450400000000", "loc_namecn": "梧州市", "loc_x": 111.316229, "loc_y": 23.472309 }, "411500000000": { "loc_id": "411500000000", "loc_namecn": "信阳市", "loc_x": 114.075031, "loc_y": 32.123274 }, "632300000000": { "loc_id": "632300000000", "loc_namecn": "黄南藏族自治州", "loc_x": 102.019988, "loc_y": 35.517744 }, "440500000000": { "loc_id": "440500000000", "loc_namecn": "汕头市", "loc_x": 116.708463, "loc_y": 23.37102 }, "650000000000": { "loc_id": "650000000000", "loc_namecn": "新疆", "loc_x": null, "loc_y": null }, "610000000000": { "loc_id": "610000000000", "loc_namecn": "陕西", "loc_x": null, "loc_y": null }, "430000000000": { "loc_id": "430000000000", "loc_namecn": "湖南", "loc_x": null, "loc_y": null }, "360700000000": { "loc_id": "360700000000", "loc_namecn": "赣州市", "loc_x": 114.940278, "loc_y": 25.85097 }, "650100000000": { "loc_id": "650100000000", "loc_namecn": "乌鲁木齐市", "loc_x": 87.617733, "loc_y": 43.792818 }, "610800000000": { "loc_id": "610800000000", "loc_namecn": "榆林市", "loc_x": 109.741193, "loc_y": 38.290162 }, "370200000000": { "loc_id": "370200000000", "loc_namecn": "青岛市", "loc_x": 120.369557, "loc_y": 36.094406 }, "620900000000": { "loc_id": "620900000000", "loc_namecn": "酒泉市", "loc_x": 98.510795, "loc_y": 39.744023 }, "520100000000": { "loc_id": "520100000000", "loc_namecn": "贵阳市", "loc_x": 106.713478, "loc_y": 26.578343 }, "350400000000": { "loc_id": "350400000000", "loc_namecn": "三明市", "loc_x": 117.635001, "loc_y": 26.265444 }, "441900000000": { "loc_id": "441900000000", "loc_namecn": "东莞市", "loc_x": 113.760234, "loc_y": 23.048884 }, "131000000000": { "loc_id": "131000000000", "loc_namecn": "廊坊市", "loc_x": 116.713873, "loc_y": 39.529244 }, "341700000000": { "loc_id": "341700000000", "loc_namecn": "池州市", "loc_x": 117.489157, "loc_y": 30.656037 }, "360900000000": { "loc_id": "360900000000", "loc_namecn": "宜春市", "loc_x": 114.391136, "loc_y": 27.8043 }, "430300000000": { "loc_id": "430300000000", "loc_namecn": "湘潭市", "loc_x": 112.925083, "loc_y": 27.846725 }, "370400000000": { "loc_id": "370400000000", "loc_namecn": "枣庄市", "loc_x": 117.557964, "loc_y": 34.856424 }, "130900000000": { "loc_id": "130900000000", "loc_namecn": "沧州市", "loc_x": 116.857461, "loc_y": 38.310582 }, "211400000000": { "loc_id": "211400000000", "loc_namecn": "葫芦岛市", "loc_x": 120.856394, "loc_y": 40.755572 }, "341800000000": { "loc_id": "341800000000", "loc_namecn": "宣城市", "loc_x": 118.757995, "loc_y": 30.945667 }, "140400000000": { "loc_id": "140400000000", "loc_namecn": "长治市", "loc_x": 113.113556, "loc_y": 36.191112 }, "611000000000": { "loc_id": "611000000000", "loc_namecn": "商洛市", "loc_x": 109.939776, "loc_y": 33.868319 }, "411200000000": { "loc_id": "411200000000", "loc_namecn": "三门峡市", "loc_x": 111.194099, "loc_y": 34.777338 }, "632200000000": { "loc_id": "632200000000", "loc_namecn": "海北藏族自治州", "loc_x": 100.901059, "loc_y": 36.959435 }, "410700000000": { "loc_id": "410700000000", "loc_namecn": "新乡市", "loc_x": 113.883991, "loc_y": 35.302616 }, "150500000000": { "loc_id": "150500000000", "loc_namecn": "通辽市", "loc_x": 122.263119, "loc_y": 43.617429 }, "542100000000": { "loc_id": "542100000000", "loc_namecn": "昌都地区", "loc_x": 97.178452, "loc_y": 31.136875 }, "371400000000": { "loc_id": "371400000000", "loc_namecn": "德州市", "loc_x": 116.307428, "loc_y": 37.453968 }, "321200000000": { "loc_id": "321200000000", "loc_namecn": "泰州市", "loc_x": 119.915176, "loc_y": 32.484882 }, "330700000000": { "loc_id": "330700000000", "loc_namecn": "金华市", "loc_x": 119.649506, "loc_y": 29.089524 }, "370700000000": { "loc_id": "370700000000", "loc_namecn": "潍坊市", "loc_x": 119.107078, "loc_y": 36.70925 }, "430200000000": { "loc_id": "430200000000", "loc_namecn": "株洲市", "loc_x": 113.151737, "loc_y": 27.835806 }, "610400000000": { "loc_id": "610400000000", "loc_namecn": "咸阳市", "loc_x": 108.705117, "loc_y": 34.333439 }, "440900000000": { "loc_id": "440900000000", "loc_namecn": "茂名市", "loc_x": 110.919229, "loc_y": 21.659751 }, "330600000000": { "loc_id": "330600000000", "loc_namecn": "绍兴市", "loc_x": 120.582112, "loc_y": 29.997117 }, "632600000000": { "loc_id": "632600000000", "loc_namecn": "果洛藏族自治州", "loc_x": 100.242143, "loc_y": 34.4736 }, "621000000000": { "loc_id": "621000000000", "loc_namecn": "庆阳市", "loc_x": 107.638372, "loc_y": 35.734218 }, "441700000000": { "loc_id": "441700000000", "loc_namecn": "阳江市", "loc_x": 111.975107, "loc_y": 21.859222 }, "310000000000": { "loc_id": "310000000000", "loc_namecn": "上海", "loc_x": 121.472644, "loc_y": 31.231706 }, "440200000000": { "loc_id": "440200000000", "loc_namecn": "韶关市", "loc_x": 113.591544, "loc_y": 24.801322 }, "230900000000": { "loc_id": "230900000000", "loc_namecn": "七台河市", "loc_x": 131.015584, "loc_y": 45.771266 }, "511000000000": { "loc_id": "511000000000", "loc_namecn": "内江市", "loc_x": 105.066138, "loc_y": 29.58708 }, "140300000000": { "loc_id": "140300000000", "loc_namecn": "阳泉市", "loc_x": 113.583285, "loc_y": 37.861188 }, "150600000000": { "loc_id": "150600000000", "loc_namecn": "鄂尔多斯市", "loc_x": 109.99029, "loc_y": 39.817179 }, "430100000000": { "loc_id": "430100000000", "loc_namecn": "长沙市", "loc_x": 112.982279, "loc_y": 28.19409 }, "110000000000": { "loc_id": "110000000000", "loc_namecn": "北京", "loc_x": 116.405285, "loc_y": 39.904989 }, "450800000000": { "loc_id": "450800000000", "loc_namecn": "贵港市", "loc_x": 109.602146, "loc_y": 23.0936 }, "230600000000": { "loc_id": "230600000000", "loc_namecn": "大庆市", "loc_x": 125.11272, "loc_y": 46.590734 }, "640100000000": { "loc_id": "640100000000", "loc_namecn": "银川市", "loc_x": 106.278179, "loc_y": 38.46637 }, "330000000000": { "loc_id": "330000000000", "loc_namecn": "浙江", "loc_x": null, "loc_y": null }, "411600000000": { "loc_id": "411600000000", "loc_namecn": "周口市", "loc_x": 114.649653, "loc_y": 33.620357 }, "410300000000": { "loc_id": "410300000000", "loc_namecn": "洛阳市", "loc_x": 112.434468, "loc_y": 34.663041 }, "350000000000": { "loc_id": "350000000000", "loc_namecn": "福建", "loc_x": null, "loc_y": null }, "440800000000": { "loc_id": "440800000000", "loc_namecn": "湛江市", "loc_x": 110.405529, "loc_y": 21.195338 }, "513400000000": { "loc_id": "513400000000", "loc_namecn": "凉山彝族自治州", "loc_x": 102.258746, "loc_y": 27.886762 }, "130800000000": { "loc_id": "130800000000", "loc_namecn": "承德市", "loc_x": 117.939152, "loc_y": 40.976204 }, "419000000000": { "loc_id": "419000000000", "loc_namecn": "省直辖县级行政区划", "loc_x": null, "loc_y": null }, "361000000000": { "loc_id": "361000000000", "loc_namecn": "抚州市", "loc_x": 116.358351, "loc_y": 27.98385 }, "220100000000": { "loc_id": "220100000000", "loc_namecn": "长春市", "loc_x": 125.3245, "loc_y": 43.886841 }, "360100000000": { "loc_id": "360100000000", "loc_namecn": "南昌市", "loc_x": 115.892151, "loc_y": 28.676493 }, "540000000000": { "loc_id": "540000000000", "loc_namecn": "西藏", "loc_x": null, "loc_y": null }, "140200000000": { "loc_id": "140200000000", "loc_namecn": "大同市", "loc_x": 113.295259, "loc_y": 40.09031 }, "533100000000": { "loc_id": "533100000000", "loc_namecn": "德宏傣族景颇族自治州", "loc_x": 98.578363, "loc_y": 24.436694 }, "150100000000": { "loc_id": "150100000000", "loc_namecn": "呼和浩特市", "loc_x": 111.670801, "loc_y": 40.818311 }, "450300000000": { "loc_id": "450300000000", "loc_namecn": "桂林市", "loc_x": 110.299121, "loc_y": 25.274215 }, "440600000000": { "loc_id": "440600000000", "loc_namecn": "佛山市", "loc_x": 113.122717, "loc_y": 23.028762 }, "640000000000": { "loc_id": "640000000000", "loc_namecn": "宁夏", "loc_x": null, "loc_y": null }, "510300000000": { "loc_id": "510300000000", "loc_namecn": "自贡市", "loc_x": 104.773447, "loc_y": 29.352765 }, "330300000000": { "loc_id": "330300000000", "loc_namecn": "温州市", "loc_x": 120.672111, "loc_y": 28.000575 }, "210900000000": { "loc_id": "210900000000", "loc_namecn": "阜新市", "loc_x": 121.648962, "loc_y": 42.011796 }, "371100000000": { "loc_id": "371100000000", "loc_namecn": "日照市", "loc_x": 119.461208, "loc_y": 35.428588 }, "421100000000": { "loc_id": "421100000000", "loc_namecn": "黄冈市", "loc_x": 114.879365, "loc_y": 30.447711 }, "220500000000": { "loc_id": "220500000000", "loc_namecn": "通化市", "loc_x": 125.936501, "loc_y": 41.721177 }, "430500000000": { "loc_id": "430500000000", "loc_namecn": "邵阳市", "loc_x": 111.46923, "loc_y": 27.237842 }, "420000000000": { "loc_id": "420000000000", "loc_namecn": "湖北", "loc_x": null, "loc_y": null }, "150700000000": { "loc_id": "150700000000", "loc_namecn": "呼伦贝尔市", "loc_x": 119.758168, "loc_y": 49.215333 }, "341000000000": { "loc_id": "341000000000", "loc_namecn": "黄山市", "loc_x": 118.317325, "loc_y": 29.709239 }, "542500000000": { "loc_id": "542500000000", "loc_namecn": "阿里地区", "loc_x": 80.105498, "loc_y": 32.503187 }, "530400000000": { "loc_id": "530400000000", "loc_namecn": "玉溪市", "loc_x": 102.543907, "loc_y": 24.350461 }, "640200000000": { "loc_id": "640200000000", "loc_namecn": "石嘴山市", "loc_x": 106.376173, "loc_y": 39.01333 }, "361100000000": { "loc_id": "361100000000", "loc_namecn": "上饶市", "loc_x": 117.971185, "loc_y": 28.44442 }, "371600000000": { "loc_id": "371600000000", "loc_namecn": "滨州市", "loc_x": 118.016974, "loc_y": 37.383542 }, "340400000000": { "loc_id": "340400000000", "loc_namecn": "淮南市", "loc_x": 117.025449, "loc_y": 32.645947 }, "230200000000": { "loc_id": "230200000000", "loc_namecn": "齐齐哈尔市", "loc_x": 123.953486, "loc_y": 47.348079 }, "511500000000": { "loc_id": "511500000000", "loc_namecn": "宜宾市", "loc_x": 104.630825, "loc_y": 28.760189 }, "131100000000": { "loc_id": "131100000000", "loc_namecn": "衡水市", "loc_x": 115.665993, "loc_y": 37.735097 }, "640500000000": { "loc_id": "640500000000", "loc_namecn": "中卫市", "loc_x": 105.189568, "loc_y": 37.514951 }, "140000000000": { "loc_id": "140000000000", "loc_namecn": "山西", "loc_x": null, "loc_y": null }, "420600000000": { "loc_id": "420600000000", "loc_namecn": "襄阳市", "loc_x": 112.144146, "loc_y": 32.042426 }, "510400000000": { "loc_id": "510400000000", "loc_namecn": "攀枝花市", "loc_x": 101.716007, "loc_y": 26.580446 }, "445300000000": { "loc_id": "445300000000", "loc_namecn": "云浮市", "loc_x": 112.044439, "loc_y": 22.929801 }, "150300000000": { "loc_id": "150300000000", "loc_namecn": "乌海市", "loc_x": 106.825563, "loc_y": 39.673734 }, "370800000000": { "loc_id": "370800000000", "loc_namecn": "济宁市", "loc_x": 116.587245, "loc_y": 35.415393 }, "621200000000": { "loc_id": "621200000000", "loc_namecn": "陇南市", "loc_x": 104.929379, "loc_y": 33.388598 }, "451200000000": { "loc_id": "451200000000", "loc_namecn": "河池市", "loc_x": 108.062105, "loc_y": 24.695899 }, "220400000000": { "loc_id": "220400000000", "loc_namecn": "辽源市", "loc_x": 125.145349, "loc_y": 42.902692 }, "211200000000": { "loc_id": "211200000000", "loc_namecn": "铁岭市", "loc_x": 123.844279, "loc_y": 42.290585 }, "370100000000": { "loc_id": "370100000000", "loc_namecn": "济南市", "loc_x": 117.000923, "loc_y": 36.675807 }, "410600000000": { "loc_id": "410600000000", "loc_namecn": "鹤壁市", "loc_x": 114.295444, "loc_y": 35.748236 }, "441200000000": { "loc_id": "441200000000", "loc_namecn": "肇庆市", "loc_x": 112.472529, "loc_y": 23.051546 }, "512000000000": { "loc_id": "512000000000", "loc_namecn": "资阳市", "loc_x": 104.641917, "loc_y": 30.122211 }, "632800000000": { "loc_id": "632800000000", "loc_namecn": "海西蒙古族藏族自治州", "loc_x": 97.370785, "loc_y": 37.374663 }, "330800000000": { "loc_id": "330800000000", "loc_namecn": "衢州市", "loc_x": 118.87263, "loc_y": 28.941708 }, "430800000000": { "loc_id": "430800000000", "loc_namecn": "张家界市", "loc_x": 110.479921, "loc_y": 29.127401 }, "231000000000": { "loc_id": "231000000000", "loc_namecn": "牡丹江市", "loc_x": 129.618602, "loc_y": 44.582962 }, "511400000000": { "loc_id": "511400000000", "loc_namecn": "眉山市", "loc_x": 103.831788, "loc_y": 30.048318 }, "150800000000": { "loc_id": "150800000000", "loc_namecn": "巴彦淖尔市", "loc_x": 107.416959, "loc_y": 40.757402 }, "510700000000": { "loc_id": "510700000000", "loc_namecn": "绵阳市", "loc_x": 104.741722, "loc_y": 31.46402 }, "370500000000": { "loc_id": "370500000000", "loc_namecn": "东营市", "loc_x": 118.4963, "loc_y": 37.461266 }, "410200000000": { "loc_id": "410200000000", "loc_namecn": "开封市", "loc_x": 114.341447, "loc_y": 34.797049 }, "532300000000": { "loc_id": "532300000000", "loc_namecn": "楚雄彝族自治州", "loc_x": 101.546046, "loc_y": 25.041988 }, "152200000000": { "loc_id": "152200000000", "loc_namecn": "兴安盟", "loc_x": 122.070317, "loc_y": 46.076268 } },
+	    getLoc: function getLoc(loc_id) {
+	        var loc = this._data[loc_id];
+	        if (loc) {
+	            return loc;
+	        } else {
+	            return {};
+	        }
+	    },
+	    getCityLongId: function getCityLongId(cityId, prov) {
+	        if (!cityId) {
+	            return undefined;
+	        }
+	        if (cityId.length == 2) {
+	            if (prov) {
+	                cityId += "00";
+	            } else {
+	                cityId += ["11", "12", "31", "50"].indexOf(cityId) != -1 ? "00" : "01";
+	            }
+	        }
+	        if (cityId.length == 4) {
+	            cityId = cityId + "00000000";
+	            var rv = this._data[cityId];
+	            if (!rv) {
+	                cityId = cityId.substr(0, 2) + "0100000000";
+	            }
+	            rv = this._data[cityId];
+	            if (!rv) {
+	                return undefined;
+	            }
+	        }
+	        return cityId;
+	    },
+	    getCityName: function getCityName(cityId, prov) {
+	        cityId = this.getCityLongId(cityId, prov);
+	        if (this.getLoc(cityId).loc_namecn) {
+	            return this.getLoc(cityId).loc_namecn.replace('市', '');
+	        }
+	        return undefined;
+	    },
+	    getProvinceName: function getProvinceName(provId) {
+	        if (!provId) {
+	            return undefined;
+	        }
+	        if (provId.length == 12) {
+	            loc = this.getLoc(provId);
+	            return loc.loc_namecn;
+	        }
+
+	        return undefined;
+	    },
+	    getProv: function getProv(provName) {
+	        var rv = false;
+	        //console.log(this.province);
+	        this.province.forEach(function (prov) {
+	            if (provName.indexOf(prov.name) > -1) {
+	                rv = prov;
+	            }
+	        });
+	        return rv;
+	    },
+
+	    getProvId: function getProvId(provName) {
+	        var rv = false;
+	        //console.log(this.province);
+	        this.province.forEach(function (prov) {
+
+	            if (provName.indexOf(prov.name) > -1) {
+	                rv = prov.pid;
+	                return rv;
+	            }
+	        });
+	        return rv;
+	    },
+	    findProvRegion: function findProvRegion(provName) {
+	        var regionKey = "";
+	        Object.keys(REGION).forEach(function (k) {
+	            if (REGION[k].provList.indexOf(provName) != -1) {
+	                regionKey = k;
+	            }
+	        });
+	        return regionKey;
+	    }
+	};
+
+	var REGION = {
+	    "region_huabei": {
+	        "title": "华北",
+	        "provList": ["北京", "内蒙古", "天津", "河北", "山西"]
+	    },
+	    "region_dongbei": {
+	        "title": "东北",
+	        "provList": ["辽宁", "黑龙江", "吉林"]
+	    },
+	    "region_huadong": {
+	        "title": "华东",
+	        "provList": ["上海", "江苏", "浙江", "安徽", "福建", "江西", "山东"]
+	    },
+	    "region_huazhong": {
+	        "title": "华中",
+	        "provList": ["河南", "湖北", "湖南"]
+	    },
+	    "region_huanan": {
+	        "title": "华南",
+	        "provList": ["广东", "广西", "海南"]
+	    },
+	    "region_xinan": {
+	        "title": "西南",
+	        "provList": ["重庆", "四川", "贵州", "云南", "西藏"]
+	    },
+	    "region_xibei": {
+	        "title": "西北",
+	        "provList": ["陕西", "甘肃", "青海", "宁夏", "新疆"]
+	    }
+	};
+
+	var no_data_provinces = ["540000000000", "310000000000"]; //完全没有数据的省份
+	var no_data_provinces_2014 = ["460000000000", "330000000000"]; //14年没有录取数据省份
+	var not_ratio_provinces = ["110000000000", "650000000000", "420000000000", "330000000000"]; //因为政策原因无法计算得出录取概率省份
+	var no_data_provinces_2015 = ["330000000000", "350000000000"]; //15年没有录取数据省份
+
+	var no_data_provinces_2015 = ["330000000000", "350000000000"]; //14年没有录取数据省份
+
+	var data_is_dealing_provs = ['广东', '上海', '辽宁', '湖北', '江西', '内蒙古', '重庆', '贵州', '天津', '河北'];
+
+	var hot_cities_names = ["北京", "上海", "深圳", "广州", "武汉", "西安", "南京", "天津", "成都", "长春", "重庆", "沈阳", "哈尔滨", "杭州", "济南", "长沙", "大连", "青岛", "宁波", "厦门"];
+	var air_fresh_cities_names = ["广州", "南昌", "昆明", "贵阳", "福州", "南宁", "呼和浩特", "宁波", "烟台", "银川", "厦门", "温州"];
+	var happy_cities_names = ["西安", "南京", "天津", "成都", "长春", "杭州", "长沙", "大连", "珠海", "岳阳"];
+
+	var provid = ["31", "63", "32", "42", "35", "11", "37", "61", "54", "12", "21", "65", "44", "45", "36", "15", "51", "23", "34", "13", "14", "43", "22", "50", "33", "41", "62", "52", "46", "53", "64"];
+
+	var prov_py = {
+	    11: "B", 12: "T", 13: "H", 14: "S",
+	    15: "N", 21: "L", 22: "J", 23: "H",
+	    31: "S", 32: "J", 33: "Z", 34: "A",
+	    35: "F", 36: "J", 37: "S", 41: "H",
+	    42: "H", 43: "H", 44: "G", 45: "G", 46: "H",
+	    50: "C", 51: "S", 52: "G", 53: "Y", 54: "X",
+	    61: "S", 62: "G", 63: "Q", 64: "N", 65: "X"
+	};
+	var province = [];
+	var provinceMap = {};
+	var cityName2ProvinceIdMap = {};
+
+	provid.forEach(function (i) {
+	    var cityId = module.exports.getCityLongId(i + "00");
+	    var city = module.exports.getLoc(cityId);
+	    var info = { "py": prov_py[i], "pid": i, name: city.loc_namecn, loc_id: city.loc_id };
+	    province.push(info);
+	    provinceMap[info.name] = info;
+	});
+	province.sort(function (a, b) {
+	    return a.py.charCodeAt() > b.py.charCodeAt() ? 1 : -1;
+	});
+
+	function getProvInfoByName(provName) {
+	    var strMap = [provName, provName.slice(0, -1), provName + "省", provName + "市"];
+	    var _iteratorNormalCompletion = true;
+	    var _didIteratorError = false;
+	    var _iteratorError = undefined;
+
+	    try {
+	        for (var _iterator = strMap[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	            var str = _step.value;
+
+	            if (str in provinceMap) {
+	                return provinceMap[str];
+	            }
+	        }
+	    } catch (err) {
+	        _didIteratorError = true;
+	        _iteratorError = err;
+	    } finally {
+	        try {
+	            if (!_iteratorNormalCompletion && _iterator.return) {
+	                _iterator.return();
+	            }
+	        } finally {
+	            if (_didIteratorError) {
+	                throw _iteratorError;
+	            }
+	        }
+	    }
+
+	    return null;
+	}
+	var _getCityInfoMap = function getCityInfoMap() {
+	    var locData = module.exports._data;
+	    var locInfoFromNameMap = {};
+	    for (var key in locData) {
+	        locInfoFromNameMap[locData[key].loc_namecn] = locData[key];
+	    }
+	    _getCityInfoMap = function getCityInfoMap() {
+	        return locInfoFromNameMap;
+	    };
+	    return locInfoFromNameMap;
+	};
+
+	function getCityInfoByName(cityName) {
+	    var strMap = [cityName, cityName.slice(0, -1), cityName + "市"];
+	    var cityInfoMap = _getCityInfoMap();
+
+	    var _iteratorNormalCompletion2 = true;
+	    var _didIteratorError2 = false;
+	    var _iteratorError2 = undefined;
+
+	    try {
+	        for (var _iterator2 = strMap[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+	            var str = _step2.value;
+
+	            if (str in cityInfoMap) {
+	                return cityInfoMap[str];
+	            }
+	        }
+	    } catch (err) {
+	        _didIteratorError2 = true;
+	        _iteratorError2 = err;
+	    } finally {
+	        try {
+	            if (!_iteratorNormalCompletion2 && _iterator2.return) {
+	                _iterator2.return();
+	            }
+	        } finally {
+	            if (_didIteratorError2) {
+	                throw _iteratorError2;
+	            }
+	        }
+	    }
+
+	    return null;
+	}
+	var _getTopCity = function getTopCity() {
+	    var getCityInfoList = function getCityInfoList(cityList) {
+	        var cityInfos = [];
+	        var _iteratorNormalCompletion3 = true;
+	        var _didIteratorError3 = false;
+	        var _iteratorError3 = undefined;
+
+	        try {
+	            for (var _iterator3 = cityList[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+	                var city = _step3.value;
+
+	                cityInfos.push(getCityInfoByName(city));
+	            }
+	        } catch (err) {
+	            _didIteratorError3 = true;
+	            _iteratorError3 = err;
+	        } finally {
+	            try {
+	                if (!_iteratorNormalCompletion3 && _iterator3.return) {
+	                    _iterator3.return();
+	                }
+	            } finally {
+	                if (_didIteratorError3) {
+	                    throw _iteratorError3;
+	                }
+	            }
+	        }
+
+	        return cityInfos;
+	    };
+	    var rv = {
+	        hot_cities: getCityInfoList(hot_cities_names),
+	        air_fresh_cities: getCityInfoList(air_fresh_cities_names),
+	        happy_cities: getCityInfoList(happy_cities_names)
+	    };
+	    _getTopCity = function getTopCity() {
+	        return rv;
+	    };
+	    return rv;
+	};
+
+	var contains = function contains(arr, e) {
+
+	    for (var i = 0; i < arr.length; i++) {
+
+	        if (arr[i] == e) {
+	            return true;
+	        }
+	    }
+	    return false;
+	};
+
+	var filterProvinceId = function filterProvinceId(list) {
+	    if (!list) {
+	        return [];
+	    };
+
+	    var allPro = "";
+
+	    for (var index in list) {
+	        var item = list[index];
+
+	        if (item.length > 6) {
+
+	            var pr = item.substr(0, 2);
+	            var city = item.substr(2, 6);
+	            pin.log(pr);
+	            pin.log(city);
+	            if (contains(provid, pr) == true && city == "0000") {
+	                if (allPro == "") {
+	                    allPro = item;
+	                } else {
+	                    allPro = allPro + "," + item;
+	                }
+
+	                pin.log(allPro);
+	            }
+	        };
+	    }
+
+	    return allPro;
+	};
+
+	var filterCityId = function filterCityId(list) {
+
+	    if (!list) {
+	        return [];
+	    };
+
+	    var allCity = "";
+
+	    for (var index in list) {
+	        var item = list[index];
+	        if (item.length > 6) {
+
+	            var pr = item.substr(0, 2);
+	            var city = item.substr(2, 6);
+
+	            if (city != "0000") {
+
+	                if (allCity == "") {
+	                    allCity = item;
+	                } else {
+	                    allCity = allCity + "," + item;
+	                }
+	            }
+	        };
+	    }
+
+	    return allCity;
+	};
+
+	var getProvIdFromCityName = function getProvIdFromCityName(cityName) {
+	    var pid;
+	    if (!cityName) {
+	        return pid;
+	    };
+
+	    var cityInfo = getCityInfoByName(cityName);
+
+	    if (!cityInfo) {
+	        return pid;
+	    };
+
+	    pid = cityInfo.loc_id.slice(0, 2);
+
+	    return pid;
+	};
+
+	var getRegionIdsFromCityName = function getRegionIdsFromCityName(cityName) {
+	    var region = [];
+	    var pid = getProvIdFromCityName(cityName);
+
+	    if (pid) {
+	        var loc = module.exports.getLoc(pid + "0000000000");
+	        var re = module.exports.findProvRegion(loc.loc_namecn);
+
+	        Object.keys(REGION).forEach(function (k) {
+
+	            if (k == re) {
+	                region = REGION[k].provList;
+	            }
+	        });
+	    };
+
+	    var pids = [];
+	    for (var i in region) {
+	        var proName = region[i];
+	        var pid = module.exports.getProvId(proName);
+	        pids.push(pid + "0000000000");
+	    }
+	    return pids;
+	};
+
+	var isSupportProvince = function isSupportProvince(provid) {
+
+	    for (var i in no_data_provinces) {
+	        if (provid == no_data_provinces[i]) {
+	            return false;
+	        };
+	    }
+	    return true;
+	};
+
+	var isNoData2014 = function isNoData2014(provid) {
+	    for (var i in no_data_provinces_2014) {
+	        if (provid == no_data_provinces_2014[i]) {
+	            return true;
+	        }
+	    }
+	};
+
+	var isNoData2015 = function isNoData2015(provid) {
+	    for (var i in no_data_provinces_2015) {
+	        if (provid == no_data_provinces_2015[i]) {
+	            return true;
+	        }
+	    }
+	};
+
+	var isDataDealing = function isDataDealing(loc_name) {
+	    var _iteratorNormalCompletion4 = true;
+	    var _didIteratorError4 = false;
+	    var _iteratorError4 = undefined;
+
+	    try {
+	        for (var _iterator4 = data_is_dealing_provs[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+	            var item = _step4.value;
+
+	            if (loc_name.indexOf(item) != -1) {
+	                return true;
+	            }
+	        }
+	    } catch (err) {
+	        _didIteratorError4 = true;
+	        _iteratorError4 = err;
+	    } finally {
+	        try {
+	            if (!_iteratorNormalCompletion4 && _iterator4.return) {
+	                _iterator4.return();
+	            }
+	        } finally {
+	            if (_didIteratorError4) {
+	                throw _iteratorError4;
+	            }
+	        }
+	    }
+
+	    return false;
+	};
+
+	module.exports.prov_py = prov_py;
+	module.exports.province = province;
+	module.exports.REGION = REGION;
+	module.exports.no_data_provinces = no_data_provinces;
+	module.exports.no_data_provinces_2014 = no_data_provinces_2014;
+	module.exports.not_ratio_provinces = not_ratio_provinces;
+	module.exports.getProvInfoByName = getProvInfoByName;
+	module.exports.getCityInfoByName = getCityInfoByName;
+	module.exports.getTopCity = _getTopCity;
+	module.exports.filterProvinceId = filterProvinceId;
+	module.exports.filterCityId = filterCityId;
+	module.exports.getProvIdFromCityName = getProvIdFromCityName;
+	module.exports.getRegionIdsFromCityName = getRegionIdsFromCityName;
+	module.exports.isSupportProvince = isSupportProvince;
+	module.exports.isNoData2014 = isNoData2014;
+	module.exports.isNoData2015 = isNoData2015;
+	module.exports.isDataDealing = isDataDealing;
+
+/***/ },
+/* 8 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	///获取url中的参数
+	var getQueryString = function getQueryString(name) {
+	  var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+	  var result = window.location.search.substr(1).match(reg);
+	  return result ? decodeURIComponent(result[2]) : null;
+	};
+	var getQueryObj = function getQueryObj() {
+	  var str = window.location.search;
+	  var num = str.indexOf("?");
+	  if (num < 0) {
+	    return false;
+	  };
+	  str = decodeURIComponent(str.substr(num + 1)); //取得所有参数   stringvar.substr(start [, length ]
+	  var arr = str.split("&"); //各个参数放到数组里
+	  var lastArr = {};
+	  for (var i = 0; i < arr.length; i++) {
+	    lastArr[arr[i].split("=")[0]] = arr[i].split("=")[1];
+	  };
+	  return lastArr;
+	};
+	module.exports = {
+	  getQueryString: getQueryString,
+	  getQueryObj: getQueryObj
+	};
+
+/***/ },
+/* 9 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	var _url = __webpack_require__(5);
 
 	var _url2 = _interopRequireDefault(_url);
 
