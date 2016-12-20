@@ -8,7 +8,6 @@
 <head>
     <title><%if(title){%><%= title%><%}%></title>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta http-equiv="cache-control" content="max-age=0" />
     <meta http-equiv="cache-control" content="no-cache" />
     <meta http-equiv="expires" content="0" />
@@ -20,6 +19,7 @@
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
     <meta name="description" content="<%if(description){%><%= description%><%}%>">
     <META HTTP-EQUIV="Cache-Control" CONTENT="public">
+    <script type="text/javascript" src= 'originjs/utils/flexible.js'></script>
 
     <!--[if lt IE 9]>
     <link href="../scss/css/bootstrap.css" rel="stylesheet">
@@ -56,15 +56,11 @@
 <![endif]-->
 
 
-<% if (header) { %>
-<%- include includes/header.html -%>
-<% } %>
+
 <div class="wrap">
     <%- body %>
 </div>
-<% if (footer) { %>
-<%- include includes/footer.html -%>
-<% } %>
+
 </body>
     <script type="text/javascript" src= 'originjs/utils/jquery.min.js'></script>
     <% scripts.forEach(function(js) {%>

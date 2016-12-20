@@ -2,9 +2,9 @@ html{
 	font-size: 10px;
 }
 .wrap{
-	max-width:750px;
+	max-width:7.5rem;
 	@extend %h-center;
-	font-size: $font-14;
+	//font-size: $font-14;
 
 }
 .input-div{

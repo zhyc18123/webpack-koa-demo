@@ -473,20 +473,20 @@ i.id-third{
 
 
 @media (min-width: 320px) and (max-width: 374px) {
-	html{
-		font-size: 5px;
-	}
+	//html{
+	//	font-size: 5px;
+	//}
 }
 
 @media (min-width: 375px) and (max-width: 413px) {
-	html{
-		font-size: (375/640)*10+px;
-	}
+	//html{
+	//	font-size: (375/640)*10+px;
+	//}
 }
 @media (min-width: 414px) and (max-width: 640px) {
-	html{
-		font-size: (414/640)*10+px;
-	}
+	//html{
+	//	font-size: (414/640)*10+px;
+	//}
 }
 @media (max-width: 414px) {
 	.rectangular-title span{

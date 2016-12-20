@@ -36,12 +36,12 @@ function setCoordinate(originData, startX, startY, widthMargin, canvasHeight, lo
 	var len = originData.length;
 
 	for(var i = 0; i < len; i++){
-		rankMax = originData[i].ranking > rankMax ? originData[i].ranking : rankMax;
+		rankMax = originData[i].min_rank > rankMax ? originData[i].min_rank : rankMax;
 	}
 	rankMaxStr = ""+rankMax;
 
-	if(rankMaxStr.length <= 3){
-		rankMax += 5 * Math.pow(10, rankMaxStr.length-2);
+	if(rankMaxStr.length <= 4){
+		rankMax += 10 * Math.pow(10, rankMaxStr.length-2);
 	}else if(rankMaxStr.length <= 6){
 		rankMax += 3 * Math.pow(10, rankMaxStr.length-2);
 	}else{
@@ -50,16 +50,16 @@ function setCoordinate(originData, startX, startY, widthMargin, canvasHeight, lo
 
 	for(var i = 0; i < len; i++){
 		x = startX + widthMargin*i;
-		heightPercent = (originData[i].ranking/rankMax);
+		heightPercent = (originData[i].min_rank/rankMax);
 
 		lowestPercent = heightPercent > lowestPercent ? lowestPercent: heightPercent;
 
-		y = startY + (originData[i].ranking/rankMax) * canvasHeight;
+		y = startY + (originData[i].min_rank/rankMax) * canvasHeight;
 
 		coordData.push({
 			"x": x,
 			"y": y,
-			"ranking":originData[i].ranking,
+			"ranking":originData[i].min_rank,
 			"year": originData[i].year,
 			"heightPercent": heightPercent
 		});
