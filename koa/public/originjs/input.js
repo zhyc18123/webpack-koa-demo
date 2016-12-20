@@ -2,8 +2,7 @@
 import url from"./url";
 import prov from "./loc.js";
 import queryString from "./query-string";
-// var swiperToAyalysisReport = require('./swiper-to-analysis-report');
-var swipeToAnalysisReportPage = require('./analysis-report');
+var analysisReport = require('./analysis-report');
 var init=function(xinSwiper){
 	//获取url参数，初始化页面
 	initPage();
@@ -55,8 +54,8 @@ var init=function(xinSwiper){
 			batch:$("#school-input").data("batch")||"",
 			wenli:$(".subject-type .active").data("val"),
 		};
-		console.log(data)
-		swiperToAyalysisReport.getAnalysisReportData(data,xinSwiper);
+		analysisReport.swipeToAnalysisReportPage(data,xinSwiper);
+
 	});
 };
 var setProvByName=function(provName){

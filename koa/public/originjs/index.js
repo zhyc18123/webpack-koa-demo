@@ -3,6 +3,7 @@ require("./utils/swiper/swiper-3.3.1.jquery.min");
 require('./analysis-report');
 var getVip=require("./get-vip");
 var input=require("./input");
+var analysisReport = require('./analysis-report');
 $(function(){
 	var init=function(){
 		// var swiperHeight=[];
@@ -30,6 +31,7 @@ $(function(){
 		});
 		getVip.init(xinSwiper);
 		input.init(xinSwiper);
+		analysisReport.swipeToWmzyIntroPage(xinSwiper);
 	};
 	init();
 });

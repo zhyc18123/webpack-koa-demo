@@ -48,8 +48,9 @@
 
 	__webpack_require__(1);
 	__webpack_require__(2);
-	var getVip = __webpack_require__(4);
-	var input = __webpack_require__(6);
+	var getVip = __webpack_require__(6);
+	var input = __webpack_require__(7);
+	var analysisReport = __webpack_require__(2);
 	$(function () {
 		var init = function init() {
 			// var swiperHeight=[];
@@ -77,6 +78,7 @@
 			});
 			getVip.init(xinSwiper);
 			input.init(xinSwiper);
+			analysisReport.swipeToWmzyIntroPage(xinSwiper);
 		};
 		init();
 	});
@@ -858,17 +860,17 @@
 
 	'use strict';
 
-	var _url = __webpack_require__(5);
+	var _url = __webpack_require__(3);
 
 	var _url2 = _interopRequireDefault(_url);
 
-	var _canvasGraph = __webpack_require__(3);
+	var _canvasGraph = __webpack_require__(4);
 
 	var _canvasGraph2 = _interopRequireDefault(_canvasGraph);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var Tpl = __webpack_require__(10);
+	var Tpl = __webpack_require__(5);
 
 	var _init = function () {
 		// module scope variables
@@ -917,6 +919,17 @@
 		$(htmlId).html(ejsHtml);
 	};
 
+	/**
+	 *
+	 * selected default width for canvas
+	 * default size for font
+	 * @returns {string}
+	 */
+	function getFont(ratio) {
+		var size = 640 * ratio; // get font size based on current width
+		return (size | 0) + 'px sans-serif'; // set font
+	}
+
 	var _renderAnalysisReportPage = function _renderAnalysisReportPage(reportData) {
 
 		reportData = {
@@ -949,12 +962,14 @@
 			"recommend_sch_list": [//推荐学校列表
 			{
 				"sch_id": "52ac2e98747aec013fcf4c46", //学校id
+				"icon_url": "http://school-icon.b0.upaiyun.com/52ac2e98747aec013fcf4c1d.jpg", //学校图标识
 				"sch_name": "北京大学", //学校名称
 				"location": "北京", //所在省份
 				"total_rank": 1, //综合排名
 				"adm_ratio": 89 //录取概率
 			}, {
 				"sch_id": "52ac2e98747aec013fcf4c46", //学校id
+				"icon_url": "http://school-icon.b0.upaiyun.com/52ac2e98747aec013fcf4c1d.jpg",
 				"sch_name": "北京大学", //学校名称
 				"location": "北京", //所在省份
 				"total_rank": 1, //综合排名
@@ -988,24 +1003,43 @@
 		// 与目标学校的距离 —— 概率圆环
 		var enrollCanvas = document.getElementById('enroll-canvas');
 		var context = enrollCanvas.getContext('2d');
-		var radius = 70;
-		enrollCanvas.width = enrollCanvas.parentNode.clientWidth;
-		enrollCanvas.height = enrollCanvas.width - 60;
+		var enrollCanvasParentNodeWidth = enrollCanvas.parentNode.clientWidth;
+		enrollCanvas.width = enrollCanvasParentNodeWidth / 2;
+		var enrollCanvasFont1 = getFont(0.04);
+		var enrollCanvasFont2 = getFont(0.03);
+		var enrollCanvasFont3 = getFont(0.02);
+
+		enrollCanvas.height = enrollCanvas.width / 1.5;
+		var radius = enrollCanvas.width / 4;
 		var centerX = enrollCanvas.width / 2;
 		var centerY = enrollCanvas.height / 2;
-		_canvasGraph2.default.drawCircle(context, centerX, centerY, '#ffffff', '#e4e4e4', 8, radius, 1);
-		_canvasGraph2.default.drawCircle(context, centerX, centerY, '#ffffff', '#f9be00', 10, radius, 0.4, 'round');
+		_canvasGraph2.default.drawCircle(context, centerX, centerY, '#ffffff', '#e4e4e4', 22, radius, 1);
+		_canvasGraph2.default.drawCircle(context, centerX, centerY, '#ffffff', '#f9be00', 25, radius, 0.4, 'round');
 		context.textBaseline = 'middle';
 		context.textAlign = "center";
 
+		if (enrollCanvasParentNodeWidth >= 828) {
+			enrollCanvasFont1 = getFont(0.1);
+			enrollCanvasFont2 = getFont(0.05);
+			enrollCanvasFont3 = getFont(0.04);
+		} else if (enrollCanvasParentNodeWidth >= 750) {
+			enrollCanvasFont1 = getFont(0.07);
+			enrollCanvasFont2 = getFont(0.035);
+			enrollCanvasFont3 = getFont(0.03);
+		} else if (enrollCanvasParentNodeWidth >= 640) {
+			enrollCanvasFont1 = getFont(0.05);
+			enrollCanvasFont2 = getFont(0.025);
+			enrollCanvasFont3 = getFont(0.02);
+		}
+
 		// 分是否设立了目标学校两种情况讨论
 		if (!reportData.exp_sch) {
-			_canvasGraph2.default.drawCircleText(context, 'normal 0.16rem serif', '#b6b6b6', "未设立", centerX - 2, centerY - 12);
-			_canvasGraph2.default.drawCircleText(context, 'normal 0.16rem serif', '#b6b6b6', '目标学校', centerX, centerY + 18);
+			_canvasGraph2.default.drawCircleText(context, enrollCanvasFont3, '#b6b6b6', "未设立", centerX - 2, centerY - 12);
+			_canvasGraph2.default.drawCircleText(context, enrollCanvasFont3, '#b6b6b6', '目标学校', centerX, centerY + 18);
 		} else {
-			_canvasGraph2.default.drawCircleText(context, 'normal .36rem serif', '#f9be00', reportData.adm_ratio, centerX - 10, centerY - 16);
-			_canvasGraph2.default.drawCircleText(context, 'normal .18rem serif', '#f9be00', '%', centerX + 35, centerY - 10);
-			_canvasGraph2.default.drawCircleText(context, 'normal .16rem serif', '#b6b6b6', '录取概率', centerX, centerY + 22);
+			_canvasGraph2.default.drawCircleText(context, enrollCanvasFont1, '#f9be00', reportData.adm_ratio, centerX - 15, centerY - 15);
+			_canvasGraph2.default.drawCircleText(context, enrollCanvasFont2, '#f9be00', '%', centerX + 30, centerY - 10);
+			_canvasGraph2.default.drawCircleText(context, enrollCanvasFont3, '#b6b6b6', '录取概率', centerX, centerY + 30);
 		}
 
 		// 与目标学校的距离 —— 建议
@@ -1019,23 +1053,24 @@
 	  *
 	  **/
 
-		reportData.sch_min_score_list = 0;
+		// reportData.sch_min_score_list = 0;
 		if (reportData.sch_min_score_list) {
 
 			renderEjsTplWithData("#line-chart-wmzy-link-tpl", "#line-chart-wmzy-link-wrap", reportData);
 
-			var canvas = document.getElementById('line-chart-canvas'),
-			    context = canvas.getContext('2d');
-			canvas.width = canvas.parentNode.clientWidth;
-			canvas.height = canvas.parentNode.clientHeight - 50;
+			var lineChartCanvas = document.getElementById('line-chart-canvas'),
+			    context = lineChartCanvas.getContext('2d');
+			lineChartCanvas.width = lineChartCanvas.parentNode.clientWidth;
+			lineChartCanvas.height = lineChartCanvas.parentNode.clientHeight * 1.5;
 
 			var startX = 0;
 			var startY = 40;
-			var widthMargin = canvas.width / 4;
+			var widthMargin = lineChartCanvas.width / 4;
 			var labelWitth = widthMargin;
 			var coordData;
 			var lowestPercent = 1;
 			var offsetY;
+			var setCoordinateReturn;
 
 			var yearColor = {
 				dotColor: "#999999",
@@ -1049,44 +1084,34 @@
 				dotColor: "#eb614c",
 				lineColor: "#eda89d"
 			};
-			coordData = _canvasGraph2.default.setCoordinate(reportData.sch_min_score_list, startX, startY, widthMargin, 400, lowestPercent);
+			var lineChartFontStyle = "normal 32.3pt serif";
+			setCoordinateReturn = _canvasGraph2.default.setCoordinate(reportData.sch_min_score_list, startX, startY, widthMargin, 400, lowestPercent);
+			coordData = setCoordinateReturn[0];
+			lowestPercent = setCoordinateReturn[1];
 
-			offsetY = lowestPercent < 0.01 ? 80 : lowestPercent < 0.1 ? 50 : 30;
+			offsetY = lowestPercent < 0.01 ? 140 : lowestPercent < 0.1 ? 130 : 50;
 
-			_canvasGraph2.default.drawCoordinate(context, coordData, yearColor, historyColor, currentColor, 20, labelWitth, canvas.width, canvas.height, offsetY);
-			_canvasGraph2.default.drawLabel(context, coordData, 36, 8, 20, canvas.height, offsetY, labelWitth, canvas.width);
+			_canvasGraph2.default.drawCoordinate(context, coordData, yearColor, historyColor, currentColor, labelWitth, lineChartCanvas.width, lineChartCanvas.height, 40, offsetY, lineChartFontStyle);
+			_canvasGraph2.default.drawLabel(context, coordData, 75, 8, 20, lineChartCanvas.height, offsetY, labelWitth, lineChartCanvas.width, lineChartFontStyle);
 		}
+
+		// 推荐学校列表
+		renderEjsTplWithData("#school-list-item-tpl", "#school-list-item-wrap", reportData);
 
 		// 录取人数最多的五个院校
 		var canvas = document.getElementById('trapezoid-canvas');
 		var trapezoidParentNodeWidth = canvas.parentNode.clientWidth;
 
+		var trapezoidCount = reportData.goto_schs_list.length;
 		canvas.width = trapezoidParentNodeWidth - 60;
-		canvas.height = canvas.width * (300 / 750) * (64 / 300) * 5 + 50 + 35; // 286/750 为梯形宽度占比，64/286为高度占比， 50为每个梯形的间隙， 20为标题高度
+
 		var context = canvas.getContext('2d');
-		var contextFontStyle;
 		var width = canvas.width * (360 / 750);
 
-		if (trapezoidParentNodeWidth >= 640) {
-			contextFontStyle = "normal normal 24px serif";
-			width = canvas.width * (420 / 750);
-			canvas.height = canvas.width * (420 / 750) * (64 / 300) * 5 + 50 + 35;
-		} else if (trapezoidParentNodeWidth >= 414) {
-			contextFontStyle = "normal normal 20px serif";
-			width = canvas.width * (360 / 750);
-			canvas.height = canvas.width * (360 / 750) * (64 / 300) * 5 + 50 + 35;
-		} else if (trapezoidParentNodeWidth >= 320) {
-			contextFontStyle = "normal normal 16px serif";
-			width = canvas.width * (320 / 750);
-			canvas.height = canvas.width * (320 / 750) * (64 / 300) * 5 + 50 + 35; // 286/750 为梯形宽度占比，64/286为高度占比， 50为每个梯形的间隙， 20为标题高度
-		} else {
-			contextFontStyle = "normal normal 16px serif";
-			width = canvas.width * (320 / 750);
-			canvas.height = canvas.width * (320 / 750) * (64 / 300) * 5 + 50 + 35; // 286/750 为梯形宽度占比，64/286为高度占比， 50为每个梯形的间隙， 20为标题高度
-		}
+		canvas.height = canvas.width / 2 * (64 / 286) * trapezoidCount + 10 * trapezoidCount + 55; // 286/750 为梯形宽度占比，64/286为高度占比， 50为每个梯形的间隙， 20为标题高度
+
 		var height = width * (64 / 286);
 
-		var schoolData = [{ "studentNumber": 319000, "schoolName": "中山大学" }, { "studentNumber": 100, "schoolName": "华南理工大学" }, { "studentNumber": 80, "schoolName": "华南理工大学" }, { "studentNumber": 50, "schoolName": "华南理工大学" }, { "studentNumber": 9, "schoolName": "华南理工大学" }];
 		var trapezoidStyle = ["#f9be00", "#fac724", "#fbd149", "#fcda6d", "#fce392"],
 		    schoolNumNameStyle = {
 			"numStyle": "#ffffff",
@@ -1097,10 +1122,21 @@
 			"fillStyle": "#ffffff"
 		};
 
-		_canvasGraph2.default.drawTrapezoid(context, width, height, schoolData, trapezoidStyle, schoolNumNameStyle, lineDotStyle, "（考生数量）", 6, contextFontStyle);
+		_canvasGraph2.default.drawTrapezoid(context, width, height, reportData.goto_schs_list, trapezoidStyle, schoolNumNameStyle, lineDotStyle, "（考生数量）", 6, trapezoidParentNodeWidth);
+
+		// 其他 x 所推荐院校
+		renderEjsTplWithData("#recommend-school-link-tpl", "#recommend-school-link-wrap", reportData);
+
+		// 根据排名的数据来源
+		renderEjsTplWithData("#recommend-data-origin-tpl", "#recommend-data-origin-wrap", reportData);
+
+		// 录取人数最多的五个专业，如果有的话
+		renderEjsTplWithData("#top-five-enroll-major-tpl", "#top-five-enroll-major-wrap", reportData);
 	};
 
 	var swipeToAnalysisReportPage = function swipeToAnalysisReportPage(requestParam, xinSwiper) {
+
+		console.log("requestParam " + JSON.stringify(requestParam, null, 4));
 
 		$.ajax({
 			type: "post",
@@ -1108,7 +1144,7 @@
 			url: _url2.default.analysisReportUrl,
 			data: requestParam,
 			success: function success(data) {
-				console.log(data);
+				console.log("data " + JSON.stringify(data, null, 4));
 
 				_renderAnalysisReportPage(data);
 				xinSwiper.slideNext();
@@ -1121,9 +1157,16 @@
 			}
 		});
 	};
+	var swipeToWmzyIntroPage = function swipeToWmzyIntroPage(xinSwiper) {
+
+		$(".goto-wmzy-pro-intro").on("click", function () {
+			xinSwiper.slideNext();
+		});
+	};
 
 	module.exports = {
-		swipeToAnalysisReportPage: swipeToAnalysisReportPage
+		swipeToAnalysisReportPage: swipeToAnalysisReportPage,
+		swipeToWmzyIntroPage: swipeToWmzyIntroPage
 	};
 
 /***/ },
@@ -1131,6 +1174,30 @@
 /***/ function(module, exports) {
 
 	"use strict";
+
+	module.exports = {
+		autoUrl: "/get-auto-code",
+		vipUrl: "/get-vip",
+		analysisReportUrl: "/score/analysis",
+		guestSchool: "/guest-school"
+	};
+
+/***/ },
+/* 4 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	/**
+	 *
+	 * selected default width for canvas
+	 * default size for font
+	 * @returns {string}
+	 */
+	function getFont(ratio) {
+		var size = 640 * ratio; // get font size based on current width
+		return (size | 0) + 'px sans-serif'; // set font
+	}
 
 	function drawCircle(ctx, x, y, fillStyle, strokeStyle, lineWidth, radius, angle, lineCap) {
 		ctx.beginPath();
@@ -1175,11 +1242,11 @@
 		rankMaxStr = "" + rankMax;
 
 		if (rankMaxStr.length <= 4) {
-			rankMax += 10 * Math.pow(10, rankMaxStr.length - 2);
+			rankMax += 8 * Math.pow(10, rankMaxStr.length - 2);
 		} else if (rankMaxStr.length <= 6) {
-			rankMax += 3 * Math.pow(10, rankMaxStr.length - 2);
+			rankMax += 6 * Math.pow(10, rankMaxStr.length - 2);
 		} else {
-			rankMax += 1 * Math.pow(10, rankMaxStr.length - 2);
+			rankMax += 5 * Math.pow(10, rankMaxStr.length - 2);
 		}
 
 		for (var i = 0; i < len; i++) {
@@ -1199,7 +1266,7 @@
 			});
 		}
 
-		return coordData;
+		return [coordData, lowestPercent];
 	}
 
 	/**
@@ -1209,7 +1276,7 @@
 	 *  @param {Object} 往年录取颜色
 	 *  @param {Object} 当前排名点线颜色值
 	 * */
-	function drawCoordinate(ctx, coord, yearColor, historyColor, currentColor, startY, labelWidth, canvasWidth, canvasHeight, offsetY) {
+	function drawCoordinate(ctx, coord, yearColor, historyColor, currentColor, labelWidth, canvasWidth, canvasHeight, startY, offsetY, lineChartFontStyle) {
 		var len = coord.length;
 
 		// 过往年份 text、竖线、圆点
@@ -1228,14 +1295,14 @@
 			y = parseFloat(coord[i].y);
 			linePercent = parseFloat(coord[i].heightPercent);
 
-			ctx.font = 'normal 12pt Calibri';
+			ctx.font = lineChartFontStyle;
 			ctx.fillStyle = yearColor.dotColor;
-			ctx.fillText(year, x + labelWidth / 2 - 16, startY);
+			ctx.fillText(year, x + labelWidth / 2 - 50, startY);
 
-			ctx.setLineDash([1, 2]);
+			ctx.setLineDash([8, 4]);
 			ctx.beginPath();
-			ctx.lineWidth = 1;
-			ctx.strokeStyle = yearColor;
+			ctx.lineWidth = 2;
+			ctx.strokeStyle = "#999999";
 			ctx.moveTo(x + labelWidth / 2, lineStartY);
 			ctx.lineTo(x + labelWidth / 2, canvasHeight);
 			ctx.stroke();
@@ -1243,7 +1310,7 @@
 
 			ctx.beginPath();
 			ctx.fillStyle = historyColor.dotColor;
-			ctx.arc(x + labelWidth / 2, lineStartY + lineHeight * linePercent, 6, 0, 2 * Math.PI);
+			ctx.arc(x + labelWidth / 2, lineStartY + lineHeight * linePercent, 12, 0, 2 * Math.PI);
 			ctx.fill();
 		}
 
@@ -1252,10 +1319,10 @@
 		y = coord[coordLen - 1].y;
 		linePercent = coord[coordLen - 1].heightPercent;
 
-		ctx.setLineDash([8, 6]);
+		ctx.setLineDash([10, 4]);
 		ctx.beginPath();
 		ctx.strokeStyle = currentColor.lineColor;
-		ctx.lineWidth = 2;
+		ctx.lineWidth = 4;
 		ctx.moveTo(0, lineStartY + lineHeight * linePercent);
 		ctx.lineTo(canvasWidth, lineStartY + lineHeight * linePercent);
 		ctx.stroke();
@@ -1263,7 +1330,7 @@
 
 		ctx.beginPath();
 		ctx.fillStyle = currentColor.dotColor;
-		ctx.arc(x + labelWidth / 2, lineStartY + lineHeight * linePercent, 6, 0, 2 * Math.PI);
+		ctx.arc(x + labelWidth / 2, lineStartY + lineHeight * linePercent, 12, 0, 2 * Math.PI);
 		ctx.fill();
 
 		// 过往历史折线
@@ -1306,7 +1373,7 @@
 	 *
 	 *
 	 * */
-	function drawLabel(ctx, coord, labelHeight, radius, startY, canvasHeight, offsetY, labelWidth, canvasWidth) {
+	function drawLabel(ctx, coord, labelHeight, radius, startY, canvasHeight, offsetY, labelWidth, canvasWidth, lineChartFontStyle) {
 
 		if (typeof radius === 'undefined') {
 			radius = 5;
@@ -1339,23 +1406,29 @@
 			switch (rankingStr.length) {
 				case 1:
 				case 2:
-					width = 70;
+					width = 150;
 					break;
 				case 3:
 				case 4:
+					width = 185;
+					break;
 				case 5:
+					width = 195;
+					break;
 				case 6:
-					width = 85;
+					width = 225;
 					break;
 				case 7:
+					width = 255;
+					break;
 				case 8:
-					width = 90;
+					width = 190;
 					break;
 				case 9:
-					width = 95;
+					width = 195;
 					break;
 				default:
-					width = 100;
+					width = 200;
 					break;
 
 			}
@@ -1373,32 +1446,34 @@
 
 			y -= 58;
 			x += labelWidth / 2 - width / 2;
+			var labelYPoint = 20;
+			var labelYOffset = labelYPoint + 10;
 
 			ctx.beginPath();
-			ctx.lineTo(x + width / 2, y + labelHeight + 10);
-			ctx.lineTo(x + width / 2 - 10, y + labelHeight);
-			ctx.lineTo(x + radius.bl, y + labelHeight);
-			ctx.quadraticCurveTo(x, y + labelHeight, x, y + labelHeight - radius.bl);
-			ctx.lineTo(x, y + radius.tl);
-			ctx.quadraticCurveTo(x, y, x + radius.tl, y);
-			ctx.lineTo(x + radius.tl, y);
-			ctx.lineTo(x + width - radius.tr, y);
-			ctx.quadraticCurveTo(x + width, y, x + width, y + radius.tr);
-			ctx.lineTo(x + width, y + labelHeight - radius.br);
-			ctx.quadraticCurveTo(x + width, y + labelHeight, x + width - radius.br, y + labelHeight);
-			ctx.lineTo(x + width / 2 + 10, y + labelHeight);
+			ctx.lineTo(x + width / 2, y + labelHeight - labelYPoint);
+			ctx.lineTo(x + width / 2 - 10, y + labelHeight - labelYOffset);
+			ctx.lineTo(x + radius.bl, y + labelHeight - labelYOffset);
+			ctx.quadraticCurveTo(x, y + labelHeight - labelYOffset, x, y + labelHeight - radius.bl - labelYOffset);
+			ctx.lineTo(x, y + radius.tl - labelYOffset);
+			ctx.quadraticCurveTo(x, y - labelYOffset, x + radius.tl, y - labelYOffset);
+			ctx.lineTo(x + radius.tl, y - labelYOffset);
+			ctx.lineTo(x + width - radius.tr, y - labelYOffset);
+			ctx.quadraticCurveTo(x + width, y - labelYOffset, x + width, y + radius.tr - labelYOffset);
+			ctx.lineTo(x + width, y + labelHeight - radius.br - labelYOffset);
+			ctx.quadraticCurveTo(x + width, y + labelHeight - labelYOffset, x + width - radius.br, y + labelHeight - labelYOffset);
+			ctx.lineTo(x + width / 2 + 10, y + labelHeight - labelYOffset);
 			ctx.closePath();
 			ctx.fill();
 
 			if (ranking) {
-				ctx.font = 'normal 12pt Calibri';
+				ctx.font = lineChartFontStyle;
 				ctx.fillStyle = '#ffffff';
 				switch (rankingStr.length) {
 					case 1:
 					case 2:
-						x += 20;
-						break;
 					case 3:
+						x += 35;
+						break;
 					case 4:
 					case 5:
 						x += 15;
@@ -1415,9 +1490,9 @@
 				ctx.fillText(ranking + "名", x, y + 25);
 			}
 			if (i == len - 1) {
-				ctx.font = 'normal 12pt Calibri';
+				ctx.font = lineChartFontStyle;
 				ctx.fillStyle = '#eb614c';
-				ctx.fillText("你的排名", x + width / 2 - 40, y + 86);
+				ctx.fillText("你的排名", x + width / 2 - 100, y + 130);
 			}
 		}
 	}
@@ -1431,34 +1506,50 @@
 	 * 传参 第一个梯形的宽高 width，height
 	 *
 	 * */
-	function drawTrapezoid(ctx, initWidth, initHeight, schoolList, trapezoidStyle, schoolNumNameStyle, lineDotStyle, title, trapezoidGap, contextFontStyle) {
+	function drawTrapezoid(ctx, initWidth, initHeight, schoolList, trapezoidStyle, schoolNumNameStyle, lineDotStyle, title, trapezoidGap, trapezoidParentNodeWidth) {
 		var lineFinal = 0;
 		var startX;
 		var startY;
 		var trapezoidWidthDown;
 		var schoolListItem;
 		var offsetY = 0;
+		var contextFontStyle;
+		var titleOffsetX = 50;
 
 		if (!trapezoidGap) {
 			trapezoidGap = 10;
 		}
 
-		if (!contextFontStyle) {
-			contextFontStyle = "18px serif";
+		if (trapezoidParentNodeWidth >= 1280) {
+			// 640 pixes phone
+			contextFontStyle = getFont(0.08);
+			titleOffsetX = 130;
+		} else if (trapezoidParentNodeWidth >= 828) {
+			contextFontStyle = getFont(0.06);
+			titleOffsetX = 100;
+		} else if (trapezoidParentNodeWidth >= 750) {
+			contextFontStyle = getFont(0.05);
+			titleOffsetX = 50;
+		} else if (trapezoidParentNodeWidth >= 640) {
+			contextFontStyle = getFont(0.03);
+			titleOffsetX = 40;
 		}
+
 		// 标题
 		if (title) {
 			ctx.font = contextFontStyle;
 			ctx.fillStyle = '#bebebe';
-			if (initWidth < 120) {
-				ctx.fillText(title, initWidth / 2 - 50, 25);
-			} else if (initWidth < 140) {
-				ctx.fillText(title, initWidth / 2 - 58, 25);
-			} else {
-				ctx.fillText(title, initWidth / 2 - 66, 25);
-			}
 
-			offsetY = 40;
+			if (initWidth < 330) {
+				ctx.fillText(title, initWidth / 2 - titleOffsetX, 45);
+			} else if (initWidth < 390) {
+				ctx.fillText(title, initWidth / 2 - titleOffsetX, 45);
+			} else if (initWidth < 670) {
+				ctx.fillText(title, initWidth / 2 - titleOffsetX, 45);
+			} else if (initWidth < 670) {
+				ctx.fillText(title, initWidth / 2 - titleOffsetX, 45);
+			}
+			offsetY = 70;
 		}
 
 		for (var i = 0, len = schoolList.length; i < len; i++) {
@@ -1468,7 +1559,7 @@
 			trapezoidWidthDown = initWidth - 2 * startX;
 
 			if (!lineFinal) {
-				lineFinal = startX + trapezoidWidthDown + 20;
+				lineFinal = startX + trapezoidWidthDown + 30;
 			}
 
 			// 画梯形
@@ -1501,10 +1592,11 @@
 			} else {
 				ctx.strokeStyle = "##ccdbe1";
 			}
+			ctx.lineWidth = 4;
 			ctx.stroke();
 
 			ctx.beginPath();
-			ctx.arc(startX + trapezoidWidthDown * (250 / 286), startY + initHeight / 2, 3, 0, 2 * Math.PI, true);
+			ctx.arc(startX + trapezoidWidthDown * (250 / 286), startY + initHeight / 2, 8, 0, 2 * Math.PI, true);
 			if (lineDotStyle.fillStyle) {
 				ctx.fillStyle = lineDotStyle.fillStyle;
 			} else {
@@ -1521,7 +1613,7 @@
 			}
 			// 根据数量长度设置 x 方向的偏移量
 			var numOffset = 0;
-			var studentNumberStr = schoolListItem["studentNumber"] + "";
+			var studentNumberStr = schoolListItem["stu_count"] + "";
 			switch (studentNumberStr.length) {
 				case 1:
 					numOffset = startX + trapezoidWidthDown / 2 - 6;
@@ -1545,7 +1637,7 @@
 					numOffset = startX + trapezoidWidthDown / 2 - 22;
 					break;
 			}
-			ctx.fillText(schoolListItem["studentNumber"], numOffset, startY + initHeight / 2 + 6);
+			ctx.fillText(schoolListItem["stu_count"], numOffset, startY + initHeight / 2 + 6);
 
 			// 学校名称
 			ctx.font = contextFontStyle;
@@ -1554,7 +1646,7 @@
 			} else {
 				ctx.fillStyle = '#000000';
 			}
-			ctx.fillText(schoolListItem["schoolName"], lineFinal + 8, startY + initHeight / 2 + 6);
+			ctx.fillText(schoolListItem["sch_name"], lineFinal + 8, startY + initHeight / 2 + 6);
 		}
 	}
 
@@ -1568,12 +1660,253 @@
 	};
 
 /***/ },
-/* 4 */
+/* 5 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
+
+	!(__WEBPACK_AMD_DEFINE_RESULT__ = function () {
+	    var Tpl = {};
+	    var regTpl = /\{(\.?[\w_$]+)(\.[\w_$]+)?(\.?[\w_$]+)?\}/g;
+	    var ifRegTpl = /\[\?(!?)(\.[\w_$]+)(\.?[\w_$]+)?(\.?[\w_$]+)?\?([\S\s]*?)\?\]/g;
+
+	    var uID = new Date() * 1;
+	    function getUID() {
+	        return ++uID;
+	    }
+
+	    Tpl.tpls = {};
+	    Tpl.parse = function (tpl, map) {
+	        var self = this;
+	        !map && (map = {});
+	        if (tpl.charAt(0) !== '<') {
+	            var t = self.tpls[tpl];
+	            t && (tpl = t);
+	        }
+	        tpl = tpl.replace(ifRegTpl, function (s, s0, s1, s2, s3, s4) {
+	            var v = map[s1.substr(1)];
+	            if (s2) {
+	                v = s2.charAt(0) == '.' ? v[s2.substr(1)] : v;
+	            }
+
+	            if (s3) {
+	                v = s3.charAt(0) == '.' ? v[s3.substr(1)] : v;
+	            }
+	            if (s0 === '!') {
+	                return !v ? s4 : "";
+	            }
+	            return v ? s4 : '';
+	        });
+
+	        return tpl.replace(regTpl, function (s, s0, s1, s2) {
+	            var v = s0.charAt(0) == '.' ? map[s0.substr(1)] : self.tpls[s0];
+	            if (v == void 0) return '';
+
+	            if (s1) {
+	                v = s1.charAt(0) == '.' ? v[s1.substr(1)] : v;
+	            }
+
+	            if (s2) {
+	                v = s2.charAt(0) == '.' ? v[s2.substr(1)] : v;
+	            }
+
+	            if (v && (v.toString().charAt(0) === '<' || v.toString().substr(0, 2) == "[?")) return Tpl.parse(v, map);
+
+	            if (self.tpls[v]) return Tpl.parse(self.tpls[v], map);
+
+	            v = v === void 0 ? '' : v;
+
+	            return v;
+	        });
+	    };
+
+	    Tpl.ejs = function (tpl, data, opts) {
+	        opts = opts || {};
+	        //opts.tid = tpl;
+	        var fn = Tpl.ejs.compile(Tpl.parse(tpl, data), opts);
+	        return fn(data);
+	    };
+
+	    Tpl.ejs.cache = {};
+
+	    Tpl.ejs.filters = { //用于添加各种过滤器
+	        contains: function contains(target, str, separator) {
+	            return separator ? (separator + target + separator).indexOf(separator + str + separator) > -1 : target.indexOf(str) > -1;
+	        },
+	        truncate: function truncate(target, length, truncation) {
+	            length = length || 30;
+	            truncation = truncation === void 0 ? "..." : truncation;
+	            return target.length > length ? target.slice(0, length - truncation.length) + truncation : String(target);
+	        },
+	        camelize: function camelize(target) {
+	            if (target.indexOf("-") < 0 && target.indexOf("_") < 0) {
+	                return target;
+	            }
+	            return target.replace(/[-_][^-_]/g, function (match) {
+	                return match.charAt(1).toUpperCase();
+	            });
+	        },
+	        escape: function escape(target) {
+	            return target.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+	        },
+	        unescape: function unescape(target) {
+	            return target.replace(/&quot;/g, "\"").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&").replace(/&#([\d]+);/g, function ($0, $1) {
+	                return String.fromCharCode(parseInt($1, 10));
+	            });
+	        },
+	        floor: function floor(target) {
+	            var target = Math.floor(target);
+	            return isNaN(target) ? 0 : target;
+	        }
+
+	    };
+
+	    Tpl.ejs.compile = function (source, opts) {
+	        opts = opts || {};
+	        var tid = opts.tid;
+	        if (typeof tid === "string" && typeof Tpl.ejs.cache[tid] == "function") {
+	            return Tpl.ejs.cache[tid];
+	        }
+	        var open = !opts.open ? "<%" : "<&";
+	        var close = !opts.close ? "%>" : "&>";
+	        var helperNames = [],
+	            helpers = [];
+	        for (var name in opts) {
+	            if (opts.hasOwnProperty(name) && typeof opts[name] == "function") {
+	                helperNames.push(name);
+	                helpers.push(opts[name]); //收集所有helper!
+	            }
+	        }
+	        if (opts.userFn) {
+	            helperNames.push("userFn");
+	            helpers.push(opts.userFn);
+	        }
+	        var flag = true; //判定是否位于前定界符的左边
+	        var codes = []; //用于放置源码模板中普通文本片断
+	        var tid = getUID(); // 时间截,用于构建codes数组的引用变量
+	        var prefix = " ;r += txt" + tid + "["; //渲染函数输出部分的前面
+	        var postfix = "];"; //渲染函数输出部分的后面
+	        var t = "return function (data){ try{var r = '',line" + tid + " = 0;"; //渲染函数的最开始部分
+	        var rAt = /(^|[^\w\u00c0-\uFFFF_])(@)(?=\w)/g;
+	        var rstr = /(['"])(?:\\[\s\S]|[^\ \\r\n])*?\1/g;
+	        var rtrim = /(^-|-$)/g;
+	        var rmass = /mass/;
+	        var js = [];
+	        var pre = 0,
+	            cur,
+	            code,
+	            trim;
+	        for (var i = 0, n = source.length; i < n;) {
+	            cur = source.indexOf(flag ? open : close, i);
+	            if (cur < pre) {
+	                if (flag) {
+	                    //取得最末尾的HTML片断
+	                    t += prefix + codes.length + postfix;
+	                    if (cur == -1 && i == 0) {
+	                        code = source;
+	                    } else {
+	                        code = source.slice(pre + close.length);
+	                    }
+	                    //  code = source.slice( pre+ close.length );
+	                    if (trim) {
+	                        code = code.trim();
+	                        trim = false;
+	                    }
+	                    codes.push(code);
+	                } else {
+	                    console.log("发生错误了");
+	                }
+	                break;
+	            }
+	            code = source.slice(i, cur); //截取前后定界符之间的片断
+	            pre = cur;
+	            if (flag) {
+	                //取得HTML片断
+	                t += prefix + codes.length + postfix;
+	                if (trim) {
+	                    code = code.trim();
+	                    trim = false;
+	                }
+	                codes.push(code);
+	                i = cur + open.length;
+	            } else {
+	                //取得javascript罗辑
+	                js.push(code);
+	                t += "line" + tid + "=" + js.length + ";";
+	                switch (code.charAt(0)) {
+	                    case "=":
+	                        //直接输出
+	                        code = code.replace(rtrim, function () {
+	                            trim = true;
+	                            return "";
+	                        });
+	                        code = code.replace(rAt, "$1data.");
+	                        if (code.indexOf("|") > 1) {
+	                            //使用过滤器
+	                            var arr = [];
+	                            var str = code.replace(rstr, function (str) {
+	                                arr.push(str); //先收拾所有字符串字面量
+	                                return 'mass';
+	                            }).replace(/\|\|/g, "@"); //再收拾所有短路或
+	                            if (str.indexOf("|") > 1) {
+	                                var segments = str.split("|");
+	                                var filtered = segments.shift().replace(/\@/g, "||").replace(rmass, function () {
+	                                    return arr.shift();
+	                                });
+	                                for (var filter; filter = arr.shift();) {
+	                                    segments = filter.split(":");
+	                                    name = segments[0];
+	                                    args = "";
+	                                    if (segments[1]) {
+	                                        args = ', ' + segments[1].replace(rmass, function () {
+	                                            return arr.shift(); //还原
+	                                        });
+	                                    }
+	                                    filtered = "Tpl.ejs.filters." + name + "(" + filtered + args + ")";
+	                                }
+	                                code = filtered;
+	                            }
+	                        }
+	                        t += "r +" + code + ";";
+	                        break;
+	                    case "#":
+	                        //注释,不输出
+	                        break;
+	                    case "-":
+	                    default:
+	                        //普通逻辑,不输出
+	                        code = code.replace(rtrim, function () {
+	                            trim = true;
+	                            return "";
+	                        });
+	                        t += code.replace(rAt, "$1data.");
+	                        break;
+	                }
+	                i = cur + close.length;
+	            }
+	            flag = !flag;
+	        }
+	        t += " return r; }catch(e){ console.log(e);\nconsole.log(js" + tid + "[line" + tid + "-1]) }}";
+	        var body = ["txt" + tid, "js" + tid, "filters"];
+	        var fn = Function.apply(Function, body.concat(helperNames, t));
+	        var args = [codes, js, Tpl.ejs.filters];
+	        var compiled = fn.apply(this, args.concat(helpers));
+	        if (typeof tid === "string") {
+	            return Tpl.ejs.cache[tid] = compiled;
+	        }
+	        return compiled;
+	    };
+
+	    return Tpl;
+	}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+
+/***/ },
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
-	var _url = __webpack_require__(5);
+	var _url = __webpack_require__(3);
 
 	var _url2 = _interopRequireDefault(_url);
 
@@ -1695,40 +2028,26 @@
 	};
 
 /***/ },
-/* 5 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	module.exports = {
-		autoUrl: "/get-auto-code",
-		vipUrl: "/get-vip",
-		analysisReportUrl: "/score/analysis",
-		guestSchool: "/guest-school"
-	};
-
-/***/ },
-/* 6 */
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
-	var _url = __webpack_require__(5);
+	var _url = __webpack_require__(3);
 
 	var _url2 = _interopRequireDefault(_url);
 
-	var _loc = __webpack_require__(7);
+	var _loc = __webpack_require__(8);
 
 	var _loc2 = _interopRequireDefault(_loc);
 
-	var _queryString = __webpack_require__(8);
+	var _queryString = __webpack_require__(9);
 
 	var _queryString2 = _interopRequireDefault(_queryString);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	// var swiperToAyalysisReport = require('./swiper-to-analysis-report');
-	var swipeToAnalysisReportPage = __webpack_require__(2);
+	var analysisReport = __webpack_require__(2);
 	var init = function init(xinSwiper) {
 		//获取url参数，初始化页面
 		initPage();
@@ -1780,8 +2099,7 @@
 				batch: $("#school-input").data("batch") || "",
 				wenli: $(".subject-type .active").data("val")
 			};
-			console.log(data);
-			swiperToAyalysisReport.getAnalysisReportData(data, xinSwiper);
+			analysisReport.swipeToAnalysisReportPage(data, xinSwiper);
 		});
 	};
 	var setProvByName = function setProvByName(provName) {
@@ -1895,7 +2213,7 @@
 	};
 
 /***/ },
-/* 7 */
+/* 8 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -2362,7 +2680,7 @@
 	module.exports.isDataDealing = isDataDealing;
 
 /***/ },
-/* 8 */
+/* 9 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -2391,248 +2709,6 @@
 	  getQueryString: getQueryString,
 	  getQueryObj: getQueryObj
 	};
-
-/***/ },
-/* 9 */,
-/* 10 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
-
-	!(__WEBPACK_AMD_DEFINE_RESULT__ = function () {
-	    var Tpl = {};
-	    var regTpl = /\{(\.?[\w_$]+)(\.[\w_$]+)?(\.?[\w_$]+)?\}/g;
-	    var ifRegTpl = /\[\?(!?)(\.[\w_$]+)(\.?[\w_$]+)?(\.?[\w_$]+)?\?([\S\s]*?)\?\]/g;
-
-	    var uID = new Date() * 1;
-	    function getUID() {
-	        return ++uID;
-	    }
-
-	    Tpl.tpls = {};
-	    Tpl.parse = function (tpl, map) {
-	        var self = this;
-	        !map && (map = {});
-	        if (tpl.charAt(0) !== '<') {
-	            var t = self.tpls[tpl];
-	            t && (tpl = t);
-	        }
-	        tpl = tpl.replace(ifRegTpl, function (s, s0, s1, s2, s3, s4) {
-	            var v = map[s1.substr(1)];
-	            if (s2) {
-	                v = s2.charAt(0) == '.' ? v[s2.substr(1)] : v;
-	            }
-
-	            if (s3) {
-	                v = s3.charAt(0) == '.' ? v[s3.substr(1)] : v;
-	            }
-	            if (s0 === '!') {
-	                return !v ? s4 : "";
-	            }
-	            return v ? s4 : '';
-	        });
-
-	        return tpl.replace(regTpl, function (s, s0, s1, s2) {
-	            var v = s0.charAt(0) == '.' ? map[s0.substr(1)] : self.tpls[s0];
-	            if (v == void 0) return '';
-
-	            if (s1) {
-	                v = s1.charAt(0) == '.' ? v[s1.substr(1)] : v;
-	            }
-
-	            if (s2) {
-	                v = s2.charAt(0) == '.' ? v[s2.substr(1)] : v;
-	            }
-
-	            if (v && (v.toString().charAt(0) === '<' || v.toString().substr(0, 2) == "[?")) return Tpl.parse(v, map);
-
-	            if (self.tpls[v]) return Tpl.parse(self.tpls[v], map);
-
-	            v = v === void 0 ? '' : v;
-
-	            return v;
-	        });
-	    };
-
-	    Tpl.ejs = function (tpl, data, opts) {
-	        opts = opts || {};
-	        //opts.tid = tpl;
-	        var fn = Tpl.ejs.compile(Tpl.parse(tpl, data), opts);
-	        return fn(data);
-	    };
-
-	    Tpl.ejs.cache = {};
-
-	    Tpl.ejs.filters = { //用于添加各种过滤器
-	        contains: function contains(target, str, separator) {
-	            return separator ? (separator + target + separator).indexOf(separator + str + separator) > -1 : target.indexOf(str) > -1;
-	        },
-	        truncate: function truncate(target, length, truncation) {
-	            length = length || 30;
-	            truncation = truncation === void 0 ? "..." : truncation;
-	            return target.length > length ? target.slice(0, length - truncation.length) + truncation : String(target);
-	        },
-	        camelize: function camelize(target) {
-	            if (target.indexOf("-") < 0 && target.indexOf("_") < 0) {
-	                return target;
-	            }
-	            return target.replace(/[-_][^-_]/g, function (match) {
-	                return match.charAt(1).toUpperCase();
-	            });
-	        },
-	        escape: function escape(target) {
-	            return target.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
-	        },
-	        unescape: function unescape(target) {
-	            return target.replace(/&quot;/g, "\"").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&").replace(/&#([\d]+);/g, function ($0, $1) {
-	                return String.fromCharCode(parseInt($1, 10));
-	            });
-	        },
-	        floor: function floor(target) {
-	            var target = Math.floor(target);
-	            return isNaN(target) ? 0 : target;
-	        }
-
-	    };
-
-	    Tpl.ejs.compile = function (source, opts) {
-	        opts = opts || {};
-	        var tid = opts.tid;
-	        if (typeof tid === "string" && typeof Tpl.ejs.cache[tid] == "function") {
-	            return Tpl.ejs.cache[tid];
-	        }
-	        var open = !opts.open ? "<%" : "<&";
-	        var close = !opts.close ? "%>" : "&>";
-	        var helperNames = [],
-	            helpers = [];
-	        for (var name in opts) {
-	            if (opts.hasOwnProperty(name) && typeof opts[name] == "function") {
-	                helperNames.push(name);
-	                helpers.push(opts[name]); //收集所有helper!
-	            }
-	        }
-	        if (opts.userFn) {
-	            helperNames.push("userFn");
-	            helpers.push(opts.userFn);
-	        }
-	        var flag = true; //判定是否位于前定界符的左边
-	        var codes = []; //用于放置源码模板中普通文本片断
-	        var tid = getUID(); // 时间截,用于构建codes数组的引用变量
-	        var prefix = " ;r += txt" + tid + "["; //渲染函数输出部分的前面
-	        var postfix = "];"; //渲染函数输出部分的后面
-	        var t = "return function (data){ try{var r = '',line" + tid + " = 0;"; //渲染函数的最开始部分
-	        var rAt = /(^|[^\w\u00c0-\uFFFF_])(@)(?=\w)/g;
-	        var rstr = /(['"])(?:\\[\s\S]|[^\ \\r\n])*?\1/g;
-	        var rtrim = /(^-|-$)/g;
-	        var rmass = /mass/;
-	        var js = [];
-	        var pre = 0,
-	            cur,
-	            code,
-	            trim;
-	        for (var i = 0, n = source.length; i < n;) {
-	            cur = source.indexOf(flag ? open : close, i);
-	            if (cur < pre) {
-	                if (flag) {
-	                    //取得最末尾的HTML片断
-	                    t += prefix + codes.length + postfix;
-	                    if (cur == -1 && i == 0) {
-	                        code = source;
-	                    } else {
-	                        code = source.slice(pre + close.length);
-	                    }
-	                    //  code = source.slice( pre+ close.length );
-	                    if (trim) {
-	                        code = code.trim();
-	                        trim = false;
-	                    }
-	                    codes.push(code);
-	                } else {
-	                    console.log("发生错误了");
-	                }
-	                break;
-	            }
-	            code = source.slice(i, cur); //截取前后定界符之间的片断
-	            pre = cur;
-	            if (flag) {
-	                //取得HTML片断
-	                t += prefix + codes.length + postfix;
-	                if (trim) {
-	                    code = code.trim();
-	                    trim = false;
-	                }
-	                codes.push(code);
-	                i = cur + open.length;
-	            } else {
-	                //取得javascript罗辑
-	                js.push(code);
-	                t += "line" + tid + "=" + js.length + ";";
-	                switch (code.charAt(0)) {
-	                    case "=":
-	                        //直接输出
-	                        code = code.replace(rtrim, function () {
-	                            trim = true;
-	                            return "";
-	                        });
-	                        code = code.replace(rAt, "$1data.");
-	                        if (code.indexOf("|") > 1) {
-	                            //使用过滤器
-	                            var arr = [];
-	                            var str = code.replace(rstr, function (str) {
-	                                arr.push(str); //先收拾所有字符串字面量
-	                                return 'mass';
-	                            }).replace(/\|\|/g, "@"); //再收拾所有短路或
-	                            if (str.indexOf("|") > 1) {
-	                                var segments = str.split("|");
-	                                var filtered = segments.shift().replace(/\@/g, "||").replace(rmass, function () {
-	                                    return arr.shift();
-	                                });
-	                                for (var filter; filter = arr.shift();) {
-	                                    segments = filter.split(":");
-	                                    name = segments[0];
-	                                    args = "";
-	                                    if (segments[1]) {
-	                                        args = ', ' + segments[1].replace(rmass, function () {
-	                                            return arr.shift(); //还原
-	                                        });
-	                                    }
-	                                    filtered = "Tpl.ejs.filters." + name + "(" + filtered + args + ")";
-	                                }
-	                                code = filtered;
-	                            }
-	                        }
-	                        t += "r +" + code + ";";
-	                        break;
-	                    case "#":
-	                        //注释,不输出
-	                        break;
-	                    case "-":
-	                    default:
-	                        //普通逻辑,不输出
-	                        code = code.replace(rtrim, function () {
-	                            trim = true;
-	                            return "";
-	                        });
-	                        t += code.replace(rAt, "$1data.");
-	                        break;
-	                }
-	                i = cur + close.length;
-	            }
-	            flag = !flag;
-	        }
-	        t += " return r; }catch(e){ console.log(e);\nconsole.log(js" + tid + "[line" + tid + "-1]) }}";
-	        var body = ["txt" + tid, "js" + tid, "filters"];
-	        var fn = Function.apply(Function, body.concat(helperNames, t));
-	        var args = [codes, js, Tpl.ejs.filters];
-	        var compiled = fn.apply(this, args.concat(helpers));
-	        if (typeof tid === "string") {
-	            return Tpl.ejs.cache[tid] = compiled;
-	        }
-	        return compiled;
-	    };
-
-	    return Tpl;
-	}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
 /***/ }
 /******/ ]);

@@ -1,3 +1,14 @@
+/**
+ *
+ * selected default width for canvas
+ * default size for font
+ * @returns {string}
+ */
+function getFont(ratio) {
+	var size = 640 * ratio;   // get font size based on current width
+	return (size|0) + 'px sans-serif'; // set font
+}
+
 function drawCircle(ctx, x, y,fillStyle, strokeStyle, lineWidth, radius, angle, lineCap) {
 	ctx.beginPath();
 	ctx.arc(x, y, radius, -0.5 * Math.PI, (angle * 2 - 0.5) * Math.PI, false);
@@ -41,11 +52,11 @@ function setCoordinate(originData, startX, startY, widthMargin, canvasHeight, lo
 	rankMaxStr = ""+rankMax;
 
 	if(rankMaxStr.length <= 4){
-		rankMax += 10 * Math.pow(10, rankMaxStr.length-2);
+		rankMax += 8 * Math.pow(10, rankMaxStr.length-2);
 	}else if(rankMaxStr.length <= 6){
-		rankMax += 3 * Math.pow(10, rankMaxStr.length-2);
+		rankMax += 6 * Math.pow(10, rankMaxStr.length-2);
 	}else{
-		rankMax += 1 * Math.pow(10, rankMaxStr.length-2);
+		rankMax += 5 * Math.pow(10, rankMaxStr.length-2);
 	}
 
 	for(var i = 0; i < len; i++){
@@ -65,7 +76,7 @@ function setCoordinate(originData, startX, startY, widthMargin, canvasHeight, lo
 		});
 	}
 
-	return coordData;
+	return [coordData, lowestPercent];
 
 }
 
@@ -76,8 +87,8 @@ function setCoordinate(originData, startX, startY, widthMargin, canvasHeight, lo
  *  @param {Object} 往年录取颜色
  *  @param {Object} 当前排名点线颜色值
  * */
-function drawCoordinate(ctx, coord, yearColor, historyColor, currentColor, startY,
-						labelWidth, canvasWidth, canvasHeight, offsetY){
+function drawCoordinate(ctx, coord, yearColor, historyColor, currentColor, labelWidth, canvasWidth, canvasHeight,
+						startY, offsetY, lineChartFontStyle){
 	var len = coord.length;
 
 	// 过往年份 text、竖线、圆点
@@ -96,14 +107,14 @@ function drawCoordinate(ctx, coord, yearColor, historyColor, currentColor, start
 		y = parseFloat(coord[i].y);
 		linePercent = parseFloat(coord[i].heightPercent);
 
-		ctx.font = 'normal 12pt Calibri';
+		ctx.font = lineChartFontStyle;
 		ctx.fillStyle = yearColor.dotColor;
-		ctx.fillText(year, x + labelWidth/2 - 16, startY);
+		ctx.fillText(year, x + labelWidth/2 - 50, startY);
 
-		ctx.setLineDash([1,2]);
+		ctx.setLineDash([8,4]);
 		ctx.beginPath();
-		ctx.lineWidth = 1;
-		ctx.strokeStyle = yearColor;
+		ctx.lineWidth = 2;
+		ctx.strokeStyle = "#999999";
 		ctx.moveTo(x + labelWidth/2, lineStartY);
 		ctx.lineTo(x + labelWidth/2, canvasHeight);
 		ctx.stroke();
@@ -111,7 +122,7 @@ function drawCoordinate(ctx, coord, yearColor, historyColor, currentColor, start
 
 		ctx.beginPath();
 		ctx.fillStyle = historyColor.dotColor;
-		ctx.arc(x + labelWidth/2, lineStartY + lineHeight*linePercent , 6, 0, 2 * Math.PI);
+		ctx.arc(x + labelWidth/2, lineStartY + lineHeight*linePercent , 12, 0, 2 * Math.PI);
 		ctx.fill();
 	}
 
@@ -120,10 +131,10 @@ function drawCoordinate(ctx, coord, yearColor, historyColor, currentColor, start
 	y = coord[coordLen-1].y;
 	linePercent = coord[coordLen-1].heightPercent;
 
-	ctx.setLineDash([8,6]);
+	ctx.setLineDash([10,4]);
 	ctx.beginPath();
 	ctx.strokeStyle = currentColor.lineColor;
-	ctx.lineWidth = 2;
+	ctx.lineWidth = 4;
 	ctx.moveTo(0, lineStartY+lineHeight*linePercent);
 	ctx.lineTo(canvasWidth, lineStartY+lineHeight*linePercent);
 	ctx.stroke();
@@ -131,7 +142,7 @@ function drawCoordinate(ctx, coord, yearColor, historyColor, currentColor, start
 
 	ctx.beginPath();
 	ctx.fillStyle = currentColor.dotColor;
-	ctx.arc(x+labelWidth/2, lineStartY+lineHeight*linePercent, 6, 0, 2 * Math.PI);
+	ctx.arc(x+labelWidth/2, lineStartY+lineHeight*linePercent, 12, 0, 2 * Math.PI);
 	ctx.fill();
 
 	// 过往历史折线
@@ -177,7 +188,7 @@ function drawCoordinate(ctx, coord, yearColor, historyColor, currentColor, start
  *
  * */
 function drawLabel(ctx, coord, labelHeight, radius, startY,
-				   canvasHeight, offsetY, labelWidth, canvasWidth) {
+				   canvasHeight, offsetY, labelWidth, canvasWidth, lineChartFontStyle) {
 
 	if (typeof radius === 'undefined') {
 		radius = 5;
@@ -210,23 +221,29 @@ function drawLabel(ctx, coord, labelHeight, radius, startY,
 		switch (rankingStr.length) {
 			case 1:
 			case 2:
-				width = 70;
+				width = 150;
 				break;
 			case 3:
 			case 4:
+				width = 185;
+				break;
 			case 5:
+				width = 195;
+				break;
 			case 6:
-				width = 85;
+				width = 225;
 				break;
 			case 7:
+				width = 255;
+				break;
 			case 8:
-				width = 90;
+				width = 190;
 				break;
 			case 9:
-				width = 95;
+				width = 195;
 				break;
 			default:
-				width = 100;
+				width = 200;
 				break;
 
 		}
@@ -244,32 +261,34 @@ function drawLabel(ctx, coord, labelHeight, radius, startY,
 
 		y -= 58;
 		x += (labelWidth/2- width/2);
+		var labelYPoint = 20;
+		var labelYOffset = labelYPoint+10;
 
 		ctx.beginPath();
-		ctx.lineTo(x+width/2 , y + labelHeight + 10);
-		ctx.lineTo(x+width/2 - 10, y + labelHeight);
-		ctx.lineTo(x + radius.bl, y + labelHeight);
-		ctx.quadraticCurveTo(x, y + labelHeight, x, y + labelHeight - radius.bl);
-		ctx.lineTo(x, y + radius.tl);
-		ctx.quadraticCurveTo(x, y, x + radius.tl, y);
-		ctx.lineTo(x + radius.tl, y);
-		ctx.lineTo(x + width - radius.tr, y);
-		ctx.quadraticCurveTo(x + width, y, x + width, y + radius.tr);
-		ctx.lineTo(x + width, y + labelHeight - radius.br);
-		ctx.quadraticCurveTo(x + width, y + labelHeight, x + width - radius.br, y + labelHeight);
-		ctx.lineTo(x+width/2 + 10, y + labelHeight);
+		ctx.lineTo(x+width/2 , y + labelHeight - labelYPoint);
+		ctx.lineTo(x+width/2 - 10, y + labelHeight-labelYOffset);
+		ctx.lineTo(x + radius.bl, y + labelHeight-labelYOffset);
+		ctx.quadraticCurveTo(x, y + labelHeight-labelYOffset, x, y + labelHeight - radius.bl-labelYOffset);
+		ctx.lineTo(x, y + radius.tl-labelYOffset);
+		ctx.quadraticCurveTo(x, y-labelYOffset, x + radius.tl, y-labelYOffset);
+		ctx.lineTo(x + radius.tl, y-labelYOffset);
+		ctx.lineTo(x + width - radius.tr, y-labelYOffset);
+		ctx.quadraticCurveTo(x + width, y-labelYOffset, x + width, y + radius.tr-labelYOffset);
+		ctx.lineTo(x + width, y + labelHeight - radius.br-labelYOffset);
+		ctx.quadraticCurveTo(x + width, y + labelHeight-labelYOffset, x + width - radius.br, y + labelHeight-labelYOffset);
+		ctx.lineTo(x+width/2 + 10, y + labelHeight-labelYOffset);
 		ctx.closePath();
 		ctx.fill();
 
 		if(ranking){
-			ctx.font = 'normal 12pt Calibri';
+			ctx.font = lineChartFontStyle;
 			ctx.fillStyle = '#ffffff';
 			switch (rankingStr.length) {
 				case 1:
 				case 2:
-					x += 20;
-					break;
 				case 3:
+					x += 35;
+					break;
 				case 4:
 				case 5:
 					x += 15;
@@ -286,9 +305,9 @@ function drawLabel(ctx, coord, labelHeight, radius, startY,
 			ctx.fillText(ranking+"名", x, y+25);
 		}
 		if (i==len-1) {
-			ctx.font = 'normal 12pt Calibri';
+			ctx.font = lineChartFontStyle;
 			ctx.fillStyle = '#eb614c';
-			ctx.fillText("你的排名", x+width/2-40, y+86);
+			ctx.fillText("你的排名", x+width/2-100, y+130);
 		}
 	}
 
@@ -304,34 +323,49 @@ function drawLabel(ctx, coord, labelHeight, radius, startY,
  *
  * */
 function drawTrapezoid(ctx, initWidth, initHeight, schoolList,
-					   trapezoidStyle, schoolNumNameStyle, lineDotStyle, title, trapezoidGap, contextFontStyle) {
+					   trapezoidStyle, schoolNumNameStyle, lineDotStyle, title, trapezoidGap, trapezoidParentNodeWidth) {
 	var lineFinal = 0;
 	var startX;
 	var startY;
 	var trapezoidWidthDown;
 	var schoolListItem;
 	var offsetY = 0;
+	var contextFontStyle;
+	var titleOffsetX = 50;
 
 	if(!trapezoidGap){
 		trapezoidGap = 10;
 	}
 
-	if (!contextFontStyle) {
-		contextFontStyle = "18px serif";
+	if (trapezoidParentNodeWidth >= 1280) { // 640 pixes phone
+		contextFontStyle = getFont(0.08);
+		titleOffsetX = 130;
+	} else if (trapezoidParentNodeWidth >= 828){
+		contextFontStyle = getFont(0.06);
+		titleOffsetX = 100;
+	} else if (trapezoidParentNodeWidth >= 750){
+		contextFontStyle = getFont(0.05);
+		titleOffsetX = 50;
+	} else if (trapezoidParentNodeWidth >= 640){
+		contextFontStyle = getFont(0.03);
+		titleOffsetX = 40;
 	}
+
 	// 标题
 	if (title) {
 		ctx.font = contextFontStyle;
 		ctx.fillStyle = '#bebebe';
-		if (initWidth < 120){
-			ctx.fillText(title, initWidth / 2 - 50, 25);
-		} else if (initWidth < 140){
-			ctx.fillText(title, initWidth / 2 - 58, 25);
-		} else {
-			ctx.fillText(title, initWidth / 2 - 66, 25);
-		}
 
-		offsetY = 40
+		if (initWidth < 330) {
+			ctx.fillText(title, initWidth / 2 - titleOffsetX, 45);
+		} else if (initWidth < 390) {
+			ctx.fillText(title, initWidth / 2 - titleOffsetX, 45);
+		} else if (initWidth < 670) {
+			ctx.fillText(title, initWidth / 2 - titleOffsetX, 45);
+		} else if (initWidth < 670) {
+			ctx.fillText(title, initWidth / 2 - titleOffsetX, 45);
+		}
+		offsetY = 70;
 	}
 
 	for (var i = 0, len = schoolList.length; i < len; i++) {
@@ -341,7 +375,7 @@ function drawTrapezoid(ctx, initWidth, initHeight, schoolList,
 		trapezoidWidthDown = initWidth - 2 * startX;
 
 		if (!lineFinal) {
-			lineFinal = startX + trapezoidWidthDown + 20;
+			lineFinal = startX + trapezoidWidthDown + 30;
 		}
 
 		// 画梯形
@@ -374,10 +408,11 @@ function drawTrapezoid(ctx, initWidth, initHeight, schoolList,
 		} else {
 			ctx.strokeStyle = "##ccdbe1";
 		}
+		ctx.lineWidth = 4;
 		ctx.stroke();
 
 		ctx.beginPath();
-		ctx.arc(startX + trapezoidWidthDown * (250 / 286), startY + initHeight / 2, 3, 0, 2 * Math.PI, true);
+		ctx.arc(startX + trapezoidWidthDown * (250 / 286), startY + initHeight / 2, 8, 0, 2 * Math.PI, true);
 		if (lineDotStyle.fillStyle) {
 			ctx.fillStyle = lineDotStyle.fillStyle;
 		} else {
@@ -394,7 +429,7 @@ function drawTrapezoid(ctx, initWidth, initHeight, schoolList,
 		}
 		// 根据数量长度设置 x 方向的偏移量
 		var numOffset = 0;
-		var studentNumberStr = schoolListItem["studentNumber"] + "";
+		var studentNumberStr = schoolListItem["stu_count"] + "";
 		switch (studentNumberStr.length) {
 			case 1:
 				numOffset = startX + trapezoidWidthDown / 2 - 6;
@@ -418,7 +453,7 @@ function drawTrapezoid(ctx, initWidth, initHeight, schoolList,
 				numOffset = startX + trapezoidWidthDown / 2 - 22;
 				break;
 		}
-		ctx.fillText(schoolListItem["studentNumber"], numOffset, startY + initHeight / 2 + 6);
+		ctx.fillText(schoolListItem["stu_count"], numOffset, startY + initHeight / 2 + 6);
 
 		// 学校名称
 		ctx.font = contextFontStyle;
@@ -427,7 +462,7 @@ function drawTrapezoid(ctx, initWidth, initHeight, schoolList,
 		} else {
 			ctx.fillStyle = '#000000';
 		}
-		ctx.fillText(schoolListItem["schoolName"], lineFinal + 8, startY + initHeight / 2 + 6);
+		ctx.fillText(schoolListItem["sch_name"], lineFinal + 8, startY + initHeight / 2 + 6);
 	}
 }
 
