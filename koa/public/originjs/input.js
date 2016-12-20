@@ -51,8 +51,8 @@ var init=function(xinSwiper){
 			exam_no:examNum,
 			province_id:provId,
 			score:score,
-			exp_sch_id:$("#school-input").val(),
-			batch:1,
+			exp_sch_id:$("#school-input").data("val")||"",
+			batch:$("#school-input").data("batch")||"",
 			wenli:$(".subject-type .active").data("val"),
 		};
 		console.log(data)
@@ -100,13 +100,14 @@ var initPage=function(){
 };
 var selectSchool=function(that){
 	$("#school-input").data("val",$(that).data("val"))
+			      .data("batch",$(that).data("batch"))
 			      .val($(that).text());
 	$(".school-list").hide();
 };
 var createSchoolList=function(list){
 	var schHtml="";
 	$.each(list,function(i,item){
-		schHtml+='<li data-batch='+item.bacth+'data-val='+item.sch_id+'>'+item.sch_name+'</li>'
+		schHtml+='<li data-batch='+item.bacth+' data-val='+item.sch_id+'>'+item.sch_name+'</li>'
 	});
 	$(".school-list").hide().html(schHtml).show();
 	if(!schHtml){
