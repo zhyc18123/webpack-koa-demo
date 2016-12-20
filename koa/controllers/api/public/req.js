@@ -14,7 +14,7 @@ module.exports = function* req(url, data, parent, ignore,ContentType) {
     try{
         var data = yield request(reqOpt);
     }catch(err){
-        console.log(err);
+        console.log("<><><<>><><<<><>>>><<"+err);
     }
 
     if(data.statusCode==404){

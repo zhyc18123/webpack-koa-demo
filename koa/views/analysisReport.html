@@ -1,3 +1,4 @@
+<div id="modal-black-masking" class="hide"></div>
 <div class="analyse-report-wrap">
     <div class="report-header">
         <img src="scss/images/score-analysis-banner.png" alt="" class="header-bg">
@@ -87,39 +88,51 @@
                     <canvas id="line-chart-canvas"></canvas>
                 </div>
                 <&}&>
+                <p class="wmzy-link goto-wmzy-pro-intro">
+                    <span>更详尽院校录取数据，尽在完美志愿 >></span>
+                </p>
             </script>
         </div>
-        <p class="wmzy-link goto-wmzy-pro-intro">
-            <span>更详尽院校录取数据，尽在完美志愿 >></span>
-        </p>
 
     </div>
 
     <div class="school-list-wrap">
-        <div class="school-list-modal hide">
-            <p class="school-modal-close"><i></i></p>
-            <div class="school-list-item school-list-margin">
-                <img src="/scss/images/school-1.png" alt="学校logo" class="school-list-img">
-                <ul class="school-info">
-                    <li class="school-name-loc" title="">
-                        <span class="school-name">华南理工大学</span>
-                        <span class="school-loc">广州</span>
-                    </li>
-                    <li class="school-rank-probability">
-                        <span class="school-rank"><em class="dot"></em>综合排名<em class="rank-num">10</em></span>
-                        <span class="enroll-probability"><em class="dot"></em>录取概率<em class="probability-num">70%</em></span>
-                    </li>
-                    <li class="school-label">
-                        <span class="school-label-1">985</span>
-                        <span class="school-label-2">211</span>
-                        <span class="school-label-3">综合类</span>
-                    </li>
-                </ul>
+        <div class="school-list-modal hide" id="school-detail-modal">
+            <p class="school-modal-close" id="school-modal-close-btn"><i></i></p>
+            <div class="school-list-item" id="school-list-item-modal-wrap">
+                <script id="school-list-item-modal-tpl" type="text/template">
+                    <img src="<&= data.icon_url&>" alt="学校logo" class="school-list-img">
+                    <ul class="school-info">
+                        <li class="school-name-loc" title="">
+                            <span class="school-name"><&= data.sch_name&></span>
+                            <span class="school-loc"><&= data.city&></span>
+                        </li>
+                        <li class="school-rank-probability">
+                            <span class="school-rank"><em class="dot"></em>综合排名<em class="rank-num"><&= data.total_rank&></em></span>
+                            <span class="enroll-probability"><em class="dot"></em>录取概率<em class="probability-num"><&= data.adm_ratio&>%</em></span>
+                        </li>
+                        <li class="school-label">
+                            <span class="school-label-1"><&= data.sch_flag[0]&></span>
+                            <span class="school-label-2"><&= data.sch_flag[1]&></span>
+                            <span class="school-label-3"><&= data.sch_type[0]&></span>
+                        </li>
+                    </ul>
+                </script>
             </div>
-            <div class="line-chart-wrap">
-                <h3 class="line-chart-tiltle">往年该校录取最低省排名（广东-理科）</h3>
-                <canvas id="line-chart-canvas"></canvas>
+            <div id="line-chart-wmzy-link-modal-wrap">
+                <script id="line-chart-wmzy-link-modal-tpl" type="text/template">
+                    <& if(data.sch_min_score_list){ &>
+                    <div class="line-chart-wrap">
+                        <h3 class="line-chart-tiltle">往年该校录取最低省排名（广东-理科）</h3>
+                        <canvas id="line-chart-modal-canvas"></canvas>
+                    </div>
+                    <&}&>
+                    <p class="wmzy-link goto-wmzy-pro-intro">
+                        <span>更详尽院校录取数据，尽在完美志愿 >></span>
+                    </p>
+                </script>
             </div>
+
         </div>
         <p class="rectangular-title">
             <span class="yellow-col">你的成绩能上什么学校</span>
@@ -137,14 +150,13 @@
                             <span class="school-loc"><&= recomendSchoolItem.location&></span>
                         </li>
                         <li class="school-rank-probability">
-                            <span class="school-rank"><em class="dot"></em>综合排名<em class="rank-num"><&= recomendSchoolItem.total_rank&></em></span>
+                            <span class="school-rank"><em class="dot"></em>综合排名<em class="rank-num"><&= recomendSchoolItem.totalRank&></em></span>
                             <span class="enroll-probability"><em class="dot"></em>录取概率<em class="probability-num"><&= recomendSchoolItem.adm_ratio&>%</em></span>
                         </li>
                     </ul>
                 </div>
                 <&}&>
             </script>
-
         </div>
 
         <p class="wmzy-link goto-wmzy-pro-intro" id="recommend-school-link-wrap">

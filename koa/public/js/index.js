@@ -89,29 +89,126 @@ var _init = function () {
 	// module scope variables
 	var jqueryMap = {},
 	    setJqueryMap,
+	    _toggleModalShow,
+	    _toggleModaHide,
 	    onClickSchoolListItem,
+	    onClickCloseSchoolDetailBtn,
 	    initModule;
 
 	// UTILITY METHODS
+	_toggleModalShow = function _toggleModalShow() {
+		jqueryMap.$blackMasking.removeClass("hide");
+		jqueryMap.$schoolDetailModal.removeClass("hide");
+	};
 
+	_toggleModaHide = function _toggleModaHide() {
+		jqueryMap.$blackMasking.addClass("hide");
+		jqueryMap.$schoolDetailModal.addClass("hide");
+	};
 
 	// DOM METHODS
 	setJqueryMap = function setJqueryMap() {
 		jqueryMap = {
-			$blackMasking: $("#modal-masking"),
-			$schoolListItem: $(".school-list-item")
+			$blackMasking: $("#modal-black-masking"),
+			$schoolListItem: $(".school-list-item"),
+			$schoolDetailModal: $("#school-detail-modal"),
+			$schoolDetailClose: $("#school-modal-close-btn")
 		};
 	};
 
 	onClickSchoolListItem = function onClickSchoolListItem() {
-		alert(" onClickSchoolListItem ");
-		jqueryMap.$blackMasking.removeClass("hide");
+
+		_toggleModalShow();
+		var ejsTpl;
+		var ejsHtml;
+		var ejsOptions = {
+			open: "<&",
+			close: "&>"
+		};
+		var schoolData = {
+			"code": 0,
+			"msg": "",
+			"sch_id": "52ac2e98747aec013fcf4c46", //学校id
+			"icon_url": "http://school-icon.b0.upaiyun.com/52ac2e98747aec013fcf4c1d.jpg", //学校图标识
+			"sch_name": "北京大学", //学校名称
+			"city": "北京", //所在地区
+			"province": "广州", //用户所选省份
+			"total_rank": 1, //综合排名
+			"adm_ratio": 89, //录取概率
+			"sch_flag": [985, 211], //985、211
+			"sch_type": ['综合院校'], //学校类型
+			"sch_min_score_list": [{
+				"year": "2013", //年份
+				"min_rank": 2600 //当年最低省排名
+			}, {
+				"year": "2014", //年份
+				"min_rank": 2700 //当年最低省排名
+			}, {
+				"year": "2015", //年份
+				"min_rank": 2500 //当年最低省排名
+			}]
+		};
+
+		ejsTpl = $("#school-list-item-modal-tpl").html();
+		ejsHtml = Tpl.ejs(ejsTpl, schoolData, ejsOptions);
+		console.log("ejsHtml >> " + ejsHtml);
+		$("#school-list-item-modal-wrap").html(ejsHtml);
+
+		if (schoolData.sch_min_score_list) {
+
+			renderEjsTplWithData("#line-chart-wmzy-link-modal-tpl", "#line-chart-wmzy-link-modal-wrap", schoolData);
+
+			var lineChartCanvas = document.getElementById('line-chart-modal-canvas'),
+			    context = lineChartCanvas.getContext('2d');
+			lineChartCanvas.width = lineChartCanvas.parentNode.clientWidth;
+			lineChartCanvas.height = lineChartCanvas.parentNode.clientHeight * 1.5;
+
+			var startX = 0;
+			var startY = 40;
+			var widthMargin = lineChartCanvas.width / 4;
+			var labelWitth = widthMargin;
+			var coordData;
+			var lowestPercent = 1;
+			var offsetY;
+			var setCoordinateReturn;
+
+			var yearColor = {
+				dotColor: "#999999",
+				lineColor: "#999999"
+			};
+			var historyColor = {
+				dotColor: "#f9be00",
+				lineColor: "#f9be00"
+			};
+			var currentColor = {
+				dotColor: "#eb614c",
+				lineColor: "#eda89d"
+			};
+			var lineChartFontStyle = "normal 32.3pt serif";
+			setCoordinateReturn = _canvasGraph2.default.setCoordinate(schoolData.sch_min_score_list, startX, startY, widthMargin, 400, lowestPercent);
+			coordData = setCoordinateReturn[0];
+			lowestPercent = setCoordinateReturn[1];
+
+			offsetY = lowestPercent < 0.01 ? 140 : lowestPercent < 0.1 ? 130 : 50;
+
+			_canvasGraph2.default.drawCoordinate(context, coordData, yearColor, historyColor, currentColor, labelWitth, lineChartCanvas.width, lineChartCanvas.height, 40, offsetY, lineChartFontStyle);
+			_canvasGraph2.default.drawLabel(context, coordData, 75, 8, 20, lineChartCanvas.height, offsetY, labelWitth, lineChartCanvas.width, lineChartFontStyle);
+		}
+	};
+
+	onClickCloseSchoolDetailBtn = function onClickCloseSchoolDetailBtn() {
+		_toggleModaHide();
+		var schoolListItemModalHtml = '<script id="school-list-item-modal-tpl" type="text/template">' + '<img src="<&= data.icon_url&>" alt="学校logo" class="school-list-img">' + '<ul class="school-info">' + '<li class="school-name-loc" title="">' + '<span class="school-name"><&= data.sch_name&></span>' + '<span class="school-loc"><&= data.city&></span>' + '</li>' + '<li class="school-rank-probability">' + '<span class="school-rank"><em class="dot"></em>综合排名<em class="rank-num"><&= data.total_rank&></em></span>' + '<span class="enroll-probability"><em class="dot"></em>录取概率<em class="probability-num"><&= data.adm_ratio&>%</em></span>' + '</li>' + '<li class="school-label">' + '<span class="school-label-1"><&= data.sch_flag[0]&></span>' + '<span class="school-label-2"><&= data.sch_flag[1]&></span>' + '<span class="school-label-3"><&= data.sch_type[0]&></span>' + '</li>' + '</ul>' + '</script>';
+		var schoolListLineChartModalHtml = '<script id="line-chart-wmzy-link-modal-tpl" type="text/template">' + '<& if(data.sch_min_score_list){ &>' + '<div class="line-chart-wrap">' + '<h3 class="line-chart-tiltle">往年该校录取最低省排名（广东-理科）</h3>' + '<canvas id="line-chart-modal-canvas"></canvas>' + '</div>' + '<&}&>' + '<p class="wmzy-link goto-wmzy-pro-intro">' + '<span>更详尽院校录取数据，尽在完美志愿 >></span>' + '</p>' + '</script>';
+		$("#school-list-item-modal-wrap").html(schoolListItemModalHtml);
+		$("#line-chart-wmzy-link-modal-wrap").html(schoolListLineChartModalHtml);
 	};
 
 	// PUBLIC METHODS
 	initModule = function initModule() {
 		setJqueryMap();
 		jqueryMap.$schoolListItem.click(onClickSchoolListItem);
+		jqueryMap.$schoolDetailClose.click(onClickCloseSchoolDetailBtn);
 	};
 
 	return {
@@ -145,67 +242,80 @@ function getFont(ratio) {
 
 var _renderAnalysisReportPage = function _renderAnalysisReportPage(reportData) {
 
-	reportData = {
-		"code": 0, //状态码,0-成功，-1-失败
-		"score": 600, //分数
-		"rank": 4000, //排名
-		"rank_gap": 1000, //排名差距
-		"exp_sch": "中山大学", //目标学校
-		"diploma_id": 7, //学历 5-本科，7-专科
-		"score_gap": 30, //与目标学校分差值
-		"adm_ratio": 40, //录取概率
-		"recommend_sch": "北京大学", //推荐学校
-		"recommend_sch_num": 38, //推荐学校数量
-		"batch_name": "本科", //推荐学校的批次名称
-		"choosed_sch": "四川大学", //相近分数的人中去向最多的学校
-		"stu_count": 1300, //学生人数
-		"sch_min_score_list": [{
-			"year": "2013", //年份
-			"min_rank": 2600 //当年最低省排名
-		}, {
-			"year": "2014", //年份
-			"min_rank": 2700 //当年最低省排名
-		}, {
-			"year": "2015", //年份
-			"min_rank": 2500 //当年最低省排名
-		}, {
-			"year": "你的排名", //用户的排名
-			"min_rank": 3000 //用户排名
-		}],
-		"recommend_sch_list": [//推荐学校列表
-		{
-			"sch_id": "52ac2e98747aec013fcf4c46", //学校id
-			"icon_url": "http://school-icon.b0.upaiyun.com/52ac2e98747aec013fcf4c1d.jpg", //学校图标识
-			"sch_name": "北京大学", //学校名称
-			"location": "北京", //所在省份
-			"total_rank": 1, //综合排名
-			"adm_ratio": 89 //录取概率
-		}, {
-			"sch_id": "52ac2e98747aec013fcf4c46", //学校id
-			"icon_url": "http://school-icon.b0.upaiyun.com/52ac2e98747aec013fcf4c1d.jpg",
-			"sch_name": "北京大学", //学校名称
-			"location": "北京", //所在省份
-			"total_rank": 1, //综合排名
-			"adm_ratio": 89 //录取概率
-		}],
-		"goto_schs_list": [{
-			"sch_name": "四川大学",
-			"stu_count": 1160
-		}, {
-			"sch_name": "电子科技大学",
-			"stu_count": 720
-		}],
-		"goto_majors_list": [{
-			"major_name": "临床医学",
-			"primary_name": "医学",
-			"stu_count": 124
-		}, {
-			"major_name": "自动化",
-			"primary_name": "工学",
-			"stu_count": 124
-		}]
-
-	};
+	// reportData = {
+	// 	"code":0,//状态码,0-成功，-1-失败
+	// 	"score":600,//分数
+	// 	"rank":4000,//排名
+	// 	"rank_gap":1000,//排名差距
+	// 	"exp_sch":"中山大学",//目标学校
+	// 	"diploma_id":7,//学历 5-本科，7-专科
+	// 	"score_gap":30,//与目标学校分差值
+	// 	"adm_ratio":40,//录取概率
+	// 	"recommend_sch":"北京大学",//推荐学校
+	// 	"recommend_sch_num":38,//推荐学校数量
+	// 	"batch_name":"本科",//推荐学校的批次名称
+	// 	"choosed_sch":"四川大学",//相近分数的人中去向最多的学校
+	// 	"stu_count":1300,//学生人数
+	// 	"sch_min_score_list":[
+	// 		{
+	// 			"year":"2013",//年份
+	// 			"min_rank":2600//当年最低省排名
+	// 		},
+	// 		{
+	// 			"year":"2014",//年份
+	// 			"min_rank":2700//当年最低省排名
+	// 		},
+	// 		{
+	// 			"year":"2015",//年份
+	// 			"min_rank":2500//当年最低省排名
+	// 		},
+	// 		{
+	// 			"year":"你的排名",//用户的排名
+	// 			"min_rank":3000//用户排名
+	// 		}
+	// 	],
+	// 	"recommend_sch_list":[//推荐学校列表
+	// 		{
+	// 			"sch_id":"52ac2e98747aec013fcf4c46",//学校id
+	// 			"icon_url":"http://school-icon.b0.upaiyun.com/52ac2e98747aec013fcf4c1d.jpg",//学校图标识
+	// 			"sch_name":"北京大学",//学校名称
+	// 			"location":"北京",//所在省份
+	// 			"total_rank":1,//综合排名
+	// 			"adm_ratio":89//录取概率
+	// 		},
+	// 		{
+	// 			"sch_id":"52ac2e98747aec013fcf4c46",//学校id
+	// 			"icon_url":"http://school-icon.b0.upaiyun.com/52ac2e98747aec013fcf4c1d.jpg",
+	// 			"sch_name":"北京大学",//学校名称
+	// 			"location":"北京",//所在省份
+	// 			"total_rank":1,//综合排名
+	// 			"adm_ratio":89//录取概率
+	// 		}
+	// 	],
+	// 	"goto_schs_list":[
+	// 		{
+	// 			"sch_name":"四川大学",
+	// 			"stu_count":1160
+	// 		},
+	// 		{
+	// 			"sch_name":"电子科技大学",
+	// 			"stu_count":720
+	// 		}
+	// 	],
+	// 	"goto_majors_list":[
+	// 		{
+	// 			"major_name":"临床医学",
+	// 			"primary_name":"医学",
+	// 			"stu_count":124
+	// 		},
+	// 		{
+	// 			"major_name":"自动化",
+	// 			"primary_name":"工学",
+	// 			"stu_count":124
+	// 		}
+	// 	]
+	//
+	// };
 
 	// 成绩与排名
 	renderEjsTplWithData("#score-rank-tpl", "#score-rank-wrap", reportData);
@@ -271,8 +381,13 @@ var _renderAnalysisReportPage = function _renderAnalysisReportPage(reportData) {
 
 		renderEjsTplWithData("#line-chart-wmzy-link-tpl", "#line-chart-wmzy-link-wrap", reportData);
 
+		var lineChartCanvasClosestWidth;
 		var lineChartCanvas = document.getElementById('line-chart-canvas'),
 		    context = lineChartCanvas.getContext('2d');
+		lineChartCanvasClosestWidth = lineChartCanvas.parentNode.parentNode.clientWidth;
+
+		alert("lineChartCanvasParentNodeWidth " + lineChartCanvasClosestWidth);
+
 		lineChartCanvas.width = lineChartCanvas.parentNode.clientWidth;
 		lineChartCanvas.height = lineChartCanvas.parentNode.clientHeight * 1.5;
 
@@ -305,7 +420,7 @@ var _renderAnalysisReportPage = function _renderAnalysisReportPage(reportData) {
 		offsetY = lowestPercent < 0.01 ? 140 : lowestPercent < 0.1 ? 130 : 50;
 
 		_canvasGraph2.default.drawCoordinate(context, coordData, yearColor, historyColor, currentColor, labelWitth, lineChartCanvas.width, lineChartCanvas.height, 40, offsetY, lineChartFontStyle);
-		_canvasGraph2.default.drawLabel(context, coordData, 75, 8, 20, lineChartCanvas.height, offsetY, labelWitth, lineChartCanvas.width, lineChartFontStyle);
+		_canvasGraph2.default.drawLabel(context, coordData, 75, 8, 20, lineChartCanvas.height, offsetY, labelWitth, lineChartCanvas.width, lineChartFontStyle, lineChartCanvasClosestWidth);
 	}
 
 	// 推荐学校列表
@@ -349,17 +464,26 @@ var _renderAnalysisReportPage = function _renderAnalysisReportPage(reportData) {
 
 var swipeToAnalysisReportPage = function swipeToAnalysisReportPage(requestParam, xinSwiper) {
 
-	console.log("requestParam " + JSON.stringify(requestParam, null, 4));
+	var data = {};
+
+	data.reqId = requestParam.req_id || "1111";
+	data.examNo = requestParam.exam_no || "111";
+	data.provinceId = requestParam.province_id || "440000000000";
+	data.wenli = requestParam.wenli || "";
+	data.score = requestParam.score || "";
+	data.expSchId = requestParam.exp_sch_id || "52ac2e98747aec013fcf4c46";
+	data.batch = requestParam.batch || "";
 
 	$.ajax({
 		type: "post",
 		cache: false,
 		url: _url2.default.analysisReportUrl,
-		data: requestParam,
+		data: data,
 		success: function success(data) {
 			console.log("data " + JSON.stringify(data, null, 4));
 
 			_renderAnalysisReportPage(data);
+			_init.initModule();
 			xinSwiper.slideNext();
 		},
 		error: function error() {
@@ -370,6 +494,7 @@ var swipeToAnalysisReportPage = function swipeToAnalysisReportPage(requestParam,
 		}
 	});
 };
+
 var swipeToWmzyIntroPage = function swipeToWmzyIntroPage(xinSwiper) {
 
 	$(".goto-wmzy-pro-intro").on("click", function () {
@@ -392,7 +517,7 @@ module.exports = {
 module.exports = {
 	autoUrl: "/get-auto-code",
 	vipUrl: "/get-vip",
-	analysisReportUrl: "/score/analysis",
+	analysisReportUrl: "/analysis",
 	guestSchool: "/guest-school"
 };
 
@@ -1490,9 +1615,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 "use strict";
 
 /**
- *
- * selected default width for canvas
- * default size for font
+ * 设置canvas字体样式
+ * @param ratio  canvas标注字体样式的比例
  * @returns {string}
  */
 function getFont(ratio) {
@@ -1500,6 +1624,18 @@ function getFont(ratio) {
 	return (size | 0) + 'px sans-serif'; // set font
 }
 
+/**
+ * 用canvas画一个圆形
+ * @param ctx
+ * @param x 圆心x坐标
+ * @param y 圆形 y 坐标
+ * @param fillStyle 填充
+ * @param strokeStyle
+ * @param lineWidth
+ * @param radius
+ * @param angle
+ * @param lineCap
+ */
 function drawCircle(ctx, x, y, fillStyle, strokeStyle, lineWidth, radius, angle, lineCap) {
 	ctx.beginPath();
 	ctx.arc(x, y, radius, -0.5 * Math.PI, (angle * 2 - 0.5) * Math.PI, false);
@@ -1520,13 +1656,15 @@ function drawCircleText(ctx, font, fillStyle, content, x, y) {
 }
 
 /**
- *  获取输入数据的坐标
- *  @param { [{},{}] } originData 排名 年份
- *  @param {Number} 第一个点的横坐标 偏移量
- *  @param {Number} 年份点纵坐标偏移量，年份虚线纵坐标偏移量再次基础上加上50
- *  @param {Number} 年份竖线之前的间距
- *  @param {Number} canvas的高度
- * */
+ *
+ * @param originData originData 排名 年份
+ * @param startX 第一个点的横坐标 偏移量
+ * @param startY 年份点纵坐标偏移量
+ * @param widthMargin 年份竖线之前的间距
+ * @param canvasHeight
+ * @param lowestPercent 最低省排名的最低比例，用于调整最低排名点坐标
+ * @returns {*[]}
+ */
 function setCoordinate(originData, startX, startY, widthMargin, canvasHeight, lowestPercent) {
 
 	var coordData = [];
@@ -1571,12 +1709,18 @@ function setCoordinate(originData, startX, startY, widthMargin, canvasHeight, lo
 }
 
 /**
- *  画点线: 年份的竖线， 往年录取点线， 当前排名点线
- *  @param { Array } 点坐标
- *  @param {Object} 年份颜色
- *  @param {Object} 往年录取颜色
- *  @param {Object} 当前排名点线颜色值
- * */
+ * @param ctx
+ * @param coord  点坐标
+ * @param yearColor 年份颜色
+ * @param historyColor 往年录取颜色
+ * @param currentColor 当前排名点线颜色值
+ * @param labelWidth 每个label的宽度
+ * @param canvasWidth
+ * @param canvasHeight canvas的高度
+ * @param startY  Y轴点坐标的起始值
+ * @param offsetY Y轴点坐标的偏移量
+ * @param lineChartFontStyle 标注年份时的样式
+ */
 function drawCoordinate(ctx, coord, yearColor, historyColor, currentColor, labelWidth, canvasWidth, canvasHeight, startY, offsetY, lineChartFontStyle) {
 	var len = coord.length;
 
@@ -1668,13 +1812,20 @@ function drawCoordinate(ctx, coord, yearColor, historyColor, currentColor, label
 }
 
 /**
- * 标注:
  *
- *
- *
- *
- * */
-function drawLabel(ctx, coord, labelHeight, radius, startY, canvasHeight, offsetY, labelWidth, canvasWidth, lineChartFontStyle) {
+ * @param ctx canvas context上下文
+ * @param coord 数值对应的点坐标
+ * @param labelHeight 每个label的高度
+ * @param radius 标注的圆角大小
+ * @param startY  标注Y轴的起始值，与drawCoordinate方法startY参数对应
+ * @param canvasHeight  canvas的高度
+ * @param offsetY  标注Y轴的偏移量，与drawCoordinate方法offsetY参数对应
+ * @param labelWidth 每个label的宽度
+ * @param canvasWidth  canvas宽度 暂不使用
+ * @param lineChartFontStyle 标注标签时的字体样式
+ * @param lineChartCanvasClosestWidth  cavas祖父元素的宽度，用于调整label的宽度
+ */
+function drawLabel(ctx, coord, labelHeight, radius, startY, canvasHeight, offsetY, labelWidth, canvasWidth, lineChartFontStyle, lineChartCanvasClosestWidth) {
 
 	if (typeof radius === 'undefined') {
 		radius = 5;
@@ -1734,8 +1885,12 @@ function drawLabel(ctx, coord, labelHeight, radius, startY, canvasHeight, offset
 
 		}
 
-		if (canvasWidth < 320) {
-			width -= 10;
+		if (lineChartCanvasClosestWidth) {
+			if (lineChartCanvasClosestWidth <= 640) {
+				width -= 40;
+			} else if (lineChartCanvasClosestWidth <= 750) {
+				width -= 30;
+			}
 		}
 
 		ctx.strokeStyle = "#3e3a39";
@@ -1799,14 +1954,24 @@ function drawLabel(ctx, coord, labelHeight, radius, startY, canvasHeight, offset
 }
 
 /**
- * 梯形宽度计算方式
+ * 梯形宽度计算方式:
  * 第一个梯形宽度固定宽度为父元素宽度的 286/750，高度是宽度的 64/286
- *
  * 每个梯形需确定: 1.左上角坐标(x,y) 2.第一个梯形的高宽(width, height)
- *
  * 传参 第一个梯形的宽高 width，height
- *
  * */
+/**
+ *
+ * @param ctx
+ * @param initWidth
+ * @param initHeight
+ * @param schoolList
+ * @param trapezoidStyle
+ * @param schoolNumNameStyle
+ * @param lineDotStyle
+ * @param title
+ * @param trapezoidGap
+ * @param trapezoidParentNodeWidth
+ */
 function drawTrapezoid(ctx, initWidth, initHeight, schoolList, trapezoidStyle, schoolNumNameStyle, lineDotStyle, title, trapezoidGap, trapezoidParentNodeWidth) {
 	var lineFinal = 0;
 	var startX;
