@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 6);
+/******/ 	return __webpack_require__(__webpack_require__.s = 7);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -73,17 +73,17 @@
 "use strict";
 'use strict';
 
-var _url = __webpack_require__(5);
+var _url = __webpack_require__(1);
 
 var _url2 = _interopRequireDefault(_url);
 
-var _canvasGraph = __webpack_require__(4);
+var _canvasGraph = __webpack_require__(5);
 
 var _canvasGraph2 = _interopRequireDefault(_canvasGraph);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var Tpl = __webpack_require__(7);
+var Tpl = __webpack_require__(6);
 
 var _init = function () {
 	// module scope variables
@@ -343,12 +343,25 @@ module.exports = {
 
 /***/ },
 /* 1 */
+/***/ function(module, exports) {
+
+"use strict";
+"use strict";
+
+module.exports = {
+	autoUrl: "/get-auto-code",
+	vipUrl: "/get-vip",
+	analysisReportUrl: "/score/analysis"
+};
+
+/***/ },
+/* 2 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
 "use strict";
 
-var _url = __webpack_require__(5);
+var _url = __webpack_require__(1);
 
 var _url2 = _interopRequireDefault(_url);
 
@@ -470,7 +483,7 @@ module.exports = {
 };
 
 /***/ },
-/* 2 */
+/* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -478,24 +491,37 @@ module.exports = {
 
 var swipeToAnalysisReportPage = __webpack_require__(0);
 var init = function init(xinSwiper) {
+	// 初始化省份列表
+	createProv();
+	//监听选择省份
+	$("#prov-down").on("click", function () {
+		selectProv();
+	});
+	// 监听生成报告
 	$("#get-report").on("click", function () {
+
 		var data = {
-			req_id: "",
-			exam_no: "",
-			province_id: "",
-			score: "",
-			exp_sch_id: "",
-			batch: ""
+			req_id: "1111",
+			exam_no: "XDF234324",
+			province_id: "440000000000",
+			score: "600",
+			exp_sch_id: "52ac2e98747aec013fcf4c46",
+			batch: 1,
+			wenli: 2
 		};
 		swipeToAnalysisReportPage.swipeToAnalysisReportPage(data, xinSwiper);
 	});
 };
+var createProv = function createProv() {
+	var data = {};
+};
+var selectProv = function selectProv() {};
 module.exports = {
 	init: init
 };
 
 /***/ },
-/* 3 */
+/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1267,7 +1293,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ },
-/* 4 */
+/* 5 */
 /***/ function(module, exports) {
 
 "use strict";
@@ -1709,62 +1735,7 @@ module.exports = {
 };
 
 /***/ },
-/* 5 */
-/***/ function(module, exports) {
-
-"use strict";
-"use strict";
-
-module.exports = {
-	autoUrl: "/get-auto-code",
-	vipUrl: "/get-vip",
-	analysisReportUrl: "/score/analysis"
-};
-
-/***/ },
 /* 6 */
-/***/ function(module, exports, __webpack_require__) {
-
-"use strict";
-"use strict";
-
-__webpack_require__(3);
-__webpack_require__(0);
-var getVip = __webpack_require__(1);
-var input = __webpack_require__(2);
-$(function () {
-	var init = function init() {
-		// var swiperHeight=[];
-		var xinSwiper = new Swiper('.xin-con', {
-			autoHeight: true,
-			onSlideChangeStart: function onSlideChangeStart() {
-				var activeSlide = $(".swiper-slide").eq(xinSwiper.activeIndex);
-				console.log(activeSlide.height());
-				if (activeSlide.height() < $(window).height()) {
-					activeSlide.css('height', $(window).height() + 'px');
-					$(".swiper-wrapper").css('height', $(window).height() + 'px');
-				} else {
-					$(".swiper-wrapper").css('height', activeSlide.height() + 'px');
-				};
-			},
-			onInit: function onInit(swiper) {
-				console.log($(".swiper-slide").eq(0).height());
-				console.log($(window).height());
-				if ($(".swiper-slide").eq(0).height() < $(window).height()) {
-					console.log("xdd");
-					$(".swiper-slide").eq(0).css('height', $(window).height() + 'px');
-					$(".swiper-wrapper").css('height', $(window).height() + 'px');
-				};
-			}
-		});
-		getVip.init(xinSwiper);
-		input.init(xinSwiper);
-	};
-	init();
-});
-
-/***/ },
-/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2004,6 +1975,48 @@ var __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
 
     return Tpl;
 }.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+
+/***/ },
+/* 7 */
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+"use strict";
+
+__webpack_require__(4);
+__webpack_require__(0);
+var getVip = __webpack_require__(2);
+var input = __webpack_require__(3);
+$(function () {
+	var init = function init() {
+		// var swiperHeight=[];
+		var xinSwiper = new Swiper('.xin-con', {
+			autoHeight: true,
+			onSlideChangeStart: function onSlideChangeStart() {
+				var activeSlide = $(".swiper-slide").eq(xinSwiper.activeIndex);
+				console.log(activeSlide.height());
+				if (activeSlide.height() < $(window).height()) {
+					activeSlide.css('height', $(window).height() + 'px');
+					$(".swiper-wrapper").css('height', $(window).height() + 'px');
+				} else {
+					$(".swiper-wrapper").css('height', activeSlide.height() + 'px');
+				};
+			},
+			onInit: function onInit(swiper) {
+				console.log($(".swiper-slide").eq(0).height());
+				console.log($(window).height());
+				if ($(".swiper-slide").eq(0).height() < $(window).height()) {
+					console.log("xdd");
+					$(".swiper-slide").eq(0).css('height', $(window).height() + 'px');
+					$(".swiper-wrapper").css('height', $(window).height() + 'px');
+				};
+			}
+		});
+		getVip.init(xinSwiper);
+		input.init(xinSwiper);
+	};
+	init();
+});
 
 /***/ }
 /******/ ]);
