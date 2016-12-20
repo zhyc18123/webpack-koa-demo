@@ -1,7 +1,9 @@
+
 import url from"./url";
 import prov from "./loc.js";
 import queryString from "./query-string";
-var swiperToAyalysisReport = require('./swiper-to-analysis-report');
+// var swiperToAyalysisReport = require('./swiper-to-analysis-report');
+var swipeToAnalysisReportPage = require('./analysis-report');
 var init=function(xinSwiper){
 	//获取url参数，初始化页面
 	initPage();
@@ -141,9 +143,7 @@ var guestSchool=function(that){
 		error: function(request, error) {
 			// alert("服务器错误！")
 		}
-	});
-	$(".school-list").show();
-	$(".school-input").addClass('school-input-active');
+	})
 };
 var selectSubject=function(that){
 	$(that).parent().find("span").removeClass("active");

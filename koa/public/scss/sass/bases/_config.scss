@@ -13,7 +13,7 @@ $l-wid:920px;
 $left-width:250px;
 
 $p-bootstrap-l-width: 1170px;
-$m-width:750px;
+$m-width:7.5rem;
 
 // .........................font-size...............................................................
 $font-42: 42px;
@@ -72,8 +72,7 @@ $salary-col:#ffa94b;
 $staff-col:#5baf3f;
 
 @mixin font-size($sizeVal:1) {
-  font-size: ($sizeVal * 10) + px;
-  font-size: $sizeVal + rem;
+  font-size: $sizeVal/10 + rem;
 }
 @mixin my-transform($scale:1) {
   transform: scale($scale);

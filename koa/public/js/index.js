@@ -858,69 +858,204 @@
 
 	'use strict';
 
-	var drawCanvas = __webpack_require__(3);
+	var _url = __webpack_require__(5);
 
-	var renderAnalysisReportPage = function renderAnalysisReportPage(reportData) {
-		// 概率圆环
+	var _url2 = _interopRequireDefault(_url);
+
+	var _canvasGraph = __webpack_require__(3);
+
+	var _canvasGraph2 = _interopRequireDefault(_canvasGraph);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var Tpl = __webpack_require__(10);
+
+	var _init = function () {
+		// module scope variables
+		var jqueryMap = {},
+		    setJqueryMap,
+		    onClickSchoolListItem,
+		    initModule;
+
+		// UTILITY METHODS
+
+
+		// DOM METHODS
+		setJqueryMap = function setJqueryMap() {
+			jqueryMap = {
+				$blackMasking: $("#modal-masking"),
+				$schoolListItem: $(".school-list-item")
+			};
+		};
+
+		onClickSchoolListItem = function onClickSchoolListItem() {
+			alert(" onClickSchoolListItem ");
+			jqueryMap.$blackMasking.removeClass("hide");
+		};
+
+		// PUBLIC METHODS
+		initModule = function initModule() {
+			setJqueryMap();
+			jqueryMap.$schoolListItem.click(onClickSchoolListItem);
+		};
+
+		return {
+			initModule: initModule
+		};
+	}();
+
+	var renderEjsTplWithData = function renderEjsTplWithData(tplId, htmlId, data) {
+		var ejsTpl;
+		var ejsHtml;
+		var ejsOptions = {
+			open: "<&",
+			close: "&>"
+		};
+
+		ejsTpl = $(tplId).html();
+		ejsHtml = Tpl.ejs(ejsTpl, data, ejsOptions);
+		$(htmlId).html(ejsHtml);
+	};
+
+	var _renderAnalysisReportPage = function _renderAnalysisReportPage(reportData) {
+
+		reportData = {
+			"code": 0, //状态码,0-成功，-1-失败
+			"score": 600, //分数
+			"rank": 4000, //排名
+			"rank_gap": 1000, //排名差距
+			"exp_sch": "中山大学", //目标学校
+			"diploma_id": 7, //学历 5-本科，7-专科
+			"score_gap": 30, //与目标学校分差值
+			"adm_ratio": 40, //录取概率
+			"recommend_sch": "北京大学", //推荐学校
+			"recommend_sch_num": 38, //推荐学校数量
+			"batch_name": "本科", //推荐学校的批次名称
+			"choosed_sch": "四川大学", //相近分数的人中去向最多的学校
+			"stu_count": 1300, //学生人数
+			"sch_min_score_list": [{
+				"year": "2013", //年份
+				"min_rank": 2600 //当年最低省排名
+			}, {
+				"year": "2014", //年份
+				"min_rank": 2700 //当年最低省排名
+			}, {
+				"year": "2015", //年份
+				"min_rank": 2500 //当年最低省排名
+			}, {
+				"year": "你的排名", //用户的排名
+				"min_rank": 3000 //用户排名
+			}],
+			"recommend_sch_list": [//推荐学校列表
+			{
+				"sch_id": "52ac2e98747aec013fcf4c46", //学校id
+				"sch_name": "北京大学", //学校名称
+				"location": "北京", //所在省份
+				"total_rank": 1, //综合排名
+				"adm_ratio": 89 //录取概率
+			}, {
+				"sch_id": "52ac2e98747aec013fcf4c46", //学校id
+				"sch_name": "北京大学", //学校名称
+				"location": "北京", //所在省份
+				"total_rank": 1, //综合排名
+				"adm_ratio": 89 //录取概率
+			}],
+			"goto_schs_list": [{
+				"sch_name": "四川大学",
+				"stu_count": 1160
+			}, {
+				"sch_name": "电子科技大学",
+				"stu_count": 720
+			}],
+			"goto_majors_list": [{
+				"major_name": "临床医学",
+				"primary_name": "医学",
+				"stu_count": 124
+			}, {
+				"major_name": "自动化",
+				"primary_name": "工学",
+				"stu_count": 124
+			}]
+
+		};
+
+		// 成绩与排名
+		renderEjsTplWithData("#score-rank-tpl", "#score-rank-wrap", reportData);
+
+		// 总结
+		renderEjsTplWithData("#summary-items-tpl", "#summary-items-wrap", reportData);
+
+		// 与目标学校的距离 —— 概率圆环
 		var enrollCanvas = document.getElementById('enroll-canvas');
 		var context = enrollCanvas.getContext('2d');
 		var radius = 70;
 		enrollCanvas.width = enrollCanvas.parentNode.clientWidth;
 		enrollCanvas.height = enrollCanvas.width - 60;
-
 		var centerX = enrollCanvas.width / 2;
 		var centerY = enrollCanvas.height / 2;
-
-		drawCanvas.drawCircle(context, centerX, centerY, '#ffffff', '#e4e4e4', 8, radius, 1);
-		drawCanvas.drawCircle(context, centerX, centerY, '#ffffff', '#f9be00', 10, radius, 0.4, 'round');
+		_canvasGraph2.default.drawCircle(context, centerX, centerY, '#ffffff', '#e4e4e4', 8, radius, 1);
+		_canvasGraph2.default.drawCircle(context, centerX, centerY, '#ffffff', '#f9be00', 10, radius, 0.4, 'round');
 		context.textBaseline = 'middle';
 		context.textAlign = "center";
 
-		drawCanvas.drawCircleText(context, 'normal 36pt serif', '#f9be00', '40', centerX - 10, centerY - 16);
-		drawCanvas.drawCircleText(context, 'normal 18pt serif', '#f9be00', '%', centerX + 35, centerY - 10);
-		drawCanvas.drawCircleText(context, 'normal 16px serif', '#b6b6b6', '录取概率', centerX, centerY + 22);
+		// 分是否设立了目标学校两种情况讨论
+		if (!reportData.exp_sch) {
+			_canvasGraph2.default.drawCircleText(context, 'normal 0.16rem serif', '#b6b6b6', "未设立", centerX - 2, centerY - 12);
+			_canvasGraph2.default.drawCircleText(context, 'normal 0.16rem serif', '#b6b6b6', '目标学校', centerX, centerY + 18);
+		} else {
+			_canvasGraph2.default.drawCircleText(context, 'normal .36rem serif', '#f9be00', reportData.adm_ratio, centerX - 10, centerY - 16);
+			_canvasGraph2.default.drawCircleText(context, 'normal .18rem serif', '#f9be00', '%', centerX + 35, centerY - 10);
+			_canvasGraph2.default.drawCircleText(context, 'normal .16rem serif', '#b6b6b6', '录取概率', centerX, centerY + 22);
+		}
 
-		// canvas 折线图
+		// 与目标学校的距离 —— 建议
+		renderEjsTplWithData("#gap-suggest-tpl", "#gap-suggest-wrap", reportData);
+
+		// canvas 折线图 —— 往年该校录取最低省排名(如果设置了目标院校)
 		/**
 	  *  width: 100%;
 	  *  max-width: 600px;
 	  *  height: 500px;
+	  *
 	  **/
-		var canvas = document.getElementById('line-chart-canvas'),
-		    context = canvas.getContext('2d');
 
-		canvas.width = canvas.parentNode.clientWidth;
+		reportData.sch_min_score_list = 0;
+		if (reportData.sch_min_score_list) {
 
-		canvas.height = canvas.parentNode.clientHeight - 50;
+			renderEjsTplWithData("#line-chart-wmzy-link-tpl", "#line-chart-wmzy-link-wrap", reportData);
 
-		var originData = [{ "ranking": 10700, "year": 2013 }, { "ranking": 5326, "year": 2014 }, { "ranking": 5000, "year": 2015 }, { "ranking": 6000, "year": 2016 }];
+			var canvas = document.getElementById('line-chart-canvas'),
+			    context = canvas.getContext('2d');
+			canvas.width = canvas.parentNode.clientWidth;
+			canvas.height = canvas.parentNode.clientHeight - 50;
 
-		var startX = 0;
-		var startY = 40;
-		var widthMargin = canvas.width / 4;
-		var labelWitth = widthMargin;
-		var coordData;
-		var lowestPercent = 1;
-		var offsetY;
+			var startX = 0;
+			var startY = 40;
+			var widthMargin = canvas.width / 4;
+			var labelWitth = widthMargin;
+			var coordData;
+			var lowestPercent = 1;
+			var offsetY;
 
-		var yearColor = {
-			dotColor: "#999999",
-			lineColor: "#999999"
-		};
-		var historyColor = {
-			dotColor: "#f9be00",
-			lineColor: "#f9be00"
-		};
-		var currentColor = {
-			dotColor: "#eb614c",
-			lineColor: "#eda89d"
-		};
-		coordData = drawCanvas.setCoordinate(originData, startX, startY, widthMargin, 400, lowestPercent);
+			var yearColor = {
+				dotColor: "#999999",
+				lineColor: "#999999"
+			};
+			var historyColor = {
+				dotColor: "#f9be00",
+				lineColor: "#f9be00"
+			};
+			var currentColor = {
+				dotColor: "#eb614c",
+				lineColor: "#eda89d"
+			};
+			coordData = _canvasGraph2.default.setCoordinate(reportData.sch_min_score_list, startX, startY, widthMargin, 400, lowestPercent);
 
-		offsetY = lowestPercent < 0.01 ? 80 : lowestPercent < 0.1 ? 50 : 30;
+			offsetY = lowestPercent < 0.01 ? 80 : lowestPercent < 0.1 ? 50 : 30;
 
-		drawCanvas.drawCoordinate(context, coordData, yearColor, historyColor, currentColor, 20, labelWitth, canvas.width, canvas.height, offsetY);
-		drawCanvas.drawLabel(context, coordData, 36, 8, 20, canvas.height, offsetY, labelWitth, canvas.width);
+			_canvasGraph2.default.drawCoordinate(context, coordData, yearColor, historyColor, currentColor, 20, labelWitth, canvas.width, canvas.height, offsetY);
+			_canvasGraph2.default.drawLabel(context, coordData, 36, 8, 20, canvas.height, offsetY, labelWitth, canvas.width);
+		}
 
 		// 录取人数最多的五个院校
 		var canvas = document.getElementById('trapezoid-canvas');
@@ -962,11 +1097,33 @@
 			"fillStyle": "#ffffff"
 		};
 
-		drawCanvas.drawTrapezoid(context, width, height, schoolData, trapezoidStyle, schoolNumNameStyle, lineDotStyle, "（考生数量）", 6, contextFontStyle);
+		_canvasGraph2.default.drawTrapezoid(context, width, height, schoolData, trapezoidStyle, schoolNumNameStyle, lineDotStyle, "（考生数量）", 6, contextFontStyle);
+	};
+
+	var swipeToAnalysisReportPage = function swipeToAnalysisReportPage(requestParam, xinSwiper) {
+
+		$.ajax({
+			type: "post",
+			cache: false,
+			url: _url2.default.analysisReportUrl,
+			data: requestParam,
+			success: function success(data) {
+				console.log(data);
+
+				_renderAnalysisReportPage(data);
+				xinSwiper.slideNext();
+			},
+			error: function error() {
+				_renderAnalysisReportPage();
+				_init.initModule();
+				xinSwiper.slideNext();
+				// alert("服务器错误！")
+			}
+		});
 	};
 
 	module.exports = {
-		renderAnalysisReportPage: renderAnalysisReportPage
+		swipeToAnalysisReportPage: swipeToAnalysisReportPage
 	};
 
 /***/ },
@@ -1013,12 +1170,12 @@
 		var len = originData.length;
 
 		for (var i = 0; i < len; i++) {
-			rankMax = originData[i].ranking > rankMax ? originData[i].ranking : rankMax;
+			rankMax = originData[i].min_rank > rankMax ? originData[i].min_rank : rankMax;
 		}
 		rankMaxStr = "" + rankMax;
 
-		if (rankMaxStr.length <= 3) {
-			rankMax += 5 * Math.pow(10, rankMaxStr.length - 2);
+		if (rankMaxStr.length <= 4) {
+			rankMax += 10 * Math.pow(10, rankMaxStr.length - 2);
 		} else if (rankMaxStr.length <= 6) {
 			rankMax += 3 * Math.pow(10, rankMaxStr.length - 2);
 		} else {
@@ -1027,16 +1184,16 @@
 
 		for (var i = 0; i < len; i++) {
 			x = startX + widthMargin * i;
-			heightPercent = originData[i].ranking / rankMax;
+			heightPercent = originData[i].min_rank / rankMax;
 
 			lowestPercent = heightPercent > lowestPercent ? lowestPercent : heightPercent;
 
-			y = startY + originData[i].ranking / rankMax * canvasHeight;
+			y = startY + originData[i].min_rank / rankMax * canvasHeight;
 
 			coordData.push({
 				"x": x,
 				"y": y,
-				"ranking": originData[i].ranking,
+				"ranking": originData[i].min_rank,
 				"year": originData[i].year,
 				"heightPercent": heightPercent
 			});
@@ -1570,7 +1727,8 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var swiperToAyalysisReport = __webpack_require__(9);
+	// var swiperToAyalysisReport = require('./swiper-to-analysis-report');
+	var swipeToAnalysisReportPage = __webpack_require__(2);
 	var init = function init(xinSwiper) {
 		//获取url参数，初始化页面
 		initPage();
@@ -1710,8 +1868,6 @@
 				// alert("服务器错误！")
 			}
 		});
-		$(".school-list").show();
-		$(".school-input").addClass('school-input-active');
 	};
 	var selectSubject = function selectSubject(that) {
 		$(that).parent().find("span").removeClass("active");
@@ -2237,45 +2393,246 @@
 	};
 
 /***/ },
-/* 9 */
+/* 9 */,
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	var __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
 
-	var _url = __webpack_require__(5);
+	!(__WEBPACK_AMD_DEFINE_RESULT__ = function () {
+	    var Tpl = {};
+	    var regTpl = /\{(\.?[\w_$]+)(\.[\w_$]+)?(\.?[\w_$]+)?\}/g;
+	    var ifRegTpl = /\[\?(!?)(\.[\w_$]+)(\.?[\w_$]+)?(\.?[\w_$]+)?\?([\S\s]*?)\?\]/g;
 
-	var _url2 = _interopRequireDefault(_url);
+	    var uID = new Date() * 1;
+	    function getUID() {
+	        return ++uID;
+	    }
 
-	var _analysisReport = __webpack_require__(2);
+	    Tpl.tpls = {};
+	    Tpl.parse = function (tpl, map) {
+	        var self = this;
+	        !map && (map = {});
+	        if (tpl.charAt(0) !== '<') {
+	            var t = self.tpls[tpl];
+	            t && (tpl = t);
+	        }
+	        tpl = tpl.replace(ifRegTpl, function (s, s0, s1, s2, s3, s4) {
+	            var v = map[s1.substr(1)];
+	            if (s2) {
+	                v = s2.charAt(0) == '.' ? v[s2.substr(1)] : v;
+	            }
 
-	var _analysisReport2 = _interopRequireDefault(_analysisReport);
+	            if (s3) {
+	                v = s3.charAt(0) == '.' ? v[s3.substr(1)] : v;
+	            }
+	            if (s0 === '!') {
+	                return !v ? s4 : "";
+	            }
+	            return v ? s4 : '';
+	        });
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	        return tpl.replace(regTpl, function (s, s0, s1, s2) {
+	            var v = s0.charAt(0) == '.' ? map[s0.substr(1)] : self.tpls[s0];
+	            if (v == void 0) return '';
 
-	function gotoAnalysisReportPage(requestParam, xinSwiper) {
+	            if (s1) {
+	                v = s1.charAt(0) == '.' ? v[s1.substr(1)] : v;
+	            }
 
-		$.ajax({
-			type: "post",
-			cache: false,
-			url: _url2.default.analysisReportUrl,
-			data: requestParam,
-			success: function success(data) {
-				console.log(data);
+	            if (s2) {
+	                v = s2.charAt(0) == '.' ? v[s2.substr(1)] : v;
+	            }
 
-				_analysisReport2.default.renderAnalysisReportPage(data);
-				xinSwiper.slideNext();
-			},
-			error: function error() {
-				_analysisReport2.default.renderAnalysisReportPage();
-				xinSwiper.slideNext();
-				alert("服务器错误！");
-			}
-		});
-	}
+	            if (v && (v.toString().charAt(0) === '<' || v.toString().substr(0, 2) == "[?")) return Tpl.parse(v, map);
 
-	module.exports = {
-		getAnalysisReportData: gotoAnalysisReportPage
-	};
+	            if (self.tpls[v]) return Tpl.parse(self.tpls[v], map);
+
+	            v = v === void 0 ? '' : v;
+
+	            return v;
+	        });
+	    };
+
+	    Tpl.ejs = function (tpl, data, opts) {
+	        opts = opts || {};
+	        //opts.tid = tpl;
+	        var fn = Tpl.ejs.compile(Tpl.parse(tpl, data), opts);
+	        return fn(data);
+	    };
+
+	    Tpl.ejs.cache = {};
+
+	    Tpl.ejs.filters = { //用于添加各种过滤器
+	        contains: function contains(target, str, separator) {
+	            return separator ? (separator + target + separator).indexOf(separator + str + separator) > -1 : target.indexOf(str) > -1;
+	        },
+	        truncate: function truncate(target, length, truncation) {
+	            length = length || 30;
+	            truncation = truncation === void 0 ? "..." : truncation;
+	            return target.length > length ? target.slice(0, length - truncation.length) + truncation : String(target);
+	        },
+	        camelize: function camelize(target) {
+	            if (target.indexOf("-") < 0 && target.indexOf("_") < 0) {
+	                return target;
+	            }
+	            return target.replace(/[-_][^-_]/g, function (match) {
+	                return match.charAt(1).toUpperCase();
+	            });
+	        },
+	        escape: function escape(target) {
+	            return target.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+	        },
+	        unescape: function unescape(target) {
+	            return target.replace(/&quot;/g, "\"").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&").replace(/&#([\d]+);/g, function ($0, $1) {
+	                return String.fromCharCode(parseInt($1, 10));
+	            });
+	        },
+	        floor: function floor(target) {
+	            var target = Math.floor(target);
+	            return isNaN(target) ? 0 : target;
+	        }
+
+	    };
+
+	    Tpl.ejs.compile = function (source, opts) {
+	        opts = opts || {};
+	        var tid = opts.tid;
+	        if (typeof tid === "string" && typeof Tpl.ejs.cache[tid] == "function") {
+	            return Tpl.ejs.cache[tid];
+	        }
+	        var open = !opts.open ? "<%" : "<&";
+	        var close = !opts.close ? "%>" : "&>";
+	        var helperNames = [],
+	            helpers = [];
+	        for (var name in opts) {
+	            if (opts.hasOwnProperty(name) && typeof opts[name] == "function") {
+	                helperNames.push(name);
+	                helpers.push(opts[name]); //收集所有helper!
+	            }
+	        }
+	        if (opts.userFn) {
+	            helperNames.push("userFn");
+	            helpers.push(opts.userFn);
+	        }
+	        var flag = true; //判定是否位于前定界符的左边
+	        var codes = []; //用于放置源码模板中普通文本片断
+	        var tid = getUID(); // 时间截,用于构建codes数组的引用变量
+	        var prefix = " ;r += txt" + tid + "["; //渲染函数输出部分的前面
+	        var postfix = "];"; //渲染函数输出部分的后面
+	        var t = "return function (data){ try{var r = '',line" + tid + " = 0;"; //渲染函数的最开始部分
+	        var rAt = /(^|[^\w\u00c0-\uFFFF_])(@)(?=\w)/g;
+	        var rstr = /(['"])(?:\\[\s\S]|[^\ \\r\n])*?\1/g;
+	        var rtrim = /(^-|-$)/g;
+	        var rmass = /mass/;
+	        var js = [];
+	        var pre = 0,
+	            cur,
+	            code,
+	            trim;
+	        for (var i = 0, n = source.length; i < n;) {
+	            cur = source.indexOf(flag ? open : close, i);
+	            if (cur < pre) {
+	                if (flag) {
+	                    //取得最末尾的HTML片断
+	                    t += prefix + codes.length + postfix;
+	                    if (cur == -1 && i == 0) {
+	                        code = source;
+	                    } else {
+	                        code = source.slice(pre + close.length);
+	                    }
+	                    //  code = source.slice( pre+ close.length );
+	                    if (trim) {
+	                        code = code.trim();
+	                        trim = false;
+	                    }
+	                    codes.push(code);
+	                } else {
+	                    console.log("发生错误了");
+	                }
+	                break;
+	            }
+	            code = source.slice(i, cur); //截取前后定界符之间的片断
+	            pre = cur;
+	            if (flag) {
+	                //取得HTML片断
+	                t += prefix + codes.length + postfix;
+	                if (trim) {
+	                    code = code.trim();
+	                    trim = false;
+	                }
+	                codes.push(code);
+	                i = cur + open.length;
+	            } else {
+	                //取得javascript罗辑
+	                js.push(code);
+	                t += "line" + tid + "=" + js.length + ";";
+	                switch (code.charAt(0)) {
+	                    case "=":
+	                        //直接输出
+	                        code = code.replace(rtrim, function () {
+	                            trim = true;
+	                            return "";
+	                        });
+	                        code = code.replace(rAt, "$1data.");
+	                        if (code.indexOf("|") > 1) {
+	                            //使用过滤器
+	                            var arr = [];
+	                            var str = code.replace(rstr, function (str) {
+	                                arr.push(str); //先收拾所有字符串字面量
+	                                return 'mass';
+	                            }).replace(/\|\|/g, "@"); //再收拾所有短路或
+	                            if (str.indexOf("|") > 1) {
+	                                var segments = str.split("|");
+	                                var filtered = segments.shift().replace(/\@/g, "||").replace(rmass, function () {
+	                                    return arr.shift();
+	                                });
+	                                for (var filter; filter = arr.shift();) {
+	                                    segments = filter.split(":");
+	                                    name = segments[0];
+	                                    args = "";
+	                                    if (segments[1]) {
+	                                        args = ', ' + segments[1].replace(rmass, function () {
+	                                            return arr.shift(); //还原
+	                                        });
+	                                    }
+	                                    filtered = "Tpl.ejs.filters." + name + "(" + filtered + args + ")";
+	                                }
+	                                code = filtered;
+	                            }
+	                        }
+	                        t += "r +" + code + ";";
+	                        break;
+	                    case "#":
+	                        //注释,不输出
+	                        break;
+	                    case "-":
+	                    default:
+	                        //普通逻辑,不输出
+	                        code = code.replace(rtrim, function () {
+	                            trim = true;
+	                            return "";
+	                        });
+	                        t += code.replace(rAt, "$1data.");
+	                        break;
+	                }
+	                i = cur + close.length;
+	            }
+	            flag = !flag;
+	        }
+	        t += " return r; }catch(e){ console.log(e);\nconsole.log(js" + tid + "[line" + tid + "-1]) }}";
+	        var body = ["txt" + tid, "js" + tid, "filters"];
+	        var fn = Function.apply(Function, body.concat(helperNames, t));
+	        var args = [codes, js, Tpl.ejs.filters];
+	        var compiled = fn.apply(this, args.concat(helpers));
+	        if (typeof tid === "string") {
+	            return Tpl.ejs.cache[tid] = compiled;
+	        }
+	        return compiled;
+	    };
+
+	    return Tpl;
+	}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
 /***/ }
 /******/ ]);
