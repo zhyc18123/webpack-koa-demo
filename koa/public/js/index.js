@@ -1116,18 +1116,31 @@
 
 	var swiperToAyalysisReport = __webpack_require__(7);
 	var init = function init(xinSwiper) {
+		// 初始化省份列表
+		createProv();
+		//监听选择省份
+		$("#prov-down").on("click", function () {
+			selectProv();
+		});
+		// 监听生成报告
 		$("#get-report").on("click", function () {
+
 			var data = {
-				req_id: "",
-				exam_no: "",
-				province_id: "",
-				score: "",
-				exp_sch_id: "",
-				batch: ""
+				req_id: "1111",
+				exam_no: "XDF234324",
+				province_id: "440000000000",
+				score: "600",
+				exp_sch_id: "52ac2e98747aec013fcf4c46",
+				batch: 1,
+				wenli: 2
 			};
 			swiperToAyalysisReport.getAnalysisReportData(data, xinSwiper);
 		});
 	};
+	var createProv = function createProv() {
+		var data = {};
+	};
+	var selectProv = function selectProv() {};
 	module.exports = {
 		init: init
 	};

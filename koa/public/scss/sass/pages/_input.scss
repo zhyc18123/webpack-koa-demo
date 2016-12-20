@@ -13,6 +13,10 @@ html{
 		margin-top: 15px;
 	}
 }
+.prov-input-list{
+	width:100%;  
+	position:relative;
+}
 .xin-input{
 	border:1px solid $bor-col;
 	padding: 15px;
@@ -96,5 +100,22 @@ i.down{
 	.what-title{
 		color: $font-ligcol;
 		margin-top: 5px;
+	}
+}
+.prov-list{
+	// float:left;
+	position: absolute;
+	border:1px solid $bor-col;
+	border-top:0;
+	width:100%;
+	margin-right:10px;
+	background:$whi-col;
+	padding:0 10px 10px 10px;
+	border-radius:0 0 4px 4px;
+	li{
+		padding:0 15px;
+		line-height: 35px;
+		font-size: $font-14;
+		border-bottom: 1px solid $bor-col;
 	}
 }
