@@ -132,6 +132,17 @@ var renderEjsTplWithData = function renderEjsTplWithData(tplId, htmlId, data) {
 	$(htmlId).html(ejsHtml);
 };
 
+/**
+ *
+ * selected default width for canvas
+ * default size for font
+ * @returns {string}
+ */
+function getFont(ratio) {
+	var size = 640 * ratio; // get font size based on current width
+	return (size | 0) + 'px sans-serif'; // set font
+}
+
 var _renderAnalysisReportPage = function _renderAnalysisReportPage(reportData) {
 
 	reportData = {
@@ -164,12 +175,14 @@ var _renderAnalysisReportPage = function _renderAnalysisReportPage(reportData) {
 		"recommend_sch_list": [//推荐学校列表
 		{
 			"sch_id": "52ac2e98747aec013fcf4c46", //学校id
+			"icon_url": "http://school-icon.b0.upaiyun.com/52ac2e98747aec013fcf4c1d.jpg", //学校图标识
 			"sch_name": "北京大学", //学校名称
 			"location": "北京", //所在省份
 			"total_rank": 1, //综合排名
 			"adm_ratio": 89 //录取概率
 		}, {
 			"sch_id": "52ac2e98747aec013fcf4c46", //学校id
+			"icon_url": "http://school-icon.b0.upaiyun.com/52ac2e98747aec013fcf4c1d.jpg",
 			"sch_name": "北京大学", //学校名称
 			"location": "北京", //所在省份
 			"total_rank": 1, //综合排名
@@ -203,24 +216,43 @@ var _renderAnalysisReportPage = function _renderAnalysisReportPage(reportData) {
 	// 与目标学校的距离 —— 概率圆环
 	var enrollCanvas = document.getElementById('enroll-canvas');
 	var context = enrollCanvas.getContext('2d');
-	var radius = 70;
-	enrollCanvas.width = enrollCanvas.parentNode.clientWidth;
-	enrollCanvas.height = enrollCanvas.width - 60;
+	var enrollCanvasParentNodeWidth = enrollCanvas.parentNode.clientWidth;
+	enrollCanvas.width = enrollCanvasParentNodeWidth / 2;
+	var enrollCanvasFont1 = getFont(0.04);
+	var enrollCanvasFont2 = getFont(0.03);
+	var enrollCanvasFont3 = getFont(0.02);
+
+	enrollCanvas.height = enrollCanvas.width / 1.5;
+	var radius = enrollCanvas.width / 4;
 	var centerX = enrollCanvas.width / 2;
 	var centerY = enrollCanvas.height / 2;
-	_canvasGraph2.default.drawCircle(context, centerX, centerY, '#ffffff', '#e4e4e4', 8, radius, 1);
-	_canvasGraph2.default.drawCircle(context, centerX, centerY, '#ffffff', '#f9be00', 10, radius, 0.4, 'round');
+	_canvasGraph2.default.drawCircle(context, centerX, centerY, '#ffffff', '#e4e4e4', 22, radius, 1);
+	_canvasGraph2.default.drawCircle(context, centerX, centerY, '#ffffff', '#f9be00', 25, radius, 0.4, 'round');
 	context.textBaseline = 'middle';
 	context.textAlign = "center";
 
+	if (enrollCanvasParentNodeWidth >= 828) {
+		enrollCanvasFont1 = getFont(0.1);
+		enrollCanvasFont2 = getFont(0.05);
+		enrollCanvasFont3 = getFont(0.04);
+	} else if (enrollCanvasParentNodeWidth >= 750) {
+		enrollCanvasFont1 = getFont(0.07);
+		enrollCanvasFont2 = getFont(0.035);
+		enrollCanvasFont3 = getFont(0.03);
+	} else if (enrollCanvasParentNodeWidth >= 640) {
+		enrollCanvasFont1 = getFont(0.05);
+		enrollCanvasFont2 = getFont(0.025);
+		enrollCanvasFont3 = getFont(0.02);
+	}
+
 	// 分是否设立了目标学校两种情况讨论
 	if (!reportData.exp_sch) {
-		_canvasGraph2.default.drawCircleText(context, 'normal 0.16rem serif', '#b6b6b6', "未设立", centerX - 2, centerY - 12);
-		_canvasGraph2.default.drawCircleText(context, 'normal 0.16rem serif', '#b6b6b6', '目标学校', centerX, centerY + 18);
+		_canvasGraph2.default.drawCircleText(context, enrollCanvasFont3, '#b6b6b6', "未设立", centerX - 2, centerY - 12);
+		_canvasGraph2.default.drawCircleText(context, enrollCanvasFont3, '#b6b6b6', '目标学校', centerX, centerY + 18);
 	} else {
-		_canvasGraph2.default.drawCircleText(context, 'normal .36rem serif', '#f9be00', reportData.adm_ratio, centerX - 10, centerY - 16);
-		_canvasGraph2.default.drawCircleText(context, 'normal .18rem serif', '#f9be00', '%', centerX + 35, centerY - 10);
-		_canvasGraph2.default.drawCircleText(context, 'normal .16rem serif', '#b6b6b6', '录取概率', centerX, centerY + 22);
+		_canvasGraph2.default.drawCircleText(context, enrollCanvasFont1, '#f9be00', reportData.adm_ratio, centerX - 15, centerY - 15);
+		_canvasGraph2.default.drawCircleText(context, enrollCanvasFont2, '#f9be00', '%', centerX + 30, centerY - 10);
+		_canvasGraph2.default.drawCircleText(context, enrollCanvasFont3, '#b6b6b6', '录取概率', centerX, centerY + 30);
 	}
 
 	// 与目标学校的距离 —— 建议
@@ -234,23 +266,24 @@ var _renderAnalysisReportPage = function _renderAnalysisReportPage(reportData) {
   *
   **/
 
-	reportData.sch_min_score_list = 0;
+	// reportData.sch_min_score_list = 0;
 	if (reportData.sch_min_score_list) {
 
 		renderEjsTplWithData("#line-chart-wmzy-link-tpl", "#line-chart-wmzy-link-wrap", reportData);
 
-		var canvas = document.getElementById('line-chart-canvas'),
-		    context = canvas.getContext('2d');
-		canvas.width = canvas.parentNode.clientWidth;
-		canvas.height = canvas.parentNode.clientHeight - 50;
+		var lineChartCanvas = document.getElementById('line-chart-canvas'),
+		    context = lineChartCanvas.getContext('2d');
+		lineChartCanvas.width = lineChartCanvas.parentNode.clientWidth;
+		lineChartCanvas.height = lineChartCanvas.parentNode.clientHeight * 1.5;
 
 		var startX = 0;
 		var startY = 40;
-		var widthMargin = canvas.width / 4;
+		var widthMargin = lineChartCanvas.width / 4;
 		var labelWitth = widthMargin;
 		var coordData;
 		var lowestPercent = 1;
 		var offsetY;
+		var setCoordinateReturn;
 
 		var yearColor = {
 			dotColor: "#999999",
@@ -264,44 +297,34 @@ var _renderAnalysisReportPage = function _renderAnalysisReportPage(reportData) {
 			dotColor: "#eb614c",
 			lineColor: "#eda89d"
 		};
-		coordData = _canvasGraph2.default.setCoordinate(reportData.sch_min_score_list, startX, startY, widthMargin, 400, lowestPercent);
+		var lineChartFontStyle = "normal 32.3pt serif";
+		setCoordinateReturn = _canvasGraph2.default.setCoordinate(reportData.sch_min_score_list, startX, startY, widthMargin, 400, lowestPercent);
+		coordData = setCoordinateReturn[0];
+		lowestPercent = setCoordinateReturn[1];
 
-		offsetY = lowestPercent < 0.01 ? 80 : lowestPercent < 0.1 ? 50 : 30;
+		offsetY = lowestPercent < 0.01 ? 140 : lowestPercent < 0.1 ? 130 : 50;
 
-		_canvasGraph2.default.drawCoordinate(context, coordData, yearColor, historyColor, currentColor, 20, labelWitth, canvas.width, canvas.height, offsetY);
-		_canvasGraph2.default.drawLabel(context, coordData, 36, 8, 20, canvas.height, offsetY, labelWitth, canvas.width);
+		_canvasGraph2.default.drawCoordinate(context, coordData, yearColor, historyColor, currentColor, labelWitth, lineChartCanvas.width, lineChartCanvas.height, 40, offsetY, lineChartFontStyle);
+		_canvasGraph2.default.drawLabel(context, coordData, 75, 8, 20, lineChartCanvas.height, offsetY, labelWitth, lineChartCanvas.width, lineChartFontStyle);
 	}
+
+	// 推荐学校列表
+	renderEjsTplWithData("#school-list-item-tpl", "#school-list-item-wrap", reportData);
 
 	// 录取人数最多的五个院校
 	var canvas = document.getElementById('trapezoid-canvas');
 	var trapezoidParentNodeWidth = canvas.parentNode.clientWidth;
 
+	var trapezoidCount = reportData.goto_schs_list.length;
 	canvas.width = trapezoidParentNodeWidth - 60;
-	canvas.height = canvas.width * (300 / 750) * (64 / 300) * 5 + 50 + 35; // 286/750 为梯形宽度占比，64/286为高度占比， 50为每个梯形的间隙， 20为标题高度
+
 	var context = canvas.getContext('2d');
-	var contextFontStyle;
 	var width = canvas.width * (360 / 750);
 
-	if (trapezoidParentNodeWidth >= 640) {
-		contextFontStyle = "normal normal 24px serif";
-		width = canvas.width * (420 / 750);
-		canvas.height = canvas.width * (420 / 750) * (64 / 300) * 5 + 50 + 35;
-	} else if (trapezoidParentNodeWidth >= 414) {
-		contextFontStyle = "normal normal 20px serif";
-		width = canvas.width * (360 / 750);
-		canvas.height = canvas.width * (360 / 750) * (64 / 300) * 5 + 50 + 35;
-	} else if (trapezoidParentNodeWidth >= 320) {
-		contextFontStyle = "normal normal 16px serif";
-		width = canvas.width * (320 / 750);
-		canvas.height = canvas.width * (320 / 750) * (64 / 300) * 5 + 50 + 35; // 286/750 为梯形宽度占比，64/286为高度占比， 50为每个梯形的间隙， 20为标题高度
-	} else {
-		contextFontStyle = "normal normal 16px serif";
-		width = canvas.width * (320 / 750);
-		canvas.height = canvas.width * (320 / 750) * (64 / 300) * 5 + 50 + 35; // 286/750 为梯形宽度占比，64/286为高度占比， 50为每个梯形的间隙， 20为标题高度
-	}
+	canvas.height = canvas.width / 2 * (64 / 286) * trapezoidCount + 10 * trapezoidCount + 55; // 286/750 为梯形宽度占比，64/286为高度占比， 50为每个梯形的间隙， 20为标题高度
+
 	var height = width * (64 / 286);
 
-	var schoolData = [{ "studentNumber": 319000, "schoolName": "中山大学" }, { "studentNumber": 100, "schoolName": "华南理工大学" }, { "studentNumber": 80, "schoolName": "华南理工大学" }, { "studentNumber": 50, "schoolName": "华南理工大学" }, { "studentNumber": 9, "schoolName": "华南理工大学" }];
 	var trapezoidStyle = ["#f9be00", "#fac724", "#fbd149", "#fcda6d", "#fce392"],
 	    schoolNumNameStyle = {
 		"numStyle": "#ffffff",
@@ -312,10 +335,21 @@ var _renderAnalysisReportPage = function _renderAnalysisReportPage(reportData) {
 		"fillStyle": "#ffffff"
 	};
 
-	_canvasGraph2.default.drawTrapezoid(context, width, height, schoolData, trapezoidStyle, schoolNumNameStyle, lineDotStyle, "（考生数量）", 6, contextFontStyle);
+	_canvasGraph2.default.drawTrapezoid(context, width, height, reportData.goto_schs_list, trapezoidStyle, schoolNumNameStyle, lineDotStyle, "（考生数量）", 6, trapezoidParentNodeWidth);
+
+	// 其他 x 所推荐院校
+	renderEjsTplWithData("#recommend-school-link-tpl", "#recommend-school-link-wrap", reportData);
+
+	// 根据排名的数据来源
+	renderEjsTplWithData("#recommend-data-origin-tpl", "#recommend-data-origin-wrap", reportData);
+
+	// 录取人数最多的五个专业，如果有的话
+	renderEjsTplWithData("#top-five-enroll-major-tpl", "#top-five-enroll-major-wrap", reportData);
 };
 
 var swipeToAnalysisReportPage = function swipeToAnalysisReportPage(requestParam, xinSwiper) {
+
+	console.log("requestParam " + JSON.stringify(requestParam, null, 4));
 
 	$.ajax({
 		type: "post",
@@ -323,7 +357,7 @@ var swipeToAnalysisReportPage = function swipeToAnalysisReportPage(requestParam,
 		url: _url2.default.analysisReportUrl,
 		data: requestParam,
 		success: function success(data) {
-			console.log(data);
+			console.log("data " + JSON.stringify(data, null, 4));
 
 			_renderAnalysisReportPage(data);
 			xinSwiper.slideNext();
@@ -336,9 +370,16 @@ var swipeToAnalysisReportPage = function swipeToAnalysisReportPage(requestParam,
 		}
 	});
 };
+var swipeToWmzyIntroPage = function swipeToWmzyIntroPage(xinSwiper) {
+
+	$(".goto-wmzy-pro-intro").on("click", function () {
+		xinSwiper.slideNext();
+	});
+};
 
 module.exports = {
-	swipeToAnalysisReportPage: swipeToAnalysisReportPage
+	swipeToAnalysisReportPage: swipeToAnalysisReportPage,
+	swipeToWmzyIntroPage: swipeToWmzyIntroPage
 };
 
 /***/ },
@@ -489,7 +530,7 @@ module.exports = {
 "use strict";
 "use strict";
 
-var swipeToAnalysisReportPage = __webpack_require__(0);
+var analysisReport = __webpack_require__(0);
 var init = function init(xinSwiper) {
 	// 初始化省份列表
 	createProv();
@@ -509,7 +550,7 @@ var init = function init(xinSwiper) {
 			batch: 1,
 			wenli: 2
 		};
-		swipeToAnalysisReportPage.swipeToAnalysisReportPage(data, xinSwiper);
+		analysisReport.swipeToAnalysisReportPage(data, xinSwiper);
 	});
 };
 var createProv = function createProv() {
@@ -1299,6 +1340,17 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 "use strict";
 "use strict";
 
+/**
+ *
+ * selected default width for canvas
+ * default size for font
+ * @returns {string}
+ */
+function getFont(ratio) {
+	var size = 640 * ratio; // get font size based on current width
+	return (size | 0) + 'px sans-serif'; // set font
+}
+
 function drawCircle(ctx, x, y, fillStyle, strokeStyle, lineWidth, radius, angle, lineCap) {
 	ctx.beginPath();
 	ctx.arc(x, y, radius, -0.5 * Math.PI, (angle * 2 - 0.5) * Math.PI, false);
@@ -1342,11 +1394,11 @@ function setCoordinate(originData, startX, startY, widthMargin, canvasHeight, lo
 	rankMaxStr = "" + rankMax;
 
 	if (rankMaxStr.length <= 4) {
-		rankMax += 10 * Math.pow(10, rankMaxStr.length - 2);
+		rankMax += 8 * Math.pow(10, rankMaxStr.length - 2);
 	} else if (rankMaxStr.length <= 6) {
-		rankMax += 3 * Math.pow(10, rankMaxStr.length - 2);
+		rankMax += 6 * Math.pow(10, rankMaxStr.length - 2);
 	} else {
-		rankMax += 1 * Math.pow(10, rankMaxStr.length - 2);
+		rankMax += 5 * Math.pow(10, rankMaxStr.length - 2);
 	}
 
 	for (var i = 0; i < len; i++) {
@@ -1366,7 +1418,7 @@ function setCoordinate(originData, startX, startY, widthMargin, canvasHeight, lo
 		});
 	}
 
-	return coordData;
+	return [coordData, lowestPercent];
 }
 
 /**
@@ -1376,7 +1428,7 @@ function setCoordinate(originData, startX, startY, widthMargin, canvasHeight, lo
  *  @param {Object} 往年录取颜色
  *  @param {Object} 当前排名点线颜色值
  * */
-function drawCoordinate(ctx, coord, yearColor, historyColor, currentColor, startY, labelWidth, canvasWidth, canvasHeight, offsetY) {
+function drawCoordinate(ctx, coord, yearColor, historyColor, currentColor, labelWidth, canvasWidth, canvasHeight, startY, offsetY, lineChartFontStyle) {
 	var len = coord.length;
 
 	// 过往年份 text、竖线、圆点
@@ -1395,14 +1447,14 @@ function drawCoordinate(ctx, coord, yearColor, historyColor, currentColor, start
 		y = parseFloat(coord[i].y);
 		linePercent = parseFloat(coord[i].heightPercent);
 
-		ctx.font = 'normal 12pt Calibri';
+		ctx.font = lineChartFontStyle;
 		ctx.fillStyle = yearColor.dotColor;
-		ctx.fillText(year, x + labelWidth / 2 - 16, startY);
+		ctx.fillText(year, x + labelWidth / 2 - 50, startY);
 
-		ctx.setLineDash([1, 2]);
+		ctx.setLineDash([8, 4]);
 		ctx.beginPath();
-		ctx.lineWidth = 1;
-		ctx.strokeStyle = yearColor;
+		ctx.lineWidth = 2;
+		ctx.strokeStyle = "#999999";
 		ctx.moveTo(x + labelWidth / 2, lineStartY);
 		ctx.lineTo(x + labelWidth / 2, canvasHeight);
 		ctx.stroke();
@@ -1410,7 +1462,7 @@ function drawCoordinate(ctx, coord, yearColor, historyColor, currentColor, start
 
 		ctx.beginPath();
 		ctx.fillStyle = historyColor.dotColor;
-		ctx.arc(x + labelWidth / 2, lineStartY + lineHeight * linePercent, 6, 0, 2 * Math.PI);
+		ctx.arc(x + labelWidth / 2, lineStartY + lineHeight * linePercent, 12, 0, 2 * Math.PI);
 		ctx.fill();
 	}
 
@@ -1419,10 +1471,10 @@ function drawCoordinate(ctx, coord, yearColor, historyColor, currentColor, start
 	y = coord[coordLen - 1].y;
 	linePercent = coord[coordLen - 1].heightPercent;
 
-	ctx.setLineDash([8, 6]);
+	ctx.setLineDash([10, 4]);
 	ctx.beginPath();
 	ctx.strokeStyle = currentColor.lineColor;
-	ctx.lineWidth = 2;
+	ctx.lineWidth = 4;
 	ctx.moveTo(0, lineStartY + lineHeight * linePercent);
 	ctx.lineTo(canvasWidth, lineStartY + lineHeight * linePercent);
 	ctx.stroke();
@@ -1430,7 +1482,7 @@ function drawCoordinate(ctx, coord, yearColor, historyColor, currentColor, start
 
 	ctx.beginPath();
 	ctx.fillStyle = currentColor.dotColor;
-	ctx.arc(x + labelWidth / 2, lineStartY + lineHeight * linePercent, 6, 0, 2 * Math.PI);
+	ctx.arc(x + labelWidth / 2, lineStartY + lineHeight * linePercent, 12, 0, 2 * Math.PI);
 	ctx.fill();
 
 	// 过往历史折线
@@ -1473,7 +1525,7 @@ function drawCoordinate(ctx, coord, yearColor, historyColor, currentColor, start
  *
  *
  * */
-function drawLabel(ctx, coord, labelHeight, radius, startY, canvasHeight, offsetY, labelWidth, canvasWidth) {
+function drawLabel(ctx, coord, labelHeight, radius, startY, canvasHeight, offsetY, labelWidth, canvasWidth, lineChartFontStyle) {
 
 	if (typeof radius === 'undefined') {
 		radius = 5;
@@ -1506,23 +1558,29 @@ function drawLabel(ctx, coord, labelHeight, radius, startY, canvasHeight, offset
 		switch (rankingStr.length) {
 			case 1:
 			case 2:
-				width = 70;
+				width = 150;
 				break;
 			case 3:
 			case 4:
+				width = 185;
+				break;
 			case 5:
+				width = 195;
+				break;
 			case 6:
-				width = 85;
+				width = 225;
 				break;
 			case 7:
+				width = 255;
+				break;
 			case 8:
-				width = 90;
+				width = 190;
 				break;
 			case 9:
-				width = 95;
+				width = 195;
 				break;
 			default:
-				width = 100;
+				width = 200;
 				break;
 
 		}
@@ -1540,32 +1598,34 @@ function drawLabel(ctx, coord, labelHeight, radius, startY, canvasHeight, offset
 
 		y -= 58;
 		x += labelWidth / 2 - width / 2;
+		var labelYPoint = 20;
+		var labelYOffset = labelYPoint + 10;
 
 		ctx.beginPath();
-		ctx.lineTo(x + width / 2, y + labelHeight + 10);
-		ctx.lineTo(x + width / 2 - 10, y + labelHeight);
-		ctx.lineTo(x + radius.bl, y + labelHeight);
-		ctx.quadraticCurveTo(x, y + labelHeight, x, y + labelHeight - radius.bl);
-		ctx.lineTo(x, y + radius.tl);
-		ctx.quadraticCurveTo(x, y, x + radius.tl, y);
-		ctx.lineTo(x + radius.tl, y);
-		ctx.lineTo(x + width - radius.tr, y);
-		ctx.quadraticCurveTo(x + width, y, x + width, y + radius.tr);
-		ctx.lineTo(x + width, y + labelHeight - radius.br);
-		ctx.quadraticCurveTo(x + width, y + labelHeight, x + width - radius.br, y + labelHeight);
-		ctx.lineTo(x + width / 2 + 10, y + labelHeight);
+		ctx.lineTo(x + width / 2, y + labelHeight - labelYPoint);
+		ctx.lineTo(x + width / 2 - 10, y + labelHeight - labelYOffset);
+		ctx.lineTo(x + radius.bl, y + labelHeight - labelYOffset);
+		ctx.quadraticCurveTo(x, y + labelHeight - labelYOffset, x, y + labelHeight - radius.bl - labelYOffset);
+		ctx.lineTo(x, y + radius.tl - labelYOffset);
+		ctx.quadraticCurveTo(x, y - labelYOffset, x + radius.tl, y - labelYOffset);
+		ctx.lineTo(x + radius.tl, y - labelYOffset);
+		ctx.lineTo(x + width - radius.tr, y - labelYOffset);
+		ctx.quadraticCurveTo(x + width, y - labelYOffset, x + width, y + radius.tr - labelYOffset);
+		ctx.lineTo(x + width, y + labelHeight - radius.br - labelYOffset);
+		ctx.quadraticCurveTo(x + width, y + labelHeight - labelYOffset, x + width - radius.br, y + labelHeight - labelYOffset);
+		ctx.lineTo(x + width / 2 + 10, y + labelHeight - labelYOffset);
 		ctx.closePath();
 		ctx.fill();
 
 		if (ranking) {
-			ctx.font = 'normal 12pt Calibri';
+			ctx.font = lineChartFontStyle;
 			ctx.fillStyle = '#ffffff';
 			switch (rankingStr.length) {
 				case 1:
 				case 2:
-					x += 20;
-					break;
 				case 3:
+					x += 35;
+					break;
 				case 4:
 				case 5:
 					x += 15;
@@ -1582,9 +1642,9 @@ function drawLabel(ctx, coord, labelHeight, radius, startY, canvasHeight, offset
 			ctx.fillText(ranking + "名", x, y + 25);
 		}
 		if (i == len - 1) {
-			ctx.font = 'normal 12pt Calibri';
+			ctx.font = lineChartFontStyle;
 			ctx.fillStyle = '#eb614c';
-			ctx.fillText("你的排名", x + width / 2 - 40, y + 86);
+			ctx.fillText("你的排名", x + width / 2 - 100, y + 130);
 		}
 	}
 }
@@ -1598,34 +1658,50 @@ function drawLabel(ctx, coord, labelHeight, radius, startY, canvasHeight, offset
  * 传参 第一个梯形的宽高 width，height
  *
  * */
-function drawTrapezoid(ctx, initWidth, initHeight, schoolList, trapezoidStyle, schoolNumNameStyle, lineDotStyle, title, trapezoidGap, contextFontStyle) {
+function drawTrapezoid(ctx, initWidth, initHeight, schoolList, trapezoidStyle, schoolNumNameStyle, lineDotStyle, title, trapezoidGap, trapezoidParentNodeWidth) {
 	var lineFinal = 0;
 	var startX;
 	var startY;
 	var trapezoidWidthDown;
 	var schoolListItem;
 	var offsetY = 0;
+	var contextFontStyle;
+	var titleOffsetX = 50;
 
 	if (!trapezoidGap) {
 		trapezoidGap = 10;
 	}
 
-	if (!contextFontStyle) {
-		contextFontStyle = "18px serif";
+	if (trapezoidParentNodeWidth >= 1280) {
+		// 640 pixes phone
+		contextFontStyle = getFont(0.08);
+		titleOffsetX = 130;
+	} else if (trapezoidParentNodeWidth >= 828) {
+		contextFontStyle = getFont(0.06);
+		titleOffsetX = 100;
+	} else if (trapezoidParentNodeWidth >= 750) {
+		contextFontStyle = getFont(0.05);
+		titleOffsetX = 50;
+	} else if (trapezoidParentNodeWidth >= 640) {
+		contextFontStyle = getFont(0.03);
+		titleOffsetX = 40;
 	}
+
 	// 标题
 	if (title) {
 		ctx.font = contextFontStyle;
 		ctx.fillStyle = '#bebebe';
-		if (initWidth < 120) {
-			ctx.fillText(title, initWidth / 2 - 50, 25);
-		} else if (initWidth < 140) {
-			ctx.fillText(title, initWidth / 2 - 58, 25);
-		} else {
-			ctx.fillText(title, initWidth / 2 - 66, 25);
-		}
 
-		offsetY = 40;
+		if (initWidth < 330) {
+			ctx.fillText(title, initWidth / 2 - titleOffsetX, 45);
+		} else if (initWidth < 390) {
+			ctx.fillText(title, initWidth / 2 - titleOffsetX, 45);
+		} else if (initWidth < 670) {
+			ctx.fillText(title, initWidth / 2 - titleOffsetX, 45);
+		} else if (initWidth < 670) {
+			ctx.fillText(title, initWidth / 2 - titleOffsetX, 45);
+		}
+		offsetY = 70;
 	}
 
 	for (var i = 0, len = schoolList.length; i < len; i++) {
@@ -1635,7 +1711,7 @@ function drawTrapezoid(ctx, initWidth, initHeight, schoolList, trapezoidStyle, s
 		trapezoidWidthDown = initWidth - 2 * startX;
 
 		if (!lineFinal) {
-			lineFinal = startX + trapezoidWidthDown + 20;
+			lineFinal = startX + trapezoidWidthDown + 30;
 		}
 
 		// 画梯形
@@ -1668,10 +1744,11 @@ function drawTrapezoid(ctx, initWidth, initHeight, schoolList, trapezoidStyle, s
 		} else {
 			ctx.strokeStyle = "##ccdbe1";
 		}
+		ctx.lineWidth = 4;
 		ctx.stroke();
 
 		ctx.beginPath();
-		ctx.arc(startX + trapezoidWidthDown * (250 / 286), startY + initHeight / 2, 3, 0, 2 * Math.PI, true);
+		ctx.arc(startX + trapezoidWidthDown * (250 / 286), startY + initHeight / 2, 8, 0, 2 * Math.PI, true);
 		if (lineDotStyle.fillStyle) {
 			ctx.fillStyle = lineDotStyle.fillStyle;
 		} else {
@@ -1688,7 +1765,7 @@ function drawTrapezoid(ctx, initWidth, initHeight, schoolList, trapezoidStyle, s
 		}
 		// 根据数量长度设置 x 方向的偏移量
 		var numOffset = 0;
-		var studentNumberStr = schoolListItem["studentNumber"] + "";
+		var studentNumberStr = schoolListItem["stu_count"] + "";
 		switch (studentNumberStr.length) {
 			case 1:
 				numOffset = startX + trapezoidWidthDown / 2 - 6;
@@ -1712,7 +1789,7 @@ function drawTrapezoid(ctx, initWidth, initHeight, schoolList, trapezoidStyle, s
 				numOffset = startX + trapezoidWidthDown / 2 - 22;
 				break;
 		}
-		ctx.fillText(schoolListItem["studentNumber"], numOffset, startY + initHeight / 2 + 6);
+		ctx.fillText(schoolListItem["stu_count"], numOffset, startY + initHeight / 2 + 6);
 
 		// 学校名称
 		ctx.font = contextFontStyle;
@@ -1721,7 +1798,7 @@ function drawTrapezoid(ctx, initWidth, initHeight, schoolList, trapezoidStyle, s
 		} else {
 			ctx.fillStyle = '#000000';
 		}
-		ctx.fillText(schoolListItem["schoolName"], lineFinal + 8, startY + initHeight / 2 + 6);
+		ctx.fillText(schoolListItem["sch_name"], lineFinal + 8, startY + initHeight / 2 + 6);
 	}
 }
 
@@ -1987,6 +2064,7 @@ __webpack_require__(4);
 __webpack_require__(0);
 var getVip = __webpack_require__(2);
 var input = __webpack_require__(3);
+var analysisReport = __webpack_require__(0);
 $(function () {
 	var init = function init() {
 		// var swiperHeight=[];
@@ -2014,6 +2092,7 @@ $(function () {
 		});
 		getVip.init(xinSwiper);
 		input.init(xinSwiper);
+		analysisReport.swipeToWmzyIntroPage(xinSwiper);
 	};
 	init();
 });

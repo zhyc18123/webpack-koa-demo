@@ -53,6 +53,18 @@ var renderEjsTplWithData = function(tplId, htmlId, data) {
 	$(htmlId).html(ejsHtml);
 };
 
+
+/**
+ *
+ * selected default width for canvas
+ * default size for font
+ * @returns {string}
+ */
+function getFont(ratio) {
+	var size = 640 * ratio;   // get font size based on current width
+	return (size|0) + 'px sans-serif'; // set font
+}
+
 var _renderAnalysisReportPage = function (reportData) {
 
 
@@ -91,6 +103,7 @@ var _renderAnalysisReportPage = function (reportData) {
 		"recommend_sch_list":[//推荐学校列表
 			{
 				"sch_id":"52ac2e98747aec013fcf4c46",//学校id
+				"icon_url":"http://school-icon.b0.upaiyun.com/52ac2e98747aec013fcf4c1d.jpg",//学校图标识
 				"sch_name":"北京大学",//学校名称
 				"location":"北京",//所在省份
 				"total_rank":1,//综合排名
@@ -98,6 +111,7 @@ var _renderAnalysisReportPage = function (reportData) {
 			},
 			{
 				"sch_id":"52ac2e98747aec013fcf4c46",//学校id
+				"icon_url":"http://school-icon.b0.upaiyun.com/52ac2e98747aec013fcf4c1d.jpg",
 				"sch_name":"北京大学",//学校名称
 				"location":"北京",//所在省份
 				"total_rank":1,//综合排名
@@ -138,24 +152,43 @@ var _renderAnalysisReportPage = function (reportData) {
 	// 与目标学校的距离 —— 概率圆环
 	var enrollCanvas = document.getElementById('enroll-canvas');
 	var context = enrollCanvas.getContext('2d');
-	var radius = 70;
-	enrollCanvas.width = enrollCanvas.parentNode.clientWidth ;
-	enrollCanvas.height = enrollCanvas.width-60;
+	var enrollCanvasParentNodeWidth = enrollCanvas.parentNode.clientWidth;
+	enrollCanvas.width = enrollCanvasParentNodeWidth / 2 ;
+	var enrollCanvasFont1=  getFont(0.04);
+	var enrollCanvasFont2=  getFont(0.03);
+	var enrollCanvasFont3=  getFont(0.02);
+
+	enrollCanvas.height = enrollCanvas.width/1.5;
+	var radius = enrollCanvas.width/4 ;
 	var centerX = enrollCanvas.width / 2;
 	var centerY = enrollCanvas.height / 2;
-	drawCanvas.drawCircle(context, centerX, centerY, '#ffffff', '#e4e4e4', 8, radius, 1);
-	drawCanvas.drawCircle(context, centerX, centerY, '#ffffff', '#f9be00', 10, radius, 0.4, 'round');
+	drawCanvas.drawCircle(context, centerX, centerY, '#ffffff', '#e4e4e4', 22, radius, 1);
+	drawCanvas.drawCircle(context, centerX, centerY, '#ffffff', '#f9be00', 25, radius, 0.4, 'round');
 	context.textBaseline = 'middle';
 	context.textAlign = "center";
 
+	if (enrollCanvasParentNodeWidth >= 828){
+		enrollCanvasFont1=  getFont(0.1);
+		enrollCanvasFont2=  getFont(0.05);
+		enrollCanvasFont3=  getFont(0.04);
+	} else if (enrollCanvasParentNodeWidth >= 750){
+		enrollCanvasFont1=  getFont(0.07);
+		enrollCanvasFont2=  getFont(0.035);
+		enrollCanvasFont3=  getFont(0.03);
+	} else if (enrollCanvasParentNodeWidth >= 640){
+		enrollCanvasFont1=  getFont(0.05);
+		enrollCanvasFont2=  getFont(0.025);
+		enrollCanvasFont3=  getFont(0.02);
+	}
+
 	// 分是否设立了目标学校两种情况讨论
 	if (!reportData.exp_sch) {
-		drawCanvas.drawCircleText(context, 'normal 0.16rem serif', '#b6b6b6', "未设立", centerX-2, centerY-12);
-		drawCanvas.drawCircleText(context, 'normal 0.16rem serif', '#b6b6b6', '目标学校', centerX, centerY+18);
+		drawCanvas.drawCircleText(context, enrollCanvasFont3, '#b6b6b6', "未设立", centerX-2, centerY-12);
+		drawCanvas.drawCircleText(context, enrollCanvasFont3, '#b6b6b6', '目标学校', centerX, centerY+18);
 	} else {
-		drawCanvas.drawCircleText(context, 'normal .36rem serif', '#f9be00', reportData.adm_ratio, centerX-10, centerY-16);
-		drawCanvas.drawCircleText(context, 'normal .18rem serif', '#f9be00', '%', centerX+35, centerY-10);
-		drawCanvas.drawCircleText(context, 'normal .16rem serif', '#b6b6b6', '录取概率', centerX, centerY+22);
+		drawCanvas.drawCircleText(context, enrollCanvasFont1, '#f9be00', reportData.adm_ratio, centerX-15, centerY-15);
+		drawCanvas.drawCircleText(context, enrollCanvasFont2, '#f9be00', '%', centerX+30, centerY-10);
+		drawCanvas.drawCircleText(context, enrollCanvasFont3, '#b6b6b6', '录取概率', centerX, centerY+30);
 	}
 
 
@@ -173,23 +206,24 @@ var _renderAnalysisReportPage = function (reportData) {
 	 **/
 
 
-	reportData.sch_min_score_list = 0;
+	// reportData.sch_min_score_list = 0;
 	if (reportData.sch_min_score_list) {
 
 		renderEjsTplWithData("#line-chart-wmzy-link-tpl", "#line-chart-wmzy-link-wrap", reportData);
 
-		var canvas = document.getElementById('line-chart-canvas'),
-			context = canvas.getContext('2d');
-		canvas.width = canvas.parentNode.clientWidth ;
-		canvas.height = canvas.parentNode.clientHeight-50;
+		var lineChartCanvas = document.getElementById('line-chart-canvas'),
+			context = lineChartCanvas.getContext('2d');
+		lineChartCanvas.width = lineChartCanvas.parentNode.clientWidth ;
+		lineChartCanvas.height = lineChartCanvas.parentNode.clientHeight*1.5;
 
 		var startX = 0;
 		var startY = 40;
-		var widthMargin = canvas.width/4;
+		var widthMargin = lineChartCanvas.width/4;
 		var labelWitth = widthMargin;
 		var coordData;
 		var lowestPercent = 1;
 		var offsetY;
+		var setCoordinateReturn;
 
 		var yearColor = {
 			dotColor: "#999999",
@@ -203,54 +237,40 @@ var _renderAnalysisReportPage = function (reportData) {
 			dotColor: "#eb614c",
 			lineColor: "#eda89d"
 		};
-		coordData = drawCanvas.setCoordinate(reportData.sch_min_score_list, startX, startY, widthMargin, 400, lowestPercent);
+		var lineChartFontStyle = "normal 32.3pt serif";
+		setCoordinateReturn = drawCanvas.setCoordinate(reportData.sch_min_score_list, startX, startY, widthMargin, 400, lowestPercent);
+		coordData = setCoordinateReturn[0];
+		lowestPercent = setCoordinateReturn[1];
 
-		offsetY = lowestPercent < 0.01 ? 80 :
-			lowestPercent < 0.1 ? 50 : 30;
+		offsetY = lowestPercent < 0.01 ? 140 :
+			lowestPercent < 0.1 ? 130 : 50;
 
-		drawCanvas.drawCoordinate(context, coordData, yearColor,historyColor, currentColor, 20, labelWitth, canvas.width, canvas.height, offsetY);
-		drawCanvas.drawLabel(context, coordData, 36, 8, 20, canvas.height, offsetY, labelWitth, canvas.width);
+		drawCanvas.drawCoordinate(context, coordData, yearColor,historyColor, currentColor, labelWitth, lineChartCanvas.width, lineChartCanvas.height,
+									40, offsetY, lineChartFontStyle);
+		drawCanvas.drawLabel(context, coordData, 75, 8, 20, lineChartCanvas.height, offsetY, labelWitth, lineChartCanvas.width, lineChartFontStyle);
 
 	}
 
 
+	// 推荐学校列表
+	renderEjsTplWithData("#school-list-item-tpl", "#school-list-item-wrap", reportData);
 
 
 	// 录取人数最多的五个院校
 	var canvas = document.getElementById('trapezoid-canvas');
 	var trapezoidParentNodeWidth = canvas.parentNode.clientWidth;
 
+	var trapezoidCount = reportData.goto_schs_list.length;
 	canvas.width = trapezoidParentNodeWidth - 60;
-	canvas.height = canvas.width * (300 / 750) * (64 / 300) * 5 + 50 + 35; // 286/750 为梯形宽度占比，64/286为高度占比， 50为每个梯形的间隙， 20为标题高度
+
 	var context = canvas.getContext('2d');
-	var contextFontStyle;
 	var width = canvas.width * (360 / 750);
 
-	if (trapezoidParentNodeWidth >= 640) {
-		contextFontStyle = "normal normal 24px serif";
-		width = canvas.width * (420 / 750);
-		canvas.height = canvas.width * (420 / 750) * (64 / 300) * 5 + 50 + 35;
-	} else if (trapezoidParentNodeWidth >= 414) {
-		contextFontStyle = "normal normal 20px serif";
-		width = canvas.width * (360 / 750);
-		canvas.height = canvas.width * (360 / 750) * (64 / 300) * 5 + 50 + 35;
-	} else if (trapezoidParentNodeWidth >=320) {
-		contextFontStyle = "normal normal 16px serif";
-		width = canvas.width * (320 / 750);
-		canvas.height = canvas.width * (320 / 750) * (64 / 300) * 5 + 50 + 35; // 286/750 为梯形宽度占比，64/286为高度占比， 50为每个梯形的间隙， 20为标题高度
+	canvas.height = (canvas.width/2) * (64 / 286) * trapezoidCount + 10 * trapezoidCount + 55; // 286/750 为梯形宽度占比，64/286为高度占比， 50为每个梯形的间隙， 20为标题高度
 
-	}else{
-		contextFontStyle = "normal normal 16px serif";
-		width = canvas.width * (320 / 750);
-		canvas.height = canvas.width * (320 / 750) * (64 / 300) * 5 + 50 + 35; // 286/750 为梯形宽度占比，64/286为高度占比， 50为每个梯形的间隙， 20为标题高度
-	}
 	var height = width * (64 / 286);
 
-	var schoolData = [{"studentNumber": 319000, "schoolName": "中山大学"},
-		{"studentNumber": 100, "schoolName": "华南理工大学"},
-		{"studentNumber": 80, "schoolName": "华南理工大学"},
-		{"studentNumber": 50, "schoolName": "华南理工大学"},
-		{"studentNumber": 9, "schoolName": "华南理工大学"}];
+
 	var trapezoidStyle = ["#f9be00", "#fac724", "#fbd149", "#fcda6d", "#fce392"],
 		schoolNumNameStyle = {
 			"numStyle": "#ffffff",
@@ -261,10 +281,23 @@ var _renderAnalysisReportPage = function (reportData) {
 			"fillStyle": "#ffffff"
 		};
 
-	drawCanvas.drawTrapezoid(context, width, height, schoolData, trapezoidStyle, schoolNumNameStyle, lineDotStyle, "（考生数量）", 6, contextFontStyle);
+	drawCanvas.drawTrapezoid(context, width, height, reportData.goto_schs_list, trapezoidStyle, schoolNumNameStyle, lineDotStyle, "（考生数量）", 6, trapezoidParentNodeWidth);
+
+	// 其他 x 所推荐院校
+	renderEjsTplWithData("#recommend-school-link-tpl", "#recommend-school-link-wrap", reportData);
+
+	// 根据排名的数据来源
+	renderEjsTplWithData("#recommend-data-origin-tpl", "#recommend-data-origin-wrap", reportData);
+
+	// 录取人数最多的五个专业，如果有的话
+	renderEjsTplWithData("#top-five-enroll-major-tpl", "#top-five-enroll-major-wrap", reportData);
+
+
 };
 
 var swipeToAnalysisReportPage = function ( requestParam,xinSwiper ) {
+
+	console.log("requestParam " + JSON.stringify(requestParam, null, 4));
 
 	$.ajax({
 		type: "post",
@@ -272,7 +305,7 @@ var swipeToAnalysisReportPage = function ( requestParam,xinSwiper ) {
 		url: url.analysisReportUrl,
 		data:requestParam,
 		success: function(data) {
-			console.log(data);
+			console.log("data "+ JSON.stringify(data, null, 4));
 
 			_renderAnalysisReportPage (data);
 			xinSwiper.slideNext();
@@ -286,9 +319,19 @@ var swipeToAnalysisReportPage = function ( requestParam,xinSwiper ) {
 	});
 
 };
+var swipeToWmzyIntroPage = function (xinSwiper) {
+
+	$(".goto-wmzy-pro-intro").on("click", function () {
+		xinSwiper.slideNext();
+	});
+
+};
+
+
 
 module.exports = {
-	swipeToAnalysisReportPage: swipeToAnalysisReportPage
+	swipeToAnalysisReportPage: swipeToAnalysisReportPage,
+	swipeToWmzyIntroPage: swipeToWmzyIntroPage
 };
 
 

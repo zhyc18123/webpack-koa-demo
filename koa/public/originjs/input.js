@@ -1,5 +1,5 @@
 
-var swipeToAnalysisReportPage = require('./analysis-report');
+var analysisReport = require('./analysis-report');
 var init=function(xinSwiper){
 	// 初始化省份列表
 	createProv();
@@ -19,7 +19,7 @@ var init=function(xinSwiper){
 			batch:1,
 			wenli:2,
 		};
-		swipeToAnalysisReportPage.swipeToAnalysisReportPage(data,xinSwiper);
+		analysisReport.swipeToAnalysisReportPage(data,xinSwiper);
 	});
 };
 var createProv=function(){
