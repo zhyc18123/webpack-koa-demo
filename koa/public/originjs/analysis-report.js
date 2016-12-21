@@ -1,5 +1,6 @@
 import url from"./url";
 import drawCanvas from './canvasGraph';
+import prov from "./loc.js";
 var Tpl = require('./utils/ejs');
 
 var REQUESTPARAM = {};
@@ -32,42 +33,42 @@ var _init = (function () {
 			open:"<&",
 			close:"&>"
 		};
-		var schoolData = {
-			"code": 0,
-			"msg": "",
-			"sch_id":"52ac2e98747aec013fcf4c46",//学校id
-			"icon_url":"http://school-icon.b0.upaiyun.com/52ac2e98747aec013fcf4c1d.jpg",//学校图标识
-			"sch_name":"北京大学",//学校名称
-			"city":"北京",//所在地区
-			"province":"广州",//用户所选省份
-			"total_rank":1,//综合排名
-			"adm_ratio":89,//录取概率
-			"sch_flag":[985,211],//985、211
-			"sch_type":['综合院校'],//学校类型
-			"sch_min_score_list":[
-				{
-					"year":"2013",//年份
-					"min_rank":2600//当年最低省排名
-				},
-				{
-					"year":"2014",//年份
-					"min_rank":2700//当年最低省排名
-				},
-				{
-					"year":"2015",//年份
-					"min_rank":2500//当年最低省排名
-				}
-			]
-		};
+		// var schoolData = {
+		// 	"code": 0,
+		// 	"msg": "",
+		// 	"sch_id":"52ac2e98747aec013fcf4c46",//学校id
+		// 	"icon_url":"http://school-icon.b0.upaiyun.com/52ac2e98747aec013fcf4c1d.jpg",//学校图标识
+		// 	"sch_name":"北京大学",//学校名称
+		// 	"city":"北京",//所在地区
+		// 	"province":"广州",//用户所选省份
+		// 	"total_rank":1,//综合排名
+		// 	"adm_ratio":89,//录取概率
+		// 	"sch_flag":[985,211],//985、211
+		// 	"sch_type":['综合院校'],//学校类型
+		// 	"sch_min_score_list":[
+		// 		{
+		// 			"year":"2013",//年份
+		// 			"min_rank":2600//当年最低省排名
+		// 		},
+		// 		{
+		// 			"year":"2014",//年份
+		// 			"min_rank":2700//当年最低省排名
+		// 		},
+		// 		{
+		// 			"year":"2015",//年份
+		// 			"min_rank":2500//当年最低省排名
+		// 		}
+		// 	]
+		// };
 
-		// schoolData = data;
+		var schoolData = data;
 
 		ejsTpl = $("#school-list-item-modal-tpl").html();
 		ejsHtml = Tpl.ejs(ejsTpl, schoolData, ejsOptions);
 		console.log("ejsHtml >> " + ejsHtml);
 		$("#school-list-item-modal-wrap").html(ejsHtml);
 
-		if (schoolData.sch_min_score_list) {
+		if (schoolData.sch_min_score_list.length>0) {
 
 			renderEjsTplWithData("#line-chart-wmzy-link-modal-tpl", "#line-chart-wmzy-link-modal-wrap", schoolData);
 
@@ -249,84 +250,6 @@ function getFont(canvas, ratio) {
 
 var _renderAnalysisReportPage = function (reportData) {
 
-
-	// reportData = {
-	// 	"code":0,//状态码,0-成功，-1-失败
-	// 	"score":600,//分数
-	// 	"rank":4000,//排名
-	// 	"rank_gap":1000,//排名差距
-	// 	"exp_sch":"中山大学",//目标学校
-	// 	"diploma_id":7,//学历 5-本科，7-专科
-	// 	"score_gap":30,//与目标学校分差值
-	// 	"adm_ratio":40,//录取概率
-	// 	"recommend_sch":"北京大学",//推荐学校
-	// 	"recommend_sch_num":38,//推荐学校数量
-	// 	"batch_name":"本科",//推荐学校的批次名称
-	// 	"choosed_sch":"四川大学",//相近分数的人中去向最多的学校
-	// 	"stu_count":1300,//学生人数
-	// 	"sch_min_score_list":[
-	// 		{
-	// 			"year":"2013",//年份
-	// 			"min_rank":2600//当年最低省排名
-	// 		},
-	// 		{
-	// 			"year":"2014",//年份
-	// 			"min_rank":2700//当年最低省排名
-	// 		},
-	// 		{
-	// 			"year":"2015",//年份
-	// 			"min_rank":2500//当年最低省排名
-	// 		},
-	// 		{
-	// 			"year":"你的排名",//用户的排名
-	// 			"min_rank":90000//用户排名
-	// 		}
-	// 	],
-	// 	"recommend_sch_list":[//推荐学校列表
-	// 		{
-	// 			"sch_id":"52ac2e98747aec013fcf4c46",//学校id
-	// 			"icon_url":"http://school-icon.b0.upaiyun.com/52ac2e98747aec013fcf4c1d.jpg",//学校图标识
-	// 			"sch_name":"北京大学",//学校名称
-	// 			"location":"北京",//所在省份
-	// 			"total_rank":1,//综合排名
-	// 			"adm_ratio":89//录取概率
-	// 		},
-	// 		{
-	// 			"sch_id":"52ac2e98747aec013fcf4c46",//学校id
-	// 			"icon_url":"http://school-icon.b0.upaiyun.com/52ac2e98747aec013fcf4c1d.jpg",
-	// 			"sch_name":"北京大学",//学校名称
-	// 			"location":"北京",//所在省份
-	// 			"total_rank":1,//综合排名
-	// 			"adm_ratio":89//录取概率
-	// 		}
-	// 	],
-	// 	"goto_schs_list":[
-	// 		{
-	// 			"sch_name":"四川大学",
-	// 			"stu_count":1160
-	// 		},
-	// 		{
-	// 			"sch_name":"电子科技大学",
-	// 			"stu_count":720
-	// 		}
-	// 	],
-	// 	"goto_majors_list":[
-	// 		{
-	// 			"major_name":"临床医学",
-	// 			"primary_name":"医学",
-	// 			"stu_count":124
-	// 		},
-	// 		{
-	// 			"major_name":"自动化",
-	// 			"primary_name":"工学",
-	// 			"stu_count":124
-	// 		}
-	// 	]
-    //
-	// };
-
-
-	// alert("window.dpr " + window.dpr);
 	// 成绩与排名
 	renderEjsTplWithData("#score-rank-tpl", "#score-rank-wrap", reportData);
 
@@ -367,13 +290,13 @@ var _renderAnalysisReportPage = function (reportData) {
 	context.textAlign = "center";
 
 	// 分是否设立了目标学校两种情况讨论
-	if (!reportData.exp_sch) {
-		drawCanvas.drawCircleText(context, enrollCanvasFontDpr3, '#b6b6b6', "未设立", centerX, enrollCanvas.height*0.4);
-		drawCanvas.drawCircleText(context, enrollCanvasFontDpr3, '#b6b6b6', '目标学校', centerX, enrollCanvas.height*0.65);
-	} else {
+	if (reportData.exp_sch && reportData.adm_ratio) {
 		drawCanvas.drawCircleText(context, enrollCanvasFontDpr1, '#f9be00', reportData.adm_ratio, enrollCanvas.width*0.46, enrollCanvas.height*0.45);
 		drawCanvas.drawCircleText(context, enrollCanvasFontDpr2, '#f9be00', '%', enrollCanvas.width*0.62, enrollCanvas.height*0.5);
 		drawCanvas.drawCircleText(context, enrollCanvasFontDpr3, '#b6b6b6', '录取概率', centerX, enrollCanvas.height*0.65);
+	} else {
+		drawCanvas.drawCircleText(context, enrollCanvasFontDpr3, '#b6b6b6', "未设立", centerX, enrollCanvas.height*0.5);
+		drawCanvas.drawCircleText(context, enrollCanvasFontDpr3, '#b6b6b6', '目标学校', centerX, enrollCanvas.height*0.6);
 	}
 
 	// 与目标学校的距离 —— 建议
@@ -530,27 +453,29 @@ var _renderAnalysisReportPage = function (reportData) {
 
 var swipeToAnalysisReportPage = function ( requestParam, xinSwiper ) {
 
-	var data  = {};
+	var paramData  = {};
 
-	data.reqId = requestParam.req_id || "1111";
-	data.examNo = requestParam.exam_no || "111";
-	data.provinceId = requestParam.province_id || "440000000000";
-	data.wenli = requestParam.wenli || "";
-	data.score = requestParam.score || "";
-	data.expSchId = requestParam.exp_sch_id || "52ac2e98747aec013fcf4c46";
-	data.batch = requestParam.batch || "";
+	paramData.reqId = requestParam.req_id || "1111";
+	paramData.examNo = requestParam.exam_no || "111";
+	paramData.provinceId = requestParam.province_id || "440000000000";
+	paramData.wenli = requestParam.wenli || "";
+	paramData.score = requestParam.score || "";
+	paramData.expSchId = requestParam.exp_sch_id || "52ac2e98747aec013fcf4c46";
+	paramData.batch = requestParam.batch || "";
 
-	REQUESTPARAM = data;
+	REQUESTPARAM = paramData;
 
 	$.ajax({
 		type: "post",
 		cache: false,
 		url: url.getAnalysisReportUrl,
-		data: data,
+		data: paramData,
 		success: function(data) {
 			console.log("data "+ JSON.stringify(data, null, 4));
+			data.loc_provinc_name = prov.getProvinceName(paramData.provinceId);
+			data.loc_wenli = REQUESTPARAM.wenli == 1 ? "理科" : "文科";
 
-			_renderAnalysisReportPage (data);
+			_renderAnalysisReportPage(data);
 			_init.initModule();
 			xinSwiper.slideNext();
 		},

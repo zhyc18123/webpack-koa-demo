@@ -7,7 +7,7 @@
             <div class="beveled-boder" id="score-rank-wrap">
 
                 <script id="score-rank-tpl" type="text/template">
-                    <p class="loc-subject">广东—理科</p>
+                    <p class="loc-subject"><&= data.loc_provinc_name&> — <&= data.loc_wenli&></p>
                     <ul class="score-rank">
                         <li class="about-score">
                             <span class="score-key">你的成绩：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
@@ -23,9 +23,9 @@
             </div>
             <ul class="summary-items" id="summary-items-wrap">
                 <script id="summary-items-tpl" type="text/template">
-                    <& if(data.exp_sch){ &>
+                    <& if(data.exp_sch && data.adm_ratio){ &>
                     <li class="item-detail">
-                        <i class="id-first"></i>
+                        <i class="iconfont icon-sch-gap id-first"></i>
                         <span>目标学校
                             <em class="black-strong">&nbsp;<&= data.exp_sch&>&nbsp;</em>的录取概率为
                             <em class="black-strong">&nbsp;<&= data.adm_ratio&>%&nbsp;</em>，距离该校还有
@@ -33,25 +33,23 @@
                         </span>
                     </li>
                     <li class="item-detail">
-                        <i class="id-second"></i>
+                        <i class="iconfont icon-roc-sch id-second"></i>
                         <span>你的分数还可以考上
                             <em class="black-strong">&nbsp;<&= data.recommend_sch&>&nbsp;</em>等
-                            <em class="black-strong">&nbsp;<&= data.recommend_sch_num&>&nbsp;</em>，所<&= data.batch_name&>学校
-                            <em class="black-strong">&nbsp;30-40&nbsp;</em>分的差距
+                            <em class="black-strong">&nbsp;<&= data.recommend_sch_num&>&nbsp;</em>所<&= data.batch_name&>学校
                         </span>
                     </li>
                     <&}else{&>
                     <li class="item-detail">
-                        <i class="id-second"></i>
+                        <i class="iconfont icon-roc-sch id-second"></i>
                         <span>你的分数可以考上
                             <em class="black-strong">&nbsp;<&= data.recommend_sch&>&nbsp;</em>等
-                            <em class="black-strong">&nbsp;<&= data.recommend_sch_num&>&nbsp;</em>，所<&= data.batch_name&>学校
-                            <em class="black-strong">&nbsp;30-40&nbsp;</em>分的差距
+                            <em class="black-strong">&nbsp;<&= data.recommend_sch_num&>&nbsp;</em>所<&= data.batch_name&>学校
                         </span>
                     </li>
                     <&}&>
                     <li class="item-detail">
-                        <i class="id-third"></i>
+                        <i class="iconfont icon-pop-sch id-third"></i>
                         <span>2015年与你成绩相近的人当中，被
                         <em class="black-strong">&nbsp;<&= data.choosed_sch&>&nbsp;</em>录取的考生最多
                         <em class="black-strong">&nbsp;(<&= data.stu_count&>)&nbsp;</em>
@@ -73,7 +71,13 @@
 
             <script id="gap-suggest-tpl" type="text/template">
                 <& if(data.exp_sch){ &>
-                <p class="gap-sugest">如果你想稳妥考上<em class="black-strong">&nbsp;<&= data.exp_sch&>&nbsp;</em>分数还需要提高<em class="black-strong">&nbsp;<&= data.score_gap&>&nbsp;</em>分，省排名提高约<em class="black-strong">&nbsp;<&= data.rank_gap&>&nbsp;</em>名。</p>
+                    <& if(data.score_gap <= -5) {&>
+                        <p class="gap-sugest">你的成绩比该校的最低分还高出<em class="black-strong">&nbsp;<&= Math.abs(data.score_gap)-5&>~<&= Math.abs(data.score_gap)+5&>&nbsp;</em>分</p>
+                    <& }else if( data.score_gap > -5 && data.score_gap <=5 ) {&>
+                        <p class="gap-sugest">以你目前的成绩，勉强可以考上该校</p>
+                    <&} else {&>
+                        <p class="gap-sugest">如果你想稳妥考上<em class="black-strong">&nbsp;<&= data.exp_sch&>&nbsp;</em>分数还需要提高<em class="black-strong">&nbsp;<&= data.score_gap-5&>~<&= data.score_gap+5&>&nbsp;</em>分，省排名提高约<em class="black-strong">&nbsp;<&= data.rank_gap&>&nbsp;</em>名。</p>
+                    <&}&>
                 <& }else{ &>
                 <p class="gap-sugest">无法查看目标学校的录取概率分析</p>
                 <& } &>
@@ -98,7 +102,7 @@
 
     <div class="school-list-wrap">
         <div class="school-list-modal hide" id="school-detail-modal">
-            <p class="school-modal-close" id="school-modal-close-btn"><i></i></p>
+            <p class="school-modal-close" id="school-modal-close-btn"><i class="iconfont icon-close"></i></p>
             <div class="school-list-item" id="school-list-item-modal-wrap">
                 <script id="school-list-item-modal-tpl" type="text/template">
                     <img src="<&= data.icon_url&>" alt="学校logo" class="school-list-img">
@@ -176,12 +180,12 @@
         </p>
 
         <div class="trapezoid-canvas-wrap">
-            <p class="top-five-enroll"><i></i><span class="title">录取人数最多的 5 个 <em>学校</em></span></p>
+            <p class="top-five-enroll"><i class="iconfont icon-lingxin"></i><span class="title">录取人数最多的 5 个 <em>学校</em></span></p>
             <canvas id="trapezoid-canvas"></canvas>
         </div>
 
         <div class="top-five-major">
-            <p class="top-five-enroll"><i></i><span class="title">录取人数最多的 5 个 <em>专业</em></span></p>
+            <p class="top-five-enroll"><i class="iconfont icon-lingxin"></i><span class="title">录取人数最多的 5 个 <em>专业</em></span></p>
             <div id="top-five-enroll-major-wrap">
             <script id="top-five-enroll-major-tpl" type="text/template">
                 <& if(data.goto_majors_list.length>0){&>
