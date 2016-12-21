@@ -191,12 +191,14 @@
                         <span class="major-category-header">所属大类</span>
                         <span class="major-examinee-header">考生数量</span>
                     </li>
+                    <&  var maxMajorStuCount = data.goto_majors_list[0].stu_count;&>
                     <& for(var j=0, len = data.goto_majors_list.length; j < len ;j++){
-                        var gotoMajorItem = data.goto_majors_list[j];&>
+                        var gotoMajorItem = data.goto_majors_list[j];
+                        var itemInvalidPercent = (1-gotoMajorItem.stu_count/maxMajorStuCount)*0.5*100 &>
                     <li class="enroll-major-detail">
                         <span class="major-name-detail"><&= gotoMajorItem.major_name&></span>
                         <span class="major-category-detail"><&= gotoMajorItem.primary_name&></span>
-                        <span class="major-examinee-detail"><&= gotoMajorItem.stu_count&> <em class="valid-bg"></em><em class="invalid-bg"></em></span>
+                        <span class="major-examinee-detail"><&= gotoMajorItem.stu_count&> <em class="valid-bg"></em><em class="invalid-bg" style="width: <&= itemInvalidPercent&>%"></em></span>
                     </li>
                     <&}&>
                 </ul>
