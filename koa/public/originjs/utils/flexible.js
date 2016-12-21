@@ -50,6 +50,7 @@
             dpr = 1;
         }
         scale = 1 / dpr;
+        win.dpr = dpr;
     }
 
     docEl.setAttribute('data-dpr', dpr);
@@ -78,7 +79,7 @@
     function refreshRem(){
         var width = docEl.getBoundingClientRect().width;
         if (IsPC() && width < 2047) {
-            width = 540;
+            width = 750;
         }
 
         var rem = width / 7.5;
@@ -116,12 +117,12 @@
             val += 'px';
         }
         return val;
-    }
+    };
     flexible.px2rem = function(d) {
         var val = parseFloat(d) / this.rem;
         if (typeof d === 'string' && d.match(/px$/)) {
             val += 'rem';
         }
         return val;
-    }
+    };
 })(window, window['lib'] || (window['lib'] = {}));

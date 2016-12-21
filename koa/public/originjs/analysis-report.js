@@ -3,13 +3,15 @@ import url from"./url";
 import drawCanvas from './canvasGraph';
 var Tpl = require('./utils/ejs');
 
+var REQUESTPARAM = {};
+
 var _init = (function () {
 	// module scope variables
 	var
 
 		jqueryMap = {},
 
-		setJqueryMap, _toggleModalShow, _toggleModaHide, onClickSchoolListItem,
+		setJqueryMap, _toggleModalShow, _toggleModaHide, _renderSchoolItemDetail, onClickSchoolListItem,
 		onClickCloseSchoolDetailBtn, initModule;
 
 	// UTILITY METHODS
@@ -23,18 +25,7 @@ var _init = (function () {
 		jqueryMap.$schoolDetailModal.addClass("hide");
 	};
 
-	// DOM METHODS
-	setJqueryMap = function () {
-		jqueryMap = {
-			$blackMasking: $("#modal-black-masking"),
-			$schoolListItem: $(".school-list-item"),
-			$schoolDetailModal: $("#school-detail-modal"),
-			$schoolDetailClose: $("#school-modal-close-btn")
-		};
-	};
-
-	onClickSchoolListItem = function() {
-
+	_renderSchoolItemDetail = function (data) {
 		_toggleModalShow();
 		var ejsTpl;
 		var ejsHtml;
@@ -70,11 +61,12 @@ var _init = (function () {
 			]
 		};
 
+		// schoolData = data;
+
 		ejsTpl = $("#school-list-item-modal-tpl").html();
 		ejsHtml = Tpl.ejs(ejsTpl, schoolData, ejsOptions);
 		console.log("ejsHtml >> " + ejsHtml);
 		$("#school-list-item-modal-wrap").html(ejsHtml);
-
 
 		if (schoolData.sch_min_score_list) {
 
@@ -119,6 +111,47 @@ var _init = (function () {
 			drawCanvas.drawLabel(context, coordData, 75, 8, 20, lineChartCanvas.height, offsetY, labelWitth, lineChartCanvas.width, lineChartFontStyle);
 
 		}
+	};
+
+	// DOM METHODS
+	setJqueryMap = function () {
+		jqueryMap = {
+			$blackMasking: $("#modal-black-masking"),
+			$schoolListItem: $(".school-list-item"),
+			$schoolDetailModal: $("#school-detail-modal"),
+			$schoolDetailClose: $("#school-modal-close-btn")
+		};
+	};
+
+	onClickSchoolListItem = function() {
+
+		// alert("REQUESTPARAM " + JSON.stringify(REQUESTPARAM, null, 4));
+
+		var schoolId = $(this).data("schoolid");
+
+		// alert("schoolId " + schoolId);
+
+		var param = {};
+		param.reqId = REQUESTPARAM.req_id || "1111";
+		param.schId = schoolId || "111";
+		param.provinceId = REQUESTPARAM.province_id || "440000000000";
+		param.wenli = REQUESTPARAM.wenli || "";
+		param.batch = REQUESTPARAM.batch || "";
+
+		$.ajax({
+			type: "post",
+			cache: false,
+			url: url.getSchoolDetailUrl,
+			data: param,
+			success: function(data) {
+				console.log("data "+ JSON.stringify(data, null, 4));
+				_renderSchoolItemDetail(data);
+			},
+			error:function() {
+				alert("服务器错误！");
+				_renderSchoolItemDetail();
+			}
+		});
 	};
 
 	onClickCloseSchoolDetailBtn = function() {
@@ -271,6 +304,8 @@ var _renderAnalysisReportPage = function (reportData) {
     //
 	// };
 
+
+	// alert("window.dpr " + window.dpr);
 	// 成绩与排名
 	renderEjsTplWithData("#score-rank-tpl", "#score-rank-wrap", reportData);
 
@@ -282,41 +317,42 @@ var _renderAnalysisReportPage = function (reportData) {
 	var context = enrollCanvas.getContext('2d');
 	var enrollCanvasParentNodeWidth = enrollCanvas.parentNode.clientWidth;
 	enrollCanvas.width = enrollCanvasParentNodeWidth / 2 ;
-	var enrollCanvasFont1=  getFont(0.04);
-	var enrollCanvasFont2=  getFont(0.03);
-	var enrollCanvasFont3=  getFont(0.02);
+	var enrollCanvasFontDpr1=  getFont(0.04);
+	var enrollCanvasFontDpr2=  getFont(0.03);
+	var enrollCanvasFontDpr3=  getFont(0.02);
 
 	enrollCanvas.height = enrollCanvas.width/1.5;
 	var radius = enrollCanvas.width/4 ;
 	var centerX = enrollCanvas.width / 2;
 	var centerY = enrollCanvas.height / 2;
-	drawCanvas.drawCircle(context, centerX, centerY, '#ffffff', '#e4e4e4', 22, radius, 1);
-	drawCanvas.drawCircle(context, centerX, centerY, '#ffffff', '#f9be00', 25, radius, 0.4, 'round');
+	var circleLineWidthInner = 10;
+	var circleLineWidthOuter = 12;
+	if(window.dpr == 2){
+		circleLineWidthInner = 16;
+		circleLineWidthOuter = 18;
+		enrollCanvasFontDpr1=  getFont(0.1);
+		enrollCanvasFontDpr2=  getFont(0.05);
+		enrollCanvasFontDpr3=  getFont(0.04);
+	}else if(window.dpr == 3){
+		circleLineWidthInner = 24;
+		circleLineWidthOuter = 26;
+		enrollCanvasFontDpr1=  getFont(0.2);
+		enrollCanvasFontDpr2=  getFont(0.1);
+		enrollCanvasFontDpr3=  getFont(0.08);
+	}
+	drawCanvas.drawCircle(context, centerX, centerY, '#ffffff', '#e4e4e4', circleLineWidthInner, radius, 1);
+	drawCanvas.drawCircle(context, centerX, centerY, '#ffffff', '#f9be00', circleLineWidthOuter, radius, 0.4, 'round');
 	context.textBaseline = 'middle';
 	context.textAlign = "center";
 
-	if (enrollCanvasParentNodeWidth >= 828){
-		enrollCanvasFont1=  getFont(0.1);
-		enrollCanvasFont2=  getFont(0.05);
-		enrollCanvasFont3=  getFont(0.04);
-	} else if (enrollCanvasParentNodeWidth >= 750){
-		enrollCanvasFont1=  getFont(0.07);
-		enrollCanvasFont2=  getFont(0.035);
-		enrollCanvasFont3=  getFont(0.03);
-	} else if (enrollCanvasParentNodeWidth >= 640){
-		enrollCanvasFont1=  getFont(0.05);
-		enrollCanvasFont2=  getFont(0.025);
-		enrollCanvasFont3=  getFont(0.02);
-	}
-
 	// 分是否设立了目标学校两种情况讨论
 	if (!reportData.exp_sch) {
-		drawCanvas.drawCircleText(context, enrollCanvasFont3, '#b6b6b6', "未设立", centerX-2, centerY-12);
-		drawCanvas.drawCircleText(context, enrollCanvasFont3, '#b6b6b6', '目标学校', centerX, centerY+18);
+		drawCanvas.drawCircleText(context, enrollCanvasFontDpr3, '#b6b6b6', "未设立", centerX-2, centerY-12);
+		drawCanvas.drawCircleText(context, enrollCanvasFontDpr3, '#b6b6b6', '目标学校', centerX, centerY+18);
 	} else {
-		drawCanvas.drawCircleText(context, enrollCanvasFont1, '#f9be00', reportData.adm_ratio, centerX-15, centerY-15);
-		drawCanvas.drawCircleText(context, enrollCanvasFont2, '#f9be00', '%', centerX+30, centerY-10);
-		drawCanvas.drawCircleText(context, enrollCanvasFont3, '#b6b6b6', '录取概率', centerX, centerY+30);
+		drawCanvas.drawCircleText(context, enrollCanvasFontDpr1, '#f9be00', reportData.adm_ratio, centerX-15, centerY-15);
+		drawCanvas.drawCircleText(context, enrollCanvasFontDpr2, '#f9be00', '%', centerX+30, centerY-10);
+		drawCanvas.drawCircleText(context, enrollCanvasFontDpr3, '#b6b6b6', '录取概率', centerX, centerY+30);
 	}
 
 	// 与目标学校的距离 —— 建议
@@ -340,7 +376,7 @@ var _renderAnalysisReportPage = function (reportData) {
 			context = lineChartCanvas.getContext('2d');
 		lineChartCanvasClosestWidth = lineChartCanvas.parentNode.parentNode.clientWidth;
 
-		alert("lineChartCanvasParentNodeWidth " + lineChartCanvasClosestWidth );
+		// alert("lineChartCanvasParentNodeWidth " + lineChartCanvasClosestWidth );
 
 		lineChartCanvas.width = lineChartCanvas.parentNode.clientWidth;
 		lineChartCanvas.height = lineChartCanvas.parentNode.clientHeight*1.5;
@@ -425,7 +461,7 @@ var _renderAnalysisReportPage = function (reportData) {
 
 };
 
-var swipeToAnalysisReportPage = function ( requestParam,xinSwiper ) {
+var swipeToAnalysisReportPage = function ( requestParam, xinSwiper ) {
 
 	var data  = {};
 
@@ -437,10 +473,12 @@ var swipeToAnalysisReportPage = function ( requestParam,xinSwiper ) {
 	data.expSchId = requestParam.exp_sch_id || "52ac2e98747aec013fcf4c46";
 	data.batch = requestParam.batch || "";
 
+	REQUESTPARAM = data;
+
 	$.ajax({
 		type: "post",
 		cache: false,
-		url: url.analysisReportUrl,
+		url: url.getAnalysisReportUrl,
 		data: data,
 		success: function(data) {
 			console.log("data "+ JSON.stringify(data, null, 4));

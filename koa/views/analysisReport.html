@@ -142,7 +142,7 @@
                 <& for(var i = 0, len = data.recommend_sch_list.length; i < len; i++ ) {
                     var recomendSchoolItem = data.recommend_sch_list[i];
                 &>
-                <div class="school-list-item <& if(i == 0) {&>school-list-margin<&}&> <&if(i==len-1){&>school-list-last<&}&>" data-shoolid="<&= recomendSchoolItem.sch_id&>">
+                <div class="school-list-item <& if(i == 0) {&>school-list-margin<&}&> <&if(i==len-1){&>school-list-last<&}&>" data-schoolid="<&= recomendSchoolItem.sch_id&>">
                     <img src="<&= recomendSchoolItem.icon_url&>" alt="学校logo" class="school-list-img">
                     <ul class="school-info">
                         <li class="school-name-loc" title="">

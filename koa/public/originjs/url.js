@@ -1,6 +1,7 @@
 module.exports={
 	autoUrl:"/get-auto-code",
 	vipUrl:"/get-vip",
-	analysisReportUrl: "/analysis",
+	getAnalysisReportUrl: "/analysis",
+	getSchoolDetailUrl: "/school-detail",
 	guestSchool:"/guest-school"
 };
