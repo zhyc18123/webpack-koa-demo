@@ -269,6 +269,9 @@ i.id-third {
     @include font-size(2.8);
     color: #eb614c;
   }
+  &:hover{
+    cursor: pointer;
+  }
 }
 
 .school-list-wrap {
@@ -288,6 +291,9 @@ i.id-third {
   margin: 0 auto;
   padding: percentage(46/750) percentage(20/750); /*46 20 750*/
   border-top: 1px solid #dfdfdf;
+  &:hover{
+    cursor: pointer;
+  }
 }
 
 .school-list-margin {
@@ -407,7 +413,7 @@ i.id-third {
 .top-five-major {
   position: relative;
   width: 100%;
-  margin-top: percentage(110/750);
+  margin-top: percentage(80/750);
 }
 
 .enroll-major-wrap {

@@ -950,6 +950,7 @@
 				var startY = 40;
 				var widthMargin = lineChartCanvas.width / 4;
 				var labelWitth = widthMargin;
+				var labelHeight = 75;
 				var coordData;
 				var lowestPercent = 1;
 				var offsetY;
@@ -967,15 +968,36 @@
 					dotColor: "#eb614c",
 					lineColor: "#eda89d"
 				};
-				var lineChartFontStyle = "normal 32.3pt serif";
+				// alert(" the win.dpr " + window.dpr);
+				var lineChartFontStyle = getFont(lineChartCanvas, 0.03);
+				var lineDotStyle = {};
+
+				if (window.dpr) {
+					startX = 20;
+				} else if (window.dpr == 2) {
+					lineChartFontStyle = getFont(lineChartCanvas, 0.04);
+				} else if (window.dpr === 3) {
+					lineChartFontStyle = getFont(lineChartCanvas, 0.04);
+				}
+
 				setCoordinateReturn = _canvasGraph2.default.setCoordinate(schoolData.sch_min_score_list, startX, startY, widthMargin, 400, lowestPercent);
 				coordData = setCoordinateReturn[0];
 				lowestPercent = setCoordinateReturn[1];
 
 				offsetY = lowestPercent < 0.01 ? 140 : lowestPercent < 0.1 ? 130 : 50;
 
-				_canvasGraph2.default.drawCoordinate(context, coordData, yearColor, historyColor, currentColor, labelWitth, lineChartCanvas.width, lineChartCanvas.height, 40, offsetY, lineChartFontStyle);
-				_canvasGraph2.default.drawLabel(context, coordData, 75, 8, 20, lineChartCanvas.height, offsetY, labelWitth, lineChartCanvas.width, lineChartFontStyle);
+				if (window.dpr == 1) {
+					labelWitth = labelWitth / 2;
+					lineChartCanvas.height = lineChartCanvas.height / 2;
+					startY = startY / 2;
+					offsetY = offsetY / 2;
+					labelHeight = labelHeight / 2;
+					lineDotStyle.lineWidth = 1;
+					lineDotStyle.dotRadius = 5;
+				}
+
+				_canvasGraph2.default.drawCoordinate(context, coordData, yearColor, historyColor, currentColor, labelWitth, lineChartCanvas.width, lineChartCanvas.height, startY, offsetY, lineChartFontStyle, lineDotStyle);
+				_canvasGraph2.default.drawLabel(context, coordData, labelHeight, 8, 20, lineChartCanvas.height, offsetY, labelWitth, lineChartCanvas.width, lineChartFontStyle);
 			}
 		};
 
@@ -1023,7 +1045,7 @@
 		onClickCloseSchoolDetailBtn = function onClickCloseSchoolDetailBtn() {
 			_toggleModaHide();
 			var schoolListItemModalHtml = '<script id="school-list-item-modal-tpl" type="text/template">' + '<img src="<&= data.icon_url&>" alt="学校logo" class="school-list-img">' + '<ul class="school-info">' + '<li class="school-name-loc" title="">' + '<span class="school-name"><&= data.sch_name&></span>' + '<span class="school-loc"><&= data.city&></span>' + '</li>' + '<li class="school-rank-probability">' + '<span class="school-rank"><em class="dot"></em>综合排名<em class="rank-num"><&= data.total_rank&></em></span>' + '<span class="enroll-probability"><em class="dot"></em>录取概率<em class="probability-num"><&= data.adm_ratio&>%</em></span>' + '</li>' + '<li class="school-label">' + '<span class="school-label-1"><&= data.sch_flag[0]&></span>' + '<span class="school-label-2"><&= data.sch_flag[1]&></span>' + '<span class="school-label-3"><&= data.sch_type[0]&></span>' + '</li>' + '</ul>' + '</script>';
-			var schoolListLineChartModalHtml = '<script id="line-chart-wmzy-link-modal-tpl" type="text/template">' + '<& if(data.sch_min_score_list){ &>' + '<div class="line-chart-wrap">' + '<h3 class="line-chart-tiltle">往年该校录取最低省排名（广东-理科）</h3>' + '<canvas id="line-chart-modal-canvas"></canvas>' + '</div>' + '<&}&>' + '<p class="wmzy-link goto-wmzy-pro-intro">' + '<span>更详尽院校录取数据，尽在完美志愿 >></span>' + '</p>' + '</script>';
+			var schoolListLineChartModalHtml = '<script id="line-chart-wmzy-link-modal-tpl" type="text/template">' + '<& if(data.sch_min_score_list){ &>' + '<div class="line-chart-wrap">' + '<h3 class="line-chart-tiltle">往年该校录取最低省排名（广东-理科）</h3>' + '<canvas id="line-chart-modal-canvas"></canvas>' + '</div>' + '<&}&>' + '</script>';
 			$("#school-list-item-modal-wrap").html(schoolListItemModalHtml);
 			$("#line-chart-wmzy-link-modal-wrap").html(schoolListLineChartModalHtml);
 		};
@@ -1059,8 +1081,8 @@
 	 * default size for font
 	 * @returns {string}
 	 */
-	function getFont(ratio) {
-		var size = 640 * ratio; // get font size based on current width
+	function getFont(canvas, ratio) {
+		var size = canvas.width * ratio; // get font size based on current width
 		return (size | 0) + 'px sans-serif'; // set font
 	}
 
@@ -1095,7 +1117,7 @@
 		// 		},
 		// 		{
 		// 			"year":"你的排名",//用户的排名
-		// 			"min_rank":3000//用户排名
+		// 			"min_rank":90000//用户排名
 		// 		}
 		// 	],
 		// 	"recommend_sch_list":[//推荐学校列表
@@ -1154,29 +1176,27 @@
 		var context = enrollCanvas.getContext('2d');
 		var enrollCanvasParentNodeWidth = enrollCanvas.parentNode.clientWidth;
 		enrollCanvas.width = enrollCanvasParentNodeWidth / 2;
-		var enrollCanvasFontDpr1 = getFont(0.04);
-		var enrollCanvasFontDpr2 = getFont(0.03);
-		var enrollCanvasFontDpr3 = getFont(0.02);
+		var enrollCanvasFontDpr1 = getFont(enrollCanvas, 0.2);
+		var enrollCanvasFontDpr2 = getFont(enrollCanvas, 0.1);
+		var enrollCanvasFontDpr3 = getFont(enrollCanvas, 0.06);
 
 		enrollCanvas.height = enrollCanvas.width / 1.5;
 		var radius = enrollCanvas.width / 4;
 		var centerX = enrollCanvas.width / 2;
 		var centerY = enrollCanvas.height / 2;
-		var circleLineWidthInner = 10;
-		var circleLineWidthOuter = 12;
-		if (window.dpr == 2) {
-			circleLineWidthInner = 16;
-			circleLineWidthOuter = 18;
-			enrollCanvasFontDpr1 = getFont(0.1);
-			enrollCanvasFontDpr2 = getFont(0.05);
-			enrollCanvasFontDpr3 = getFont(0.04);
-		} else if (window.dpr == 3) {
-			circleLineWidthInner = 24;
-			circleLineWidthOuter = 26;
-			enrollCanvasFontDpr1 = getFont(0.2);
-			enrollCanvasFontDpr2 = getFont(0.1);
-			enrollCanvasFontDpr3 = getFont(0.08);
+		var circleLineWidthInner = 4;
+		var circleLineWidthOuter = 6;
+
+		if (window.dpr == 1) {}
+
+		if (window.dpr >= 2) {
+			circleLineWidthInner = 10;
+			circleLineWidthOuter = 12;
+			enrollCanvasFontDpr1 = getFont(enrollCanvas, 0.2);
+			enrollCanvasFontDpr2 = getFont(enrollCanvas, 0.1);
+			enrollCanvasFontDpr3 = getFont(enrollCanvas, 0.06);
 		}
+
 		_canvasGraph2.default.drawCircle(context, centerX, centerY, '#ffffff', '#e4e4e4', circleLineWidthInner, radius, 1);
 		_canvasGraph2.default.drawCircle(context, centerX, centerY, '#ffffff', '#f9be00', circleLineWidthOuter, radius, 0.4, 'round');
 		context.textBaseline = 'middle';
@@ -1184,12 +1204,12 @@
 
 		// 分是否设立了目标学校两种情况讨论
 		if (!reportData.exp_sch) {
-			_canvasGraph2.default.drawCircleText(context, enrollCanvasFontDpr3, '#b6b6b6', "未设立", centerX - 2, centerY - 12);
-			_canvasGraph2.default.drawCircleText(context, enrollCanvasFontDpr3, '#b6b6b6', '目标学校', centerX, centerY + 18);
+			_canvasGraph2.default.drawCircleText(context, enrollCanvasFontDpr3, '#b6b6b6', "未设立", centerX, enrollCanvas.height * 0.4);
+			_canvasGraph2.default.drawCircleText(context, enrollCanvasFontDpr3, '#b6b6b6', '目标学校', centerX, enrollCanvas.height * 0.65);
 		} else {
-			_canvasGraph2.default.drawCircleText(context, enrollCanvasFontDpr1, '#f9be00', reportData.adm_ratio, centerX - 15, centerY - 15);
-			_canvasGraph2.default.drawCircleText(context, enrollCanvasFontDpr2, '#f9be00', '%', centerX + 30, centerY - 10);
-			_canvasGraph2.default.drawCircleText(context, enrollCanvasFontDpr3, '#b6b6b6', '录取概率', centerX, centerY + 30);
+			_canvasGraph2.default.drawCircleText(context, enrollCanvasFontDpr1, '#f9be00', reportData.adm_ratio, enrollCanvas.width * 0.46, enrollCanvas.height * 0.45);
+			_canvasGraph2.default.drawCircleText(context, enrollCanvasFontDpr2, '#f9be00', '%', enrollCanvas.width * 0.62, enrollCanvas.height * 0.5);
+			_canvasGraph2.default.drawCircleText(context, enrollCanvasFontDpr3, '#b6b6b6', '录取概率', centerX, enrollCanvas.height * 0.65);
 		}
 
 		// 与目标学校的距离 —— 建议
@@ -1222,6 +1242,7 @@
 			var startY = 40;
 			var widthMargin = lineChartCanvas.width / 4;
 			var labelWitth = widthMargin;
+			var labelHeight = 75;
 			var coordData;
 			var lowestPercent = 1;
 			var offsetY;
@@ -1239,15 +1260,36 @@
 				dotColor: "#eb614c",
 				lineColor: "#eda89d"
 			};
-			var lineChartFontStyle = "normal 32.3pt serif";
+			// alert(" the win.dpr " + window.dpr);
+			var lineChartFontStyle = getFont(lineChartCanvas, 0.03);
+			var lineDotStyle = {};
+
+			if (window.dpr) {
+				startX = 20;
+			} else if (window.dpr == 2) {
+				lineChartFontStyle = getFont(lineChartCanvas, 0.04);
+			} else if (window.dpr === 3) {
+				lineChartFontStyle = getFont(lineChartCanvas, 0.04);
+			}
+
 			setCoordinateReturn = _canvasGraph2.default.setCoordinate(reportData.sch_min_score_list, startX, startY, widthMargin, 400, lowestPercent);
 			coordData = setCoordinateReturn[0];
 			lowestPercent = setCoordinateReturn[1];
 
 			offsetY = lowestPercent < 0.01 ? 140 : lowestPercent < 0.1 ? 130 : 50;
 
-			_canvasGraph2.default.drawCoordinate(context, coordData, yearColor, historyColor, currentColor, labelWitth, lineChartCanvas.width, lineChartCanvas.height, 40, offsetY, lineChartFontStyle);
-			_canvasGraph2.default.drawLabel(context, coordData, 75, 8, 20, lineChartCanvas.height, offsetY, labelWitth, lineChartCanvas.width, lineChartFontStyle, lineChartCanvasClosestWidth);
+			if (window.dpr == 1) {
+				labelWitth = labelWitth / 2;
+				lineChartCanvas.height = lineChartCanvas.height / 2;
+				startY = startY / 2;
+				offsetY = offsetY / 2;
+				labelHeight = labelHeight / 2;
+				lineDotStyle.lineWidth = 1;
+				lineDotStyle.dotRadius = 5;
+			}
+
+			_canvasGraph2.default.drawCoordinate(context, coordData, yearColor, historyColor, currentColor, labelWitth, lineChartCanvas.width, lineChartCanvas.height, startY, offsetY, lineChartFontStyle, lineDotStyle);
+			_canvasGraph2.default.drawLabel(context, coordData, labelHeight, 8, 20, lineChartCanvas.height, offsetY, labelWitth, lineChartCanvas.width, lineChartFontStyle, lineChartCanvasClosestWidth);
 		}
 
 		// 推荐学校列表
@@ -1271,13 +1313,36 @@
 		    schoolNumNameStyle = {
 			"numStyle": "#ffffff",
 			"nameStyle": "#000000"
-		},
-		    lineDotStyle = {
+		};
+
+		var lineDotStyle = {
 			"strokeStyle": "#ccdbe1",
 			"fillStyle": "#ffffff"
 		};
+		var contextFontStyle, titleOffsetX;
 
-		_canvasGraph2.default.drawTrapezoid(context, width, height, reportData.goto_schs_list, trapezoidStyle, schoolNumNameStyle, lineDotStyle, "（考生数量）", 6, trapezoidParentNodeWidth);
+		if (window.dpr == 1) {
+			lineDotStyle.lineWidth = 1;
+			lineDotStyle.dotRadius = 2;
+		} else if (window.dpr == 2) {
+			lineDotStyle.lineWidth = 2;
+			lineDotStyle.dotRadius = 4;
+		} else if (window.dpr == 3) {
+			lineDotStyle.lineWidth = 3;
+			lineDotStyle.dotRadius = 6;
+		}
+
+		contextFontStyle = getFont(canvas, 0.04);
+		if (window.dpr == 3) {
+			// 640 pixes phone
+			titleOffsetX = 20;
+		} else if (window.dpr == 2) {
+			titleOffsetX = 10;
+		} else if (window.dpr == 1) {
+			titleOffsetX = 0;
+		}
+
+		_canvasGraph2.default.drawTrapezoid(canvas, context, width, height, reportData.goto_schs_list, trapezoidStyle, schoolNumNameStyle, lineDotStyle, contextFontStyle, titleOffsetX, "（考生数量）", 6);
 
 		// 其他 x 所推荐院校
 		renderEjsTplWithData("#recommend-school-link-tpl", "#recommend-school-link-wrap", reportData);
@@ -1316,10 +1381,10 @@
 				xinSwiper.slideNext();
 			},
 			error: function error() {
+				alert("服务器错误！");
 				_renderAnalysisReportPage();
 				_init.initModule();
 				xinSwiper.slideNext();
-				// alert("服务器错误！")
 			}
 		});
 	};
@@ -1361,8 +1426,8 @@
 	 * @param ratio  canvas标注字体样式的比例
 	 * @returns {string}
 	 */
-	function getFont(ratio) {
-		var size = 640 * ratio; // get font size based on current width
+	function getFont(canvas, ratio) {
+		var size = canvas.width * ratio; // get font size based on current width
 		return (size | 0) + 'px sans-serif'; // set font
 	}
 
@@ -1424,10 +1489,10 @@
 
 		if (rankMaxStr.length <= 4) {
 			rankMax += 8 * Math.pow(10, rankMaxStr.length - 2);
-		} else if (rankMaxStr.length <= 6) {
-			rankMax += 6 * Math.pow(10, rankMaxStr.length - 2);
+		} else if (rankMaxStr.length <= 5) {
+			rankMax += 4 * Math.pow(10, rankMaxStr.length - 1);
 		} else {
-			rankMax += 5 * Math.pow(10, rankMaxStr.length - 2);
+			rankMax += 5 * Math.pow(10, rankMaxStr.length - 1);
 		}
 
 		for (var i = 0; i < len; i++) {
@@ -1463,7 +1528,7 @@
 	 * @param offsetY Y轴点坐标的偏移量
 	 * @param lineChartFontStyle 标注年份时的样式
 	 */
-	function drawCoordinate(ctx, coord, yearColor, historyColor, currentColor, labelWidth, canvasWidth, canvasHeight, startY, offsetY, lineChartFontStyle) {
+	function drawCoordinate(ctx, coord, yearColor, historyColor, currentColor, labelWidth, canvasWidth, canvasHeight, startY, offsetY, lineChartFontStyle, lineDotStyle) {
 		var len = coord.length;
 
 		// 过往年份 text、竖线、圆点
@@ -1484,11 +1549,19 @@
 
 			ctx.font = lineChartFontStyle;
 			ctx.fillStyle = yearColor.dotColor;
-			ctx.fillText(year, x + labelWidth / 2 - 50, startY);
+
+			if (window.dpr == 1) {
+				ctx.fillText(year, x + labelWidth / 2 - 10, startY);
+			} else {
+				ctx.fillText(year, x + labelWidth / 2 - 50, startY);
+			}
 
 			ctx.setLineDash([8, 4]);
 			ctx.beginPath();
 			ctx.lineWidth = 2;
+			if (lineDotStyle) {
+				ctx.lineWidth = lineDotStyle.lineWidth;
+			}
 			ctx.strokeStyle = "#999999";
 			ctx.moveTo(x + labelWidth / 2, lineStartY);
 			ctx.lineTo(x + labelWidth / 2, canvasHeight);
@@ -1497,7 +1570,12 @@
 
 			ctx.beginPath();
 			ctx.fillStyle = historyColor.dotColor;
-			ctx.arc(x + labelWidth / 2, lineStartY + lineHeight * linePercent, 12, 0, 2 * Math.PI);
+			if (lineDotStyle) {
+				ctx.arc(x + labelWidth / 2, lineStartY + lineHeight * linePercent, lineDotStyle.dotRadius, 0, 2 * Math.PI);
+			} else {
+				ctx.arc(x + labelWidth / 2, lineStartY + lineHeight * linePercent, 12, 0, 2 * Math.PI);
+			}
+
 			ctx.fill();
 		}
 
@@ -1510,6 +1588,9 @@
 		ctx.beginPath();
 		ctx.strokeStyle = currentColor.lineColor;
 		ctx.lineWidth = 4;
+		if (lineDotStyle) {
+			ctx.lineWidth = lineDotStyle.lineWidth;
+		}
 		ctx.moveTo(0, lineStartY + lineHeight * linePercent);
 		ctx.lineTo(canvasWidth, lineStartY + lineHeight * linePercent);
 		ctx.stroke();
@@ -1517,7 +1598,12 @@
 
 		ctx.beginPath();
 		ctx.fillStyle = currentColor.dotColor;
-		ctx.arc(x + labelWidth / 2, lineStartY + lineHeight * linePercent, 12, 0, 2 * Math.PI);
+
+		if (lineDotStyle) {
+			ctx.arc(x + labelWidth / 2, lineStartY + lineHeight * linePercent, lineDotStyle.dotRadius, 0, 2 * Math.PI);
+		} else {
+			ctx.arc(x + labelWidth / 2, lineStartY + lineHeight * linePercent, 12, 0, 2 * Math.PI);
+		}
 		ctx.fill();
 
 		// 过往历史折线
@@ -1627,14 +1713,6 @@
 
 			}
 
-			if (lineChartCanvasClosestWidth) {
-				if (lineChartCanvasClosestWidth <= 640) {
-					width -= 40;
-				} else if (lineChartCanvasClosestWidth <= 750) {
-					width -= 30;
-				}
-			}
-
 			ctx.strokeStyle = "#3e3a39";
 			ctx.fillStyle = "#3e3a39";
 			if (i == len - 1) {
@@ -1642,7 +1720,15 @@
 				ctx.fillStyle = "#eb614c";
 			}
 
-			y -= 58;
+			if (window.dpr == 1) {
+				width -= 120;
+				y -= 25;
+			} else if (window.dpr == 2) {
+				width -= 50;
+				y -= 58;
+			} else {
+				y -= 58;
+			}
 			x += labelWidth / 2 - width / 2;
 			var labelYPoint = 20;
 			var labelYOffset = labelYPoint + 10;
@@ -1685,7 +1771,11 @@
 						break;
 
 				}
-				ctx.fillText(ranking + "名", x, y + 25);
+				if (window.dpr == 1) {
+					ctx.fillText(ranking + "名", x, y - labelHeight / 8);
+				} else if (window.dpr >= 2) {
+					ctx.fillText(ranking + "名", x, y + 20); //
+				}
 			}
 			if (i == len - 1) {
 				ctx.font = lineChartFontStyle;
@@ -1712,52 +1802,24 @@
 	 * @param lineDotStyle
 	 * @param title
 	 * @param trapezoidGap
-	 * @param trapezoidParentNodeWidth
 	 */
-	function drawTrapezoid(ctx, initWidth, initHeight, schoolList, trapezoidStyle, schoolNumNameStyle, lineDotStyle, title, trapezoidGap, trapezoidParentNodeWidth) {
+	function drawTrapezoid(canvas, ctx, initWidth, initHeight, schoolList, trapezoidStyle, schoolNumNameStyle, lineDotStyle, contextFontStyle, titleOffsetX, title, trapezoidGap) {
 		var lineFinal = 0;
 		var startX;
 		var startY;
 		var trapezoidWidthDown;
 		var schoolListItem;
 		var offsetY = 0;
-		var contextFontStyle;
-		var titleOffsetX = 50;
-
 		if (!trapezoidGap) {
 			trapezoidGap = 10;
-		}
-
-		if (trapezoidParentNodeWidth >= 1280) {
-			// 640 pixes phone
-			contextFontStyle = getFont(0.08);
-			titleOffsetX = 130;
-		} else if (trapezoidParentNodeWidth >= 828) {
-			contextFontStyle = getFont(0.06);
-			titleOffsetX = 100;
-		} else if (trapezoidParentNodeWidth >= 750) {
-			contextFontStyle = getFont(0.05);
-			titleOffsetX = 50;
-		} else if (trapezoidParentNodeWidth >= 640) {
-			contextFontStyle = getFont(0.03);
-			titleOffsetX = 40;
 		}
 
 		// 标题
 		if (title) {
 			ctx.font = contextFontStyle;
 			ctx.fillStyle = '#bebebe';
-
-			if (initWidth < 330) {
-				ctx.fillText(title, initWidth / 2 - titleOffsetX, 45);
-			} else if (initWidth < 390) {
-				ctx.fillText(title, initWidth / 2 - titleOffsetX, 45);
-			} else if (initWidth < 670) {
-				ctx.fillText(title, initWidth / 2 - titleOffsetX, 45);
-			} else if (initWidth < 670) {
-				ctx.fillText(title, initWidth / 2 - titleOffsetX, 45);
-			}
-			offsetY = 70;
+			ctx.fillText(title, canvas.width * 0.12 + titleOffsetX, canvas.height * 0.08);
+			offsetY = canvas.height * 0.12;
 		}
 
 		for (var i = 0, len = schoolList.length; i < len; i++) {
@@ -1800,11 +1862,11 @@
 			} else {
 				ctx.strokeStyle = "##ccdbe1";
 			}
-			ctx.lineWidth = 4;
+			ctx.lineWidth = lineDotStyle.lineWidth;
 			ctx.stroke();
 
 			ctx.beginPath();
-			ctx.arc(startX + trapezoidWidthDown * (250 / 286), startY + initHeight / 2, 8, 0, 2 * Math.PI, true);
+			ctx.arc(startX + trapezoidWidthDown * (250 / 286), startY + initHeight / 2, lineDotStyle.dotRadius, 0, 2 * Math.PI, true);
 			if (lineDotStyle.fillStyle) {
 				ctx.fillStyle = lineDotStyle.fillStyle;
 			} else {
