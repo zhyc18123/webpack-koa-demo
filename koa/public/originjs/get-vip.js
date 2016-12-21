@@ -10,6 +10,10 @@ var init=function(xinSwiper){
 		getAutoCode(xinSwiper);
 
 	});
+	//监听介绍页面的获取vip按钮
+	$("#get-vip-btn").on("click",function(){
+		xinSwiper.slideNext();
+	});
 };
 ///检查输入的手机号码
 var checkMobile=function(mobile){
@@ -98,10 +102,13 @@ var getVip=function(xinSwiper){
 				break;
 				case 11301:
 				alert("您已领取过体验卡");
+				break;
 				case 11302:
 				alert("体验卡已经被领取完了");
+				break;
 				case 10005 :
 				alert("短信验证码不合法");
+				break;
 				default:
 				break;
 			}

@@ -11,10 +11,10 @@
 	.text{
 		@extend %inline-block;
 		@extend %h-center;
-		width: 220px;
-		line-height: 150px;
-		height: 120px;
-		font-size: 15px;
+		width: 4.4rem;
+		line-height: 3rem;
+		height: 2.4rem;
+		font-size: .3rem;
 		position:relative;
 		background:url("/scss/img/vip-result-text.png") no-repeat;
 	}
@@ -23,18 +23,18 @@
 .vip-desc{
 	color:$whi-col;
 	font-size:$font-12;
-	line-height:20px;
+	line-height:.4rem;
 	em{
 		color: $yellow-col;
 	}
 }
 .vip-result-btn{
-	margin:20px 10px;
+	margin:.4rem .2rem;
 }
 .how-use{
 	background:$yellow-col;
-	padding: 20px 40px;
-	margin:50px 10px 0 10px;
+	padding: .4rem .8rem;
+	margin:1rem .2rem 0 .2rem;
 	.how-title{
 		span{
 			@extend %inline-block;
@@ -42,35 +42,35 @@
 			color: $yellow-col;
 			background:url("/scss/img/how-title.png") no-repeat;
 			background-size:contain;
-			height: 30px;
-			padding:10px;
+			height: .6rem;
+			padding:.2rem;
 		}
 	}
 	.how-div{
 		display: flex;
-		margin: 20px 0 20px 0;
+		margin: .4rem 0 .4rem 0;
 		.how-num{
-			width: 50px;
+			width: 1rem;
 			i{
 				@include cvlist-sprite(how-num);
 			}
 		}
 		.how-text{
 			flex: 1;
-			font-size: 12px;
+			font-size: $font-12;
 			text-align: left;
 			div{
-				padding-top: 7px;
+				padding-top: .14rem;
 			}
 			.where-down{
-				height: 45px;
-				border-bottom: 1px solid #ab8614;
+				height: .9rem;
+				border-bottom: $border solid #ab8614;
 			}
 			.how-down{
-				height: 110px;
-				border-bottom:1px solid #ab8614;
+				height: 2.2rem;
+				border-bottom:$border solid #ab8614;
 				.phone-p{
-					margin-top: 10px;
+					margin-top: .2rem;
 				}
 				span{
 					color: $red-col;

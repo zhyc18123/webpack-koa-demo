@@ -8,23 +8,23 @@
 }
 .other-funciton{
 	background: $whi-col;
-	padding: 0 10px;
-	margin-bottom:10px;
+	padding: 0 .2rem;
+	margin-bottom:.2rem;
 	.title-p{
-		font-size: 13px;
-		padding:10px 0;
+		font-size: $font-13;
+		padding:.2rem 0;
 	}
 	ul{
 		li{
-			border-top: 1px solid #f0f0f0;
-			padding:10px 0;
+			border-top: $border solid #f0f0f0;
+			padding:.2rem 0;
 			p{
 				font-size: $font-12;
 				color: $font-midcol;
-				margin-left: 30px;
+				margin-left: .6rem;
 			}
 			i{
-				margin: 0 5px;
+				margin: 0 .1rem;
 			}
 			.test-i{
 				@include cvlist-sprite(test-i);
@@ -40,9 +40,9 @@
 
 }
 .four-reason{
-	margin-bottom:10px;
+	margin-bottom:.2rem;
 	background: $whi-col;
-	padding-top:20px;
+	padding-top:.4rem;
 	// .reason-title{
 	// 	font-size: 17px;
 	// 	color: $yellow-col;
@@ -54,12 +54,12 @@
 }
 .get-intro{
 	background:#3e3a39;
-	padding:10px 10px;
+	padding:.2rem .2rem;
 	color:$whi-col;
-	font-size:13px;
-	line-height:20px;
+	font-size:$font-13;
+	line-height:.4rem;
 	p{
-		margin: 10px 0;
+		margin: .2rem 0;
 	}
 	em{
 		color: $yellow-col;
@@ -67,10 +67,15 @@
 }
 .get-vip{
 	@extend %inline-block;
-	height:50px;
+	height:1rem;
 	width:100%;
-	line-height:50px;
+	line-height:1rem;
 	color:$whi-col;
 	text-align:center;
 	background:$red-col;
+}
+.reason-img{
+	img{
+		width: 100%;
+	}
 }

@@ -2,40 +2,41 @@
 	background:url("/scss/img/vip-bg.png") no-repeat;
 	// background-size:contain;
 	text-align: center;
+	background-color:#454242;
 	.bird{
-		padding-top:20px;
+		padding-top:.4rem;
 		i{
 			@include cvlist-sprite(bird);
 		}
 	}
 	.vip-title{
-		font-size:18px;
+		font-size:$font-18;
 		color: $whi-col;
-		margin-top: 10px;
+		margin-top: .2rem;
 	}
 	.vip-div{
 		background:$whi-col;
-		border-radius:4px;
+		border-radius:$radius;
 		display:flex;
-		margin-bottom:15px;
-		line-height: 50px;
+		margin-bottom:.3rem;
+		line-height: 1rem;
 		input{
 			flex: 1;
-			font-size:13px;
-			height: 50px;
-			padding:0 10px;
+			font-size:$font-13;
+			height: 1rem;
+			padding:0 .2rem;
 		}
 		a{
-			width: 100px;
-			padding:0 15px;
+			width: 2rem;
+			padding:0 .3rem;
 			color: $red-col;
 		}
 	}
 	.vip-form{
-		padding:0 10px;
-		margin:30px 0;
+		padding:0 .2rem;
+		margin:.6rem 0;
 	}
 	.vip-btn{
-		padding:0 10px;
+		padding:0 .2rem;
 	}
 }

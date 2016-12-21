@@ -66,6 +66,7 @@ var setProvByName=function(provName){
 var initPage=function(){
 	var provName=queryString.getQueryString("prev_name")||"",
 		score=queryString.getQueryString("score"),
+		salesmanId=queryString.getQueryString("salesman_id"),
 		examNo=queryString.getQueryString("exam_no");
 	// 设置省份
 	if(provName){
@@ -95,6 +96,10 @@ var initPage=function(){
             //设置准考证号
             if(examNo){
             	$("#exam-no").val(examNo);
+            };
+            //设置销售人员id
+            if(salesmanId){
+            	$("#sales-man").val(salesmanId);
             };
 };
 var selectSchool=function(that){

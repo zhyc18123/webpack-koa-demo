@@ -17,10 +17,12 @@ function* getVip() {
     postdata.mobile = body.mobile;
     postdata.ip = body.ip||"";
     postdata.img_code = body.img_code||"";
+    postdata.agent_id = body.agent_id||"";
+    postdata.auth_code = body.auth_code;
     console.log("ddddddddddd",postdata)
     //请求存储接口
     var data = yield robot.req(robot.url.getVip, postdata);
-    console.log(data)
+    // console.log(data)
     var bodyData = JSON.parse(data.body);
     this.body = bodyData;
 };
