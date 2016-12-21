@@ -142,8 +142,8 @@ $yellowCol: #f9be00;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   i {
     position: relative;
-    top: 0.1rem;
     vertical-align: top;
+    @include font-size(4.2);
     //@include my-transform(0.8)
   }
   span {
@@ -152,24 +152,6 @@ $yellowCol: #f9be00;
     width: 87%;
   }
   @include font-size(2.8);
-}
-
-i.id-first {
-  @extend %inline-block;
-  @include cvlist-sprite(score-rank-one);
-  @include my-transform(1.2);
-}
-
-i.id-second {
-  @extend %inline-block;
-  @include cvlist-sprite(score-rank-two);
-  @include my-transform(1.2);
-}
-
-i.id-third {
-  @extend %inline-block;
-  @include cvlist-sprite(score-rank-three);
-  @include my-transform(1.2);
 }
 
 .gap-goal {
@@ -396,10 +378,9 @@ i.id-third {
   @include font-size(2.6);
   i {
     position: relative;
-    bottom: 2px;
-    @include my-transform(0.5);
-    @extend %inline-block;
-    @include cvlist-sprite(black-hexagon-icon);
+    color: #3e3a39;
+    vertical-align: middle;
+    @include font-size(2.4);
   }
   .title {
     margin-left: percentage(20/718);
@@ -523,9 +504,8 @@ i.id-third {
     position: absolute;
     top: 0.2rem;
     right: 0.25rem;
-    @include my-transform(1.1);
-    @extend %inline-block;
-    @include cvlist-sprite(close-modal-icon);
+    @include font-size(3.8);
+    color: #999999;
     z-index: 30;
   }
 }
