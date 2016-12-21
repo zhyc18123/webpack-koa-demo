@@ -76,10 +76,12 @@ var _init = (function () {
 			lineChartCanvas.width = lineChartCanvas.parentNode.clientWidth ;
 			lineChartCanvas.height = lineChartCanvas.parentNode.clientHeight*1.5;
 
+
 			var startX = 0;
 			var startY = 40;
 			var widthMargin = lineChartCanvas.width/4;
 			var labelWitth = widthMargin;
+			var labelHeight=75;
 			var coordData;
 			var lowestPercent = 1;
 			var offsetY;
@@ -97,7 +99,19 @@ var _init = (function () {
 				dotColor: "#eb614c",
 				lineColor: "#eda89d"
 			};
-			var lineChartFontStyle = "normal 32.3pt serif";
+			// alert(" the win.dpr " + window.dpr);
+			var lineChartFontStyle = getFont(lineChartCanvas,0.03);
+			var lineDotStyle = {};
+
+			if (window.dpr) {
+				startX = 20;
+			} else if(window.dpr == 2){
+				lineChartFontStyle = getFont(lineChartCanvas,0.04);
+			}else if(window.dpr === 3){
+				lineChartFontStyle = getFont(lineChartCanvas, 0.04);
+			}
+
+
 			setCoordinateReturn = drawCanvas.setCoordinate(schoolData.sch_min_score_list, startX, startY, widthMargin, 400, lowestPercent);
 			coordData = setCoordinateReturn[0];
 			lowestPercent = setCoordinateReturn[1];
@@ -105,9 +119,20 @@ var _init = (function () {
 			offsetY = lowestPercent < 0.01 ? 140 :
 				lowestPercent < 0.1 ? 130 : 50;
 
-			drawCanvas.drawCoordinate(context, coordData, yearColor,historyColor, currentColor, labelWitth, lineChartCanvas.width, lineChartCanvas.height,
-				40, offsetY, lineChartFontStyle);
-			drawCanvas.drawLabel(context, coordData, 75, 8, 20, lineChartCanvas.height, offsetY, labelWitth, lineChartCanvas.width, lineChartFontStyle);
+			if(window.dpr == 1) {
+				labelWitth = labelWitth/2;
+				lineChartCanvas.height = lineChartCanvas.height / 2;
+				startY = startY / 2;
+				offsetY = offsetY / 2;
+				labelHeight = labelHeight / 2;
+				lineDotStyle.lineWidth = 1;
+				lineDotStyle.dotRadius = 5;
+			}
+
+			drawCanvas.drawCoordinate(context, coordData, yearColor,historyColor, currentColor, labelWitth,
+				lineChartCanvas.width, lineChartCanvas.height, startY, offsetY, lineChartFontStyle, lineDotStyle);
+			drawCanvas.drawLabel(context, coordData, labelHeight, 8, 20, lineChartCanvas.height, offsetY, labelWitth,
+				lineChartCanvas.width, lineChartFontStyle);
 
 		}
 	};
@@ -217,8 +242,8 @@ var renderEjsTplWithData = function(tplId, htmlId, data) {
  * default size for font
  * @returns {string}
  */
-function getFont(ratio) {
-	var size = 640 * ratio;   // get font size based on current width
+function getFont(canvas, ratio) {
+	var size = canvas.width * ratio;  // get font size based on current width
 	return (size|0) + 'px sans-serif'; // set font
 }
 
@@ -254,7 +279,7 @@ var _renderAnalysisReportPage = function (reportData) {
 	// 		},
 	// 		{
 	// 			"year":"你的排名",//用户的排名
-	// 			"min_rank":3000//用户排名
+	// 			"min_rank":90000//用户排名
 	// 		}
 	// 	],
 	// 	"recommend_sch_list":[//推荐学校列表
@@ -313,29 +338,29 @@ var _renderAnalysisReportPage = function (reportData) {
 	var context = enrollCanvas.getContext('2d');
 	var enrollCanvasParentNodeWidth = enrollCanvas.parentNode.clientWidth;
 	enrollCanvas.width = enrollCanvasParentNodeWidth / 2 ;
-	var enrollCanvasFontDpr1=  getFont(0.04);
-	var enrollCanvasFontDpr2=  getFont(0.03);
-	var enrollCanvasFontDpr3=  getFont(0.02);
+	var enrollCanvasFontDpr1=  getFont(enrollCanvas, 0.2);
+	var enrollCanvasFontDpr2=  getFont(enrollCanvas, 0.1);
+	var enrollCanvasFontDpr3=  getFont(enrollCanvas, 0.06);
 
 	enrollCanvas.height = enrollCanvas.width/1.5;
 	var radius = enrollCanvas.width/4 ;
 	var centerX = enrollCanvas.width / 2;
 	var centerY = enrollCanvas.height / 2;
-	var circleLineWidthInner = 10;
-	var circleLineWidthOuter = 12;
-	if(window.dpr == 2){
-		circleLineWidthInner = 16;
-		circleLineWidthOuter = 18;
-		enrollCanvasFontDpr1=  getFont(0.1);
-		enrollCanvasFontDpr2=  getFont(0.05);
-		enrollCanvasFontDpr3=  getFont(0.04);
-	}else if(window.dpr == 3){
-		circleLineWidthInner = 24;
-		circleLineWidthOuter = 26;
-		enrollCanvasFontDpr1=  getFont(0.2);
-		enrollCanvasFontDpr2=  getFont(0.1);
-		enrollCanvasFontDpr3=  getFont(0.08);
+	var circleLineWidthInner = 4;
+	var circleLineWidthOuter = 6;
+
+	if (window.dpr ==1) {
+
 	}
+
+	if(window.dpr >= 2){
+		circleLineWidthInner = 10;
+		circleLineWidthOuter = 12;
+		enrollCanvasFontDpr1=  getFont(enrollCanvas,0.2);
+		enrollCanvasFontDpr2=  getFont(enrollCanvas,0.1);
+		enrollCanvasFontDpr3=  getFont(enrollCanvas,0.06);
+	}
+
 	drawCanvas.drawCircle(context, centerX, centerY, '#ffffff', '#e4e4e4', circleLineWidthInner, radius, 1);
 	drawCanvas.drawCircle(context, centerX, centerY, '#ffffff', '#f9be00', circleLineWidthOuter, radius, 0.4, 'round');
 	context.textBaseline = 'middle';
@@ -343,12 +368,12 @@ var _renderAnalysisReportPage = function (reportData) {
 
 	// 分是否设立了目标学校两种情况讨论
 	if (!reportData.exp_sch) {
-		drawCanvas.drawCircleText(context, enrollCanvasFontDpr3, '#b6b6b6', "未设立", centerX-2, centerY-12);
-		drawCanvas.drawCircleText(context, enrollCanvasFontDpr3, '#b6b6b6', '目标学校', centerX, centerY+18);
+		drawCanvas.drawCircleText(context, enrollCanvasFontDpr3, '#b6b6b6', "未设立", centerX, enrollCanvas.height*0.4);
+		drawCanvas.drawCircleText(context, enrollCanvasFontDpr3, '#b6b6b6', '目标学校', centerX, enrollCanvas.height*0.65);
 	} else {
-		drawCanvas.drawCircleText(context, enrollCanvasFontDpr1, '#f9be00', reportData.adm_ratio, centerX-15, centerY-15);
-		drawCanvas.drawCircleText(context, enrollCanvasFontDpr2, '#f9be00', '%', centerX+30, centerY-10);
-		drawCanvas.drawCircleText(context, enrollCanvasFontDpr3, '#b6b6b6', '录取概率', centerX, centerY+30);
+		drawCanvas.drawCircleText(context, enrollCanvasFontDpr1, '#f9be00', reportData.adm_ratio, enrollCanvas.width*0.46, enrollCanvas.height*0.45);
+		drawCanvas.drawCircleText(context, enrollCanvasFontDpr2, '#f9be00', '%', enrollCanvas.width*0.62, enrollCanvas.height*0.5);
+		drawCanvas.drawCircleText(context, enrollCanvasFontDpr3, '#b6b6b6', '录取概率', centerX, enrollCanvas.height*0.65);
 	}
 
 	// 与目标学校的距离 —— 建议
@@ -381,6 +406,7 @@ var _renderAnalysisReportPage = function (reportData) {
 		var startY = 40;
 		var widthMargin = lineChartCanvas.width/4;
 		var labelWitth = widthMargin;
+		var labelHeight=75;
 		var coordData;
 		var lowestPercent = 1;
 		var offsetY;
@@ -398,7 +424,19 @@ var _renderAnalysisReportPage = function (reportData) {
 			dotColor: "#eb614c",
 			lineColor: "#eda89d"
 		};
-		var lineChartFontStyle = "normal 32.3pt serif";
+		// alert(" the win.dpr " + window.dpr);
+		var lineChartFontStyle = getFont(lineChartCanvas,0.03);
+		var lineDotStyle = {};
+
+		if (window.dpr) {
+			startX = 20;
+		} else if(window.dpr == 2){
+			lineChartFontStyle = getFont(lineChartCanvas,0.04);
+		}else if(window.dpr === 3){
+			lineChartFontStyle = getFont(lineChartCanvas, 0.04);
+		}
+
+
 		setCoordinateReturn = drawCanvas.setCoordinate(reportData.sch_min_score_list, startX, startY, widthMargin, 400, lowestPercent);
 		coordData = setCoordinateReturn[0];
 		lowestPercent = setCoordinateReturn[1];
@@ -406,9 +444,19 @@ var _renderAnalysisReportPage = function (reportData) {
 		offsetY = lowestPercent < 0.01 ? 140 :
 			lowestPercent < 0.1 ? 130 : 50;
 
-		drawCanvas.drawCoordinate(context, coordData, yearColor,historyColor, currentColor, labelWitth, lineChartCanvas.width,
-			lineChartCanvas.height, 40, offsetY, lineChartFontStyle);
-		drawCanvas.drawLabel(context, coordData, 75, 8, 20, lineChartCanvas.height, offsetY, labelWitth,
+		if(window.dpr == 1) {
+			labelWitth = labelWitth/2;
+			lineChartCanvas.height = lineChartCanvas.height / 2;
+			startY = startY / 2;
+			offsetY = offsetY / 2;
+			labelHeight = labelHeight / 2;
+			lineDotStyle.lineWidth = 1;
+			lineDotStyle.dotRadius = 5;
+		}
+
+		drawCanvas.drawCoordinate(context, coordData, yearColor,historyColor, currentColor, labelWitth,
+			lineChartCanvas.width, lineChartCanvas.height, startY, offsetY, lineChartFontStyle, lineDotStyle);
+		drawCanvas.drawLabel(context, coordData, labelHeight, 8, 20, lineChartCanvas.height, offsetY, labelWitth,
 			lineChartCanvas.width, lineChartFontStyle, lineChartCanvasClosestWidth);
 
 	}
@@ -437,13 +485,36 @@ var _renderAnalysisReportPage = function (reportData) {
 		schoolNumNameStyle = {
 			"numStyle": "#ffffff",
 			"nameStyle": "#000000"
-		},
-		lineDotStyle = {
-			"strokeStyle": "#ccdbe1",
-			"fillStyle": "#ffffff"
 		};
 
-	drawCanvas.drawTrapezoid(context, width, height, reportData.goto_schs_list, trapezoidStyle, schoolNumNameStyle, lineDotStyle, "（考生数量）", 6, trapezoidParentNodeWidth);
+	var lineDotStyle = {
+		"strokeStyle": "#ccdbe1",
+		"fillStyle": "#ffffff"
+	};
+	var contextFontStyle, titleOffsetX;
+
+	if (window.dpr ==1) {
+		lineDotStyle.lineWidth = 1;
+		lineDotStyle.dotRadius = 2;
+	} else if (window.dpr==2){
+		lineDotStyle.lineWidth = 2;
+		lineDotStyle.dotRadius = 4;
+	} else if(window.dpr==3){
+		lineDotStyle.lineWidth = 3;
+		lineDotStyle.dotRadius = 6;
+	}
+
+	contextFontStyle = getFont(canvas, 0.04);
+	if (window.dpr == 3) { // 640 pixes phone
+		titleOffsetX = 20;
+	} else if (window.dpr == 2){
+		titleOffsetX = 10;
+	} else if(window.dpr ==1 ){
+		titleOffsetX = 0;
+	}
+
+	drawCanvas.drawTrapezoid(canvas, context, width, height, reportData.goto_schs_list, trapezoidStyle,
+		schoolNumNameStyle, lineDotStyle, contextFontStyle, titleOffsetX,"（考生数量）", 6);
 
 	// 其他 x 所推荐院校
 	renderEjsTplWithData("#recommend-school-link-tpl", "#recommend-school-link-wrap", reportData);
@@ -484,10 +555,10 @@ var swipeToAnalysisReportPage = function ( requestParam, xinSwiper ) {
 			xinSwiper.slideNext();
 		},
 		error:function() {
+			alert("服务器错误！");
 			_renderAnalysisReportPage ();
 			_init.initModule();
 			xinSwiper.slideNext();
-			// alert("服务器错误！")
 		}
 	});
 };
