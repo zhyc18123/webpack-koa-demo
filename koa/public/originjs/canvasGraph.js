@@ -1,7 +1,7 @@
+
 /**
- *
- * selected default width for canvas
- * default size for font
+ * 设置canvas字体样式
+ * @param ratio  canvas标注字体样式的比例
  * @returns {string}
  */
 function getFont(ratio) {
@@ -9,6 +9,18 @@ function getFont(ratio) {
 	return (size|0) + 'px sans-serif'; // set font
 }
 
+/**
+ * 用canvas画一个圆形
+ * @param ctx
+ * @param x 圆心x坐标
+ * @param y 圆形 y 坐标
+ * @param fillStyle 填充
+ * @param strokeStyle
+ * @param lineWidth
+ * @param radius
+ * @param angle
+ * @param lineCap
+ */
 function drawCircle(ctx, x, y,fillStyle, strokeStyle, lineWidth, radius, angle, lineCap) {
 	ctx.beginPath();
 	ctx.arc(x, y, radius, -0.5 * Math.PI, (angle * 2 - 0.5) * Math.PI, false);
@@ -29,13 +41,15 @@ function drawCircleText(ctx, font, fillStyle, content, x, y){
 }
 
 /**
- *  获取输入数据的坐标
- *  @param { [{},{}] } originData 排名 年份
- *  @param {Number} 第一个点的横坐标 偏移量
- *  @param {Number} 年份点纵坐标偏移量，年份虚线纵坐标偏移量再次基础上加上50
- *  @param {Number} 年份竖线之前的间距
- *  @param {Number} canvas的高度
- * */
+ *
+ * @param originData originData 排名 年份
+ * @param startX 第一个点的横坐标 偏移量
+ * @param startY 年份点纵坐标偏移量
+ * @param widthMargin 年份竖线之前的间距
+ * @param canvasHeight
+ * @param lowestPercent 最低省排名的最低比例，用于调整最低排名点坐标
+ * @returns {*[]}
+ */
 function setCoordinate(originData, startX, startY, widthMargin, canvasHeight, lowestPercent){
 
 	var coordData = [];
@@ -77,16 +91,22 @@ function setCoordinate(originData, startX, startY, widthMargin, canvasHeight, lo
 	}
 
 	return [coordData, lowestPercent];
-
 }
 
+
 /**
- *  画点线: 年份的竖线， 往年录取点线， 当前排名点线
- *  @param { Array } 点坐标
- *  @param {Object} 年份颜色
- *  @param {Object} 往年录取颜色
- *  @param {Object} 当前排名点线颜色值
- * */
+ * @param ctx
+ * @param coord  点坐标
+ * @param yearColor 年份颜色
+ * @param historyColor 往年录取颜色
+ * @param currentColor 当前排名点线颜色值
+ * @param labelWidth 每个label的宽度
+ * @param canvasWidth
+ * @param canvasHeight canvas的高度
+ * @param startY  Y轴点坐标的起始值
+ * @param offsetY Y轴点坐标的偏移量
+ * @param lineChartFontStyle 标注年份时的样式
+ */
 function drawCoordinate(ctx, coord, yearColor, historyColor, currentColor, labelWidth, canvasWidth, canvasHeight,
 						startY, offsetY, lineChartFontStyle){
 	var len = coord.length;
@@ -181,14 +201,21 @@ function drawCoordinate(ctx, coord, yearColor, historyColor, currentColor, label
 }
 
 /**
- * 标注:
  *
- *
- *
- *
- * */
-function drawLabel(ctx, coord, labelHeight, radius, startY,
-				   canvasHeight, offsetY, labelWidth, canvasWidth, lineChartFontStyle) {
+ * @param ctx canvas context上下文
+ * @param coord 数值对应的点坐标
+ * @param labelHeight 每个label的高度
+ * @param radius 标注的圆角大小
+ * @param startY  标注Y轴的起始值，与drawCoordinate方法startY参数对应
+ * @param canvasHeight  canvas的高度
+ * @param offsetY  标注Y轴的偏移量，与drawCoordinate方法offsetY参数对应
+ * @param labelWidth 每个label的宽度
+ * @param canvasWidth  canvas宽度 暂不使用
+ * @param lineChartFontStyle 标注标签时的字体样式
+ * @param lineChartCanvasClosestWidth  cavas祖父元素的宽度，用于调整label的宽度
+ */
+function drawLabel(ctx, coord, labelHeight, radius, startY, canvasHeight, offsetY, labelWidth,
+				   canvasWidth, lineChartFontStyle, lineChartCanvasClosestWidth) {
 
 	if (typeof radius === 'undefined') {
 		radius = 5;
@@ -248,8 +275,12 @@ function drawLabel(ctx, coord, labelHeight, radius, startY,
 
 		}
 
-		if (canvasWidth < 320) {
-			width -= 10;
+		if (lineChartCanvasClosestWidth) {
+			if (lineChartCanvasClosestWidth <= 640) {
+				width -= 40;
+			} else if (lineChartCanvasClosestWidth <= 750) {
+				width -= 30;
+			}
 		}
 
 		ctx.strokeStyle = "#3e3a39";
@@ -314,16 +345,26 @@ function drawLabel(ctx, coord, labelHeight, radius, startY,
 }
 
 /**
- * 梯形宽度计算方式
+ * 梯形宽度计算方式:
  * 第一个梯形宽度固定宽度为父元素宽度的 286/750，高度是宽度的 64/286
- *
  * 每个梯形需确定: 1.左上角坐标(x,y) 2.第一个梯形的高宽(width, height)
- *
  * 传参 第一个梯形的宽高 width，height
- *
  * */
-function drawTrapezoid(ctx, initWidth, initHeight, schoolList,
-					   trapezoidStyle, schoolNumNameStyle, lineDotStyle, title, trapezoidGap, trapezoidParentNodeWidth) {
+/**
+ *
+ * @param ctx
+ * @param initWidth
+ * @param initHeight
+ * @param schoolList
+ * @param trapezoidStyle
+ * @param schoolNumNameStyle
+ * @param lineDotStyle
+ * @param title
+ * @param trapezoidGap
+ * @param trapezoidParentNodeWidth
+ */
+function drawTrapezoid(ctx, initWidth, initHeight, schoolList, trapezoidStyle, schoolNumNameStyle,
+					   lineDotStyle, title, trapezoidGap, trapezoidParentNodeWidth) {
 	var lineFinal = 0;
 	var startX;
 	var startY;

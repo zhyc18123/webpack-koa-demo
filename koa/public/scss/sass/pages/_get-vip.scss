@@ -6,7 +6,11 @@
 	.bird{
 		padding-top:.4rem;
 		i{
-			@include cvlist-sprite(bird);
+			@extend %inline-block;
+			width: 1.4rem;
+			height: 1.4rem;
+			background:url("/scss/img/bird.png") no-repeat;
+			background-size:contain;
 		}
 	}
 	.vip-title{

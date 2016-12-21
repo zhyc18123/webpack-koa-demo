@@ -151,8 +151,8 @@ var guestSchool=function(that){
 	})
 };
 var selectSubject=function(that){
-	$(that).parent().find("span").removeClass("active");
-	$(that).addClass('active');
+	$(that).parent().find("span").removeClass("active").find('i').removeClass('icon-gou');
+	$(that).addClass('active').find("i").addClass('icon-gou');
 };
 var createProv=function(){
 	var provHtml="";

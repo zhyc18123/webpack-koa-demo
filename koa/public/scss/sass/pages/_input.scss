@@ -18,10 +18,13 @@ html{
 	position:relative;
 	.down-span{
 		padding:0 .2rem;
+		i{
+			font-size: $font-14;
+		}
 	}
 }
 .xin-input{
-	border:.02rem solid $bor-col;
+	border:$border solid $bor-col;
 	padding: .3rem;
 	border-radius: .08rem;
 	display: flex;
@@ -61,11 +64,17 @@ i.down{
 		padding: 0.3rem 0;
 		text-align:center;
 		border-radius: .08rem;
+		cursor: pointer;
+		i{
+			font-size: $font-14;
+			color: $red-col;
+			margin-right: .1rem;
+		}
 		&.active{
-			i{
-				@include cvlist-sprite(red-gou);
-				margin-right: .2rem;
-			}
+			// i{
+			// 	@include cvlist-sprite(red-gou);
+			// 	margin-right: .2rem;
+			// }
 			border-color: $red-col;
 			color: $red-col;
 		}
@@ -97,9 +106,16 @@ i.down{
 		margin-top: .3rem;
 		color: $font-midcol;
 		i{
-			@include cvlist-sprite(lingxin);
-			text-align:center;
-			margin-right: .2rem;
+			// @include cvlist-sprite(lingxin);
+			// text-align:center;
+			// margin-right: .2rem;
+			font-size: .48rem;
+			color: $yellow-col;
+		}
+		span{
+			position:relative;
+			left: -0.31rem;
+			top:0.02rem;
 		}
 	}
 	.what-title{
@@ -119,7 +135,7 @@ i.down{
 	border-radius:0 0 $radius $radius;
 	height:6rem;
 	overflow: scroll;
-
+	z-index: 100;
 	li{
 		padding:0 .3rem;
 		line-height: .7rem;
@@ -136,4 +152,8 @@ i.down{
 }
 .school-list{
 	height:auto;
+}
+.input-div-title{
+	color: $font-ligcol;
+	font-size:$font-12;
 }

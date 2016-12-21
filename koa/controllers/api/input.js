@@ -14,6 +14,7 @@ function* guestSchool() {
     var bodyData = JSON.parse(data.body);
     this.body = bodyData;
 };
+
 module.exports = {
 	guestSchool:guestSchool
 };

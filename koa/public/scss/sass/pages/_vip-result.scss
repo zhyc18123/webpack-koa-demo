@@ -17,6 +17,7 @@
 		font-size: .3rem;
 		position:relative;
 		background:url("/scss/img/vip-result-text.png") no-repeat;
+		background-size:contain;
 	}
 
 }
@@ -51,8 +52,13 @@
 		margin: .4rem 0 .4rem 0;
 		.how-num{
 			width: 1rem;
-			i{
-				@include cvlist-sprite(how-num);
+			position: relative;
+			div{
+				@extend %inline-block;
+				background:url("/scss/img/how-num.png") no-repeat;
+				background-size:contain;
+				height: 3.6rem;
+				width: 100%;
 			}
 		}
 		.how-text{

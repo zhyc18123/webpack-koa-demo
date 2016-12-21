@@ -1,11 +1,20 @@
 $yellowCol: #f9be00;
+#modal-black-masking{
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background-color: #000;
+  opacity: 0.6;
+  z-index: 5;
+}
 .analyse-report-wrap {
   position: relative;
   width: 100%;
   overflow: hidden;
   background: #f1f1f1;
 }
-
 .yellow-col {
   color: $yellowCol !important;
 }
@@ -148,16 +157,19 @@ $yellowCol: #f9be00;
 i.id-first {
   @extend %inline-block;
   @include cvlist-sprite(score-rank-one);
+  @include my-transform(1.2);
 }
 
 i.id-second {
   @extend %inline-block;
   @include cvlist-sprite(score-rank-two);
+  @include my-transform(1.2);
 }
 
 i.id-third {
   @extend %inline-block;
   @include cvlist-sprite(score-rank-three);
+  @include my-transform(1.2);
 }
 
 .gap-goal {
@@ -279,7 +291,7 @@ i.id-third {
 }
 
 .school-list-margin {
-  margin-top: percentage(44/750);
+  margin-top: percentage(10/750);
 }
 
 .school-list-last {
@@ -455,7 +467,7 @@ i.id-third {
     display: inline-block;
     vertical-align: middle;
     bottom: 1px;
-    height: 14px;
+    height: 0.2rem;
     width: 50%;
     margin-left: 3px;
     background: #f9be00;
@@ -464,7 +476,7 @@ i.id-third {
     position: absolute;
     background: white;
     right: 0;
-    height: 25px;
+    height: 0.4rem;
     vertical-align: bottom;
   }
 }
@@ -498,18 +510,23 @@ i.id-third {
 }
 
 .school-modal-close {
-  position: absolute;
-  top: percentage(20/718);
-  right: percentage(20/718);
+  position: relative;
+  width: 100%;
+  height: 0.5rem;
   i {
-    @include my-transform(0.5);
+    position: absolute;
+    top: 0.2rem;
+    right: 0.25rem;
+    @include my-transform(1.1);
     @extend %inline-block;
     @include cvlist-sprite(close-modal-icon);
+    z-index: 30;
   }
 }
 
 .school-label {
   margin-top: 4.53333%;
+  color: #999999;
   span {
     display: inline-block;
     padding: 4px 15px;

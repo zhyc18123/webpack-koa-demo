@@ -27,7 +27,9 @@ $(function(){
 					$(".swiper-slide").eq(0).css('height', $(window).height() + 'px');
 					$(".swiper-wrapper").css('height', $(window).height() + 'px');
 				};
-			}
+			},
+			noSwiping: true, // 禁止左右滑动
+			noSwipingClass : 'stop-swiping'
 		});
 		getVip.init(xinSwiper);
 		input.init(xinSwiper);

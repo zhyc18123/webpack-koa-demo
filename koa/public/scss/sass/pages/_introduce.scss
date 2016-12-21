@@ -25,16 +25,18 @@
 			}
 			i{
 				margin: 0 .1rem;
+				color: $yellow-col;
+				font-size: $font-14;
 			}
-			.test-i{
-				@include cvlist-sprite(test-i);
-			}
-			.intel-i{
-				@include cvlist-sprite(intel-i);
-			}
-			.big-i{
-				@include cvlist-sprite(big-i);
-			}
+			// .test-i{
+			// 	@include cvlist-sprite(test-i);
+			// }
+			// .intel-i{
+			// 	@include cvlist-sprite(intel-i);
+			// }
+			// .big-i{
+			// 	@include cvlist-sprite(big-i);
+			// }
 		}
 	}
 
