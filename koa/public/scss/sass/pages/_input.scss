@@ -1,10 +1,12 @@
 html{
 	font-size: .2rem;
+	background:#f1f1f1;
 }
 .wrap{
 	max-width:$m-width;
 	@extend %h-center;
 	font-size: $font-14;
+	background:$whi-col;
 
 }
 .input-div{
@@ -20,6 +22,8 @@ html{
 		padding:0 .2rem;
 		i{
 			font-size: $font-14;
+			cursor: pointer;
+			color: $font-ligcol;
 		}
 	}
 }
@@ -54,7 +58,7 @@ i.down{
 	// left: -6px;
 }
 .prov-input{
-	margin-top: 0.6rem !important;
+	margin-top: 0.1rem !important;
 }
 .subject-type{
 	display: flex;
@@ -141,6 +145,10 @@ i.down{
 		line-height: .7rem;
 		font-size: $font-14;
 		border-bottom: $border solid #f0f0f0;
+		cursor: pointer;
+		&:hover{
+			background:#ffe4e0;
+		}
 	}
 }
 .prov-input-active,.school-input-active{
@@ -154,6 +162,7 @@ i.down{
 	height:auto;
 }
 .input-div-title{
+	margin-top:.1rem;
 	color: $font-ligcol;
 	font-size:$font-12;
 }

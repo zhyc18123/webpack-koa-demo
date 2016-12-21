@@ -11,13 +11,13 @@ $(function(){
 			autoHeight:true,
 			onSlideChangeStart: function() {
 				var activeSlide=$(".swiper-slide").eq(xinSwiper.activeIndex);
-				console.log(activeSlide.height())
 				if(activeSlide.height()<$(window).height()){
 					activeSlide.css('height', $(window).height() + 'px');
 					$(".swiper-wrapper").css('height', $(window).height() + 'px');
 				}else{
 					$(".swiper-wrapper").css('height', activeSlide.height() + 'px');
 				};
+				window.scrollTo(0,0);
 			},
 			onInit: function(swiper){
 				console.log($(".swiper-slide").eq(0).height())

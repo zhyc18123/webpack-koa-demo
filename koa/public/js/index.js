@@ -58,13 +58,13 @@
 				autoHeight: true,
 				onSlideChangeStart: function onSlideChangeStart() {
 					var activeSlide = $(".swiper-slide").eq(xinSwiper.activeIndex);
-					console.log(activeSlide.height());
 					if (activeSlide.height() < $(window).height()) {
 						activeSlide.css('height', $(window).height() + 'px');
 						$(".swiper-wrapper").css('height', $(window).height() + 'px');
 					} else {
 						$(".swiper-wrapper").css('height', activeSlide.height() + 'px');
 					};
+					window.scrollTo(0, 0);
 				},
 				onInit: function onInit(swiper) {
 					console.log($(".swiper-slide").eq(0).height());
@@ -2357,13 +2357,40 @@
 		// 监听生成报告
 		$("#get-report").on("click", function () {
 			var provId = $("#prov-name").data("val"),
-			    score = $("#score").val();
+			    score = $("#score").val(),
+			    prevName = $("#prov-name").val(),
+			    schoolName = $("#school-input").val();
 			if (!provId) {
 				alert("请选择省份！");
 				return;
 			};
 			if (!score) {
 				alert("请输入你的联考成绩！");
+				return;
+			} else {
+				if (isNaN(score)) {
+					alert("分数必须为数字");
+					return;
+				};
+			};
+			if (prevName === "江苏") {
+				if (score < 0 || score > 480) {
+					alert("江苏的分数范围为0~480");
+					return;
+				};
+			} else if (prevName === "海南") {
+				if (score < 0 || score > 900) {
+					alert("海南的分数范围为0~900");
+					return;
+				};
+			} else {
+				if (score < 0 || score > 750) {
+					alert("请输入正确的分数！");
+					return;
+				};
+			};
+			if (schoolName.length > 40) {
+				alert("学校名长度不允许大于40字！");
 				return;
 			};
 			var examNum = $("#exam-no").val();
@@ -2433,8 +2460,11 @@
 			schHtml += '<li data-batch=' + item.bacth + ' data-val=' + item.sch_id + '>' + item.sch_name + '</li>';
 		});
 		$(".school-list").hide().html(schHtml).show();
+		$(".school-input").addClass("prov-input-active");
+
 		if (!schHtml) {
 			$(".school-list").hide();
+			$(".school-input").removeClass("prov-input-active");
 		};
 	};
 	var guestSchool = function guestSchool(that) {
@@ -2481,10 +2511,10 @@
 		$(".prov-list").html(provHtml);
 	};
 	var openProv = function openProv(that) {
-		$(that).addClass("js-close").removeClass("js-open").parent().addClass("prov-input-active").end().closest('.prov-input-list').find('.prov-list').show();
+		$(that).addClass("js-close").removeClass("js-open").find("i").removeClass('icon-down').addClass('icon-close').end().parent().addClass("prov-input-active").end().closest('.prov-input-list').find('.prov-list').show();
 	};
 	var closeProv = function closeProv(that) {
-		$(that).addClass("js-open").removeClass("js-close").parent().removeClass("prov-input-active").end().closest('.prov-input-list').find('.prov-list').hide();
+		$(that).addClass("js-open").removeClass("js-close").find("i").removeClass('icon-close').addClass('icon-down').end().parent().removeClass("prov-input-active").end().closest('.prov-input-list').find('.prov-list').hide();
 	};
 	var selectProv = function selectProv(that) {
 		$("#prov-name").data("val", $(that).data("val")).val($.trim($(that).text()));
