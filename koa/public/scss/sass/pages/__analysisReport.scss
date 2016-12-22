@@ -559,13 +559,18 @@ $yellowCol: #f9be00;
   color: #999999;
   span {
     display: inline-block;
-    padding: 4px 15px;
+    padding: 0px 15px;
     border: 1px solid #e0e0e0;
+    height: 0.6rem;
+    line-height: 0.6rem;
   }
 }
 
 .school-label-2 {
-  margin: 0 4px;
+  margin-right: 4px;
+}
+.school-label-3 {
+  margin-right: 4px;
 }
 
 @media (min-width: 320px) and (max-width: 374px) {
