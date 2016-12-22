@@ -5,7 +5,7 @@ var api = requireDir("../controllers/api");
 var view = requireDir("../controllers/view");
 
 // view
-router.get("/", view.index);
+router.get("/score/analyse", view.index);
 
 //api
 router.post("/get-auto-code", api.get_auto_code.getAutoCode);

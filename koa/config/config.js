@@ -1,7 +1,7 @@
 var env = process.argv.slice(2);
 if(env[0] === "release") {
     var debug = false;
-    var redisHost = "192.168.0.42";
+    var redisHost = "192.168.1.50";
     var redisPort = 36391;
 }else{
     var debug = true;

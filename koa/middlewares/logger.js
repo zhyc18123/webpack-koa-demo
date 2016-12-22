@@ -11,7 +11,7 @@ var $depth = 11;
 log4js.configure({
     appenders: [{
         type: "file",
-        filename: '/var/log/node/log.log',
+        filename: './log.log',
         maxLogSize: 1024 * 1024 * 1024,
         backups: 1,
         category: 'url',
