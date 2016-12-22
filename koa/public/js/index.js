@@ -1808,9 +1808,14 @@ var createSchoolList = function createSchoolList(list) {
 };
 var guestSchool = function guestSchool(that) {
 	var schString = $(that).val();
+	// var provId=$("#prov-name").data("val");
 	if (!schString) {
 		return;
 	};
+	// if(!provId){
+	// 	alert("请先选择省份！");
+	// 	return;
+	// };
 	var data = {
 		req_id: $("#exam-no").val() + Date.parse(new Date()),
 		search_key: schString,
@@ -3509,12 +3514,10 @@ $(function () {
 		};
 		///刷新显示相应页面
 		showPage("0", "#input");
-		history.go(+1);
+		// history.go(+1);
 		console.log(window.location);
 		if ('pushState' in history) {
-			if (window.location.hash !== "#input") {
-				history.pushState("01", "", window.location.pathname + window.location.search + "#input");
-			}
+			history.pushState("01", "", window.location.pathname + window.location.search + "#input");
 		};
 		///浏览器前进后退事件
 		window.onpopstate = function () {

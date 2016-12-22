@@ -170,13 +170,19 @@ var createSchoolList=function(list){
 };
 var guestSchool=function(that){
 	var schString=$(that).val();
+	// var provId=$("#prov-name").data("val");
 	if(!schString){
 		return;
 	};
+	// if(!provId){
+	// 	alert("请先选择省份！");
+	// 	return;
+	// };
 	var data={
 		req_id:$("#exam-no").val()+Date.parse(new Date()),
 		search_key:schString,
-		wenli:$(".subject-type .active").data("val")
+		wenli:$(".subject-type .active").data("val"),
+		// province_id:provId
 	};
 	$.ajax({
 		type: "post",
