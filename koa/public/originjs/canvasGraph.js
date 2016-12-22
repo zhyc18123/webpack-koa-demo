@@ -108,7 +108,7 @@ function setCoordinate(originData, startX, startY, widthMargin, canvasHeight, lo
  * @param lineChartFontStyle 标注年份时的样式
  */
 function drawCoordinate(ctx, coord, yearColor, historyColor, currentColor, labelWidth, canvasWidth, canvasHeight,
-						startY, offsetY, lineChartFontStyle, lineDotStyle){
+						startY, offsetY, lineChartFontStyle, lineDotStyle, dpr){
 	var len = coord.length;
 
 	// 过往年份 text、竖线、圆点
@@ -130,9 +130,11 @@ function drawCoordinate(ctx, coord, yearColor, historyColor, currentColor, label
 		ctx.font = lineChartFontStyle;
 		ctx.fillStyle = yearColor.dotColor;
 
-		if (window.dpr == 1) {
+		if (dpr && dpr == 1) {
 			ctx.fillText(year, x + labelWidth/2 - 10, startY);
-		} else {
+		} else if(dpr && dpr ==2) {
+			ctx.fillText(year, x + labelWidth/2 - 30, startY);
+		} else if(dpr && dpr ==3) {
 			ctx.fillText(year, x + labelWidth/2 - 50, startY);
 		}
 
@@ -142,7 +144,7 @@ function drawCoordinate(ctx, coord, yearColor, historyColor, currentColor, label
 		if (lineDotStyle) {
 			ctx.lineWidth = lineDotStyle.lineWidth;
 		}
-		ctx.strokeStyle = "#999999";
+		ctx.strokeStyle = "#dadada";
 		ctx.moveTo(x + labelWidth/2, lineStartY);
 		ctx.lineTo(x + labelWidth/2, canvasHeight);
 		ctx.stroke();
@@ -316,10 +318,10 @@ function drawLabel(ctx, coord, labelHeight, radius, startY, canvasHeight, offset
 
 		if(dpr && dpr == 1) {
 			width -= 120;
-			y -= 25;
+			y -= 20;
 		} else if(dpr && dpr == 2){
 			width -= 50;
-			y -= 58;
+			y -= 48;
 		} else {
 			y -= 75;
 		}
@@ -346,43 +348,27 @@ function drawLabel(ctx, coord, labelHeight, radius, startY, canvasHeight, offset
 		if(ranking){
 			ctx.font = lineChartFontStyle;
 			ctx.fillStyle = '#ffffff';
-			switch (rankingStr.length) {
-				case 1:
-				case 2:
-				case 3:
-					x += 35;
-					break;
-				case 4:
-				case 5:
-					x += 10;
-					break;
-				case 6:
-				case 7:
-					x += 10;
-					break;
-				default:
-					x += 10;
-					break;
-
-			}
+			var textWidth = ctx.measureText(ranking+"名").width;
+			alert(" textWidth " + textWidth);
 			if ( dpr && dpr == 1) {
-				ctx.fillText(ranking+"名", x,  y - labelHeight/8 );
+				ctx.fillText(ranking+"名", x+width/2 - textWidth/2,  y - labelHeight/4 );
 			} else if (dpr && dpr == 2) {
-				ctx.fillText(ranking+"名", x + 10,  y + labelHeight*0.2); //
+				ctx.fillText(ranking+"名", x+width/2 - textWidth/2,  y + labelHeight*0.2); //
 			} else if (dpr && dpr == 3) {
-				ctx.fillText(ranking+"名", x + 10,  y + labelHeight*0.4); //
+				ctx.fillText(ranking+"名", x+width/2 - textWidth/2,  y + labelHeight*0.4); //
 			}
 		}
 		if (i == len-1) {
 			ctx.font = lineChartFontStyle;
 			ctx.fillStyle = '#eb614c';
+			var textWidth = ctx.measureText("你的排名").width;
 			if ( dpr && dpr == 1) {
-				ctx.fillText("你的排名", x, y + labelHeight*1.5 );
+				ctx.fillText("你的排名", x+width/2 - textWidth/2, y + labelHeight*1.2 );
 			} else if (dpr && dpr == 2) {
-				ctx.fillText("你的排名", x+10, y + labelHeight*1.5);
+				ctx.fillText("你的排名", x+width/2 - textWidth/2, y + labelHeight*1.5);
 
 			} else if (dpr && dpr == 3) {
-				ctx.fillText("你的排名", x+10, y + labelHeight*1.5 );
+				ctx.fillText("你的排名", x+width/2 - textWidth/2, y + labelHeight*1.5 );
 			}
 		}
 	}

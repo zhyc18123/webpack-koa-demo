@@ -311,16 +311,23 @@ var _renderAnalysisReportPage = function (reportData) {
 	}
 
 	drawCanvas.drawCircle(context, centerX, centerY, '#ffffff', '#e4e4e4', circleLineWidthInner, radius, 1);
-	drawCanvas.drawCircle(context, centerX, centerY, '#ffffff', '#f9be00', circleLineWidthOuter, radius, 0.4, 'round');
+	if (reportData.exp_sch && reportData.adm_ratio!=null && reportData.adm_ratio>=0) {
+		drawCanvas.drawCircle(context, centerX, centerY, '#ffffff', '#f9be00', circleLineWidthOuter, radius, reportData.adm_ratio/100, 'round');
+	}
 	context.textBaseline = 'middle';
 	context.textAlign = "center";
 
-	// 分是否设立了目标学校两种情况讨论
-	if (reportData.exp_sch && reportData.adm_ratio>=0) {
+	// 分是否设立了目标学校,概率是否存在 三种情况讨论
+	if (reportData.exp_sch && reportData.adm_ratio!=null && reportData.adm_ratio>=0) {
+
+		alert("reportData.adm_ratio.length" + (""+reportData.adm_ratio).length);
 		drawCanvas.drawCircleText(context, enrollCanvasFontDpr1, '#f9be00', reportData.adm_ratio, enrollCanvas.width*0.46, enrollCanvas.height*0.45);
-		drawCanvas.drawCircleText(context, enrollCanvasFontDpr2, '#f9be00', '%', enrollCanvas.width*0.62, enrollCanvas.height*0.5);
+		drawCanvas.drawCircleText(context, enrollCanvasFontDpr2, '#f9be00', '%', (""+reportData.adm_ratio).length>1?enrollCanvas.width*0.62:enrollCanvas.width*0.58, enrollCanvas.height*0.5);
 		drawCanvas.drawCircleText(context, enrollCanvasFontDpr3, '#b6b6b6', '录取概率', centerX, enrollCanvas.height*0.65);
-	} else {
+	} else if(reportData.adm_ratio==null ){
+		drawCanvas.drawCircleText(context, enrollCanvasFontDpr3, '#b6b6b6', "暂无", centerX, enrollCanvas.height*0.48);
+		drawCanvas.drawCircleText(context, enrollCanvasFontDpr3, '#b6b6b6', '录取概率', centerX, enrollCanvas.height*0.6);
+	}else {
 		drawCanvas.drawCircleText(context, enrollCanvasFontDpr3, '#b6b6b6', "未设立", centerX, enrollCanvas.height*0.48);
 		drawCanvas.drawCircleText(context, enrollCanvasFontDpr3, '#b6b6b6', '目标学校', centerX, enrollCanvas.height*0.6);
 	}
@@ -353,7 +360,7 @@ var _renderAnalysisReportPage = function (reportData) {
 		var startY = 40;
 		var widthMargin = lineChartCanvas.width/4;
 		var labelWidth = widthMargin;
-		var labelHeight=75;
+		var labelHeight = 65;
 		var coordData;
 		var lowestPercent = 1;
 		var offsetY;
@@ -361,7 +368,7 @@ var _renderAnalysisReportPage = function (reportData) {
 
 		var yearColor = {
 			dotColor: "#999999",
-			lineColor:　"#999999"
+			lineColor:　"#dadada"
 		};
 		var historyColor = {
 			dotColor: "#f9be00",
@@ -387,8 +394,18 @@ var _renderAnalysisReportPage = function (reportData) {
 			labelHeight = 100;
 		}
 
+		var schMinScoreList = [];
+		var schoolDataListLen = reportData.sch_min_score_list.length;
+		if(schoolDataListLen >=5){
+			for(var i = 0; i <= 3; i++){
+				schMinScoreList.push(reportData.sch_min_score_list[schoolDataListLen-4+i]); //
+			}
+		}else {
+			schMinScoreList = reportData.sch_min_score_list;
+		}
 
-		setCoordinateReturn = drawCanvas.setCoordinate(reportData.sch_min_score_list, startX, startY, widthMargin, 400, lowestPercent);
+
+		setCoordinateReturn = drawCanvas.setCoordinate(schMinScoreList, startX, startY, widthMargin, 400, lowestPercent);
 		coordData = setCoordinateReturn[0];
 		lowestPercent = setCoordinateReturn[1];
 
@@ -406,7 +423,9 @@ var _renderAnalysisReportPage = function (reportData) {
 		}
 
 		drawCanvas.drawCoordinate(context, coordData, yearColor,historyColor, currentColor, labelWidth,
-			lineChartCanvas.width, lineChartCanvas.height, startY, offsetY, lineChartFontStyle, lineDotStyle);
+			lineChartCanvas.width, lineChartCanvas.height, startY, offsetY, lineChartFontStyle, lineDotStyle, window.dpr);
+
+		
 		drawCanvas.drawLabel(context, coordData, labelHeight, 8, 20, lineChartCanvas.height, offsetY,
 			labelWidth, lineChartFontStyle, window.dpr, lineChartCanvasClosestWidth);
 
@@ -420,7 +439,7 @@ var _renderAnalysisReportPage = function (reportData) {
 
 
 	// 录取人数最多的五个院校
-	if(reportData.recommend_sch_list.length > 0){
+	if(reportData.goto_schs_list.length > 0){
 		renderEjsTplWithData("#top-five-enroll-school-tpl", "#top-five-enroll-school-wrap", reportData);
 		var canvas = document.getElementById('trapezoid-canvas');
 		var trapezoidParentNodeWidth = canvas.parentNode.clientWidth;
