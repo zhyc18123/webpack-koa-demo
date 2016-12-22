@@ -34,7 +34,7 @@ var getHostIpAddress = function() {
 var config = {
     "name": "新东方",
     hosts: getHostIpAddress() || "0.0.0.0",
-    port:8090, // 端口
+    port:3005, // 端口
     numCPUs: numCPUs,
     debug: debug,
     "cookieKey": "sf8dsfasd8sd7fsda8a123bbrc23ch41", //cookie 签名
@@ -45,7 +45,7 @@ var config = {
     "staticDir": path.join(__dirname, "..", "/public/"), // 静态文件所在的目录
     "faviconDir": path.join(__dirname, "..", "/public/favicon.ico"), // logo icon 所在目录
     "interfaceStatus": "online", // 接口状态
-    "localIp": "http://192.168.1.83:28086",
+    "localIp": "http://192.168.1.81:28086",
     "xinSearchIp": "http://192.168.1.83:9999",
     "res": {
         "title": "新东方",
