@@ -426,7 +426,7 @@ var _renderAnalysisReportPage = function (reportData) {
 		drawCanvas.drawCoordinate(context, coordData, yearColor,historyColor, currentColor, labelWidth,
 			lineChartCanvas.width, lineChartCanvas.height, startY, offsetY, lineChartFontStyle, lineDotStyle, window.dpr);
 
-		
+
 		drawCanvas.drawLabel(context, coordData, labelHeight, 8, 20, lineChartCanvas.height, offsetY,
 			labelWidth, lineChartFontStyle, window.dpr, lineChartCanvasClosestWidth);
 
