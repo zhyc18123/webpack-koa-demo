@@ -129,14 +129,8 @@ function drawCoordinate(ctx, coord, yearColor, historyColor, currentColor, label
 
 		ctx.font = lineChartFontStyle;
 		ctx.fillStyle = yearColor.dotColor;
-
-		if (dpr && dpr == 1) {
-			ctx.fillText(year, x + labelWidth/2 - 10, startY);
-		} else if(dpr && dpr ==2) {
-			ctx.fillText(year, x + labelWidth/2 - 30, startY);
-		} else if(dpr && dpr ==3) {
-			ctx.fillText(year, x + labelWidth/2 - 50, startY);
-		}
+		var yearTextWidth = ctx.measureText(year).width;
+		ctx.fillText(year, x + labelWidth/2 - yearTextWidth/2, startY);
 
 		ctx.setLineDash([8,4]);
 		ctx.beginPath();
@@ -195,20 +189,17 @@ function drawCoordinate(ctx, coord, yearColor, historyColor, currentColor, label
 	ctx.strokeStyle = historyColor.lineColor;
 	ctx.setLineDash([1,0]);
 
-
 	if ( coord[0] ) {
 		x = parseFloat(coord[0].x);
 		y = parseFloat(coord[0].y);
 		linePercent = parseFloat(coord[0].heightPercent);
 		ctx.moveTo(x+labelWidth/2, lineStartY + lineHeight*linePercent);
 	}
-
 	if ( coord[1] ) {
 		x = parseFloat(coord[1].x);
 		y = parseFloat(coord[1].y);
 		linePercent = parseFloat(coord[1].heightPercent);
 		ctx.lineTo(x+labelWidth/2, lineStartY + lineHeight*linePercent);
-
 		if(3 == coordLen ){
 			ctx.stroke();
 		}
@@ -349,7 +340,6 @@ function drawLabel(ctx, coord, labelHeight, radius, startY, canvasHeight, offset
 			ctx.font = lineChartFontStyle;
 			ctx.fillStyle = '#ffffff';
 			var textWidth = ctx.measureText(ranking+"名").width;
-			alert(" textWidth " + textWidth);
 			if ( dpr && dpr == 1) {
 				ctx.fillText(ranking+"名", x+width/2 - textWidth/2,  y - labelHeight/4 );
 			} else if (dpr && dpr == 2) {
@@ -366,7 +356,6 @@ function drawLabel(ctx, coord, labelHeight, radius, startY, canvasHeight, offset
 				ctx.fillText("你的排名", x+width/2 - textWidth/2, y + labelHeight*1.2 );
 			} else if (dpr && dpr == 2) {
 				ctx.fillText("你的排名", x+width/2 - textWidth/2, y + labelHeight*1.5);
-
 			} else if (dpr && dpr == 3) {
 				ctx.fillText("你的排名", x+width/2 - textWidth/2, y + labelHeight*1.5 );
 			}
