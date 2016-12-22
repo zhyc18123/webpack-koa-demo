@@ -321,7 +321,6 @@ var _renderAnalysisReportPage = function (reportData) {
 	// 分是否设立了目标学校,概率是否存在 三种情况讨论
 	if (reportData.exp_sch && reportData.adm_ratio!=null && reportData.adm_ratio>=0) {
 
-		alert("reportData.adm_ratio.length" + (""+reportData.adm_ratio).length);
 		drawCanvas.drawCircleText(context, enrollCanvasFontDpr1, '#f9be00', reportData.adm_ratio, enrollCanvas.width*0.46, enrollCanvas.height*0.45);
 		drawCanvas.drawCircleText(context, enrollCanvasFontDpr2, '#f9be00', '%', (""+reportData.adm_ratio).length>1?enrollCanvas.width*0.62:enrollCanvas.width*0.58, enrollCanvas.height*0.5);
 		drawCanvas.drawCircleText(context, enrollCanvasFontDpr3, '#b6b6b6', '录取概率', centerX, enrollCanvas.height*0.65);
@@ -336,12 +335,11 @@ var _renderAnalysisReportPage = function (reportData) {
 	// 与目标学校的距离 —— 建议
 	renderEjsTplWithData("#gap-suggest-tpl", "#gap-suggest-wrap", reportData);
 
-	// canvas 折线图 —— 往年该校录取最低省排名(如果设置了目标院校)
 	/**
+	 * canvas 折线图 —— 往年该校录取最低省排名(如果设置了目标院校)
 	 *  width: 100%;
 	 *  max-width: 600px;
 	 *  height: 500px;
-	 *
 	 **/
 
 	if (reportData.exp_sch && reportData.sch_min_score_list.length>1) {
@@ -426,7 +424,8 @@ var _renderAnalysisReportPage = function (reportData) {
 		drawCanvas.drawCoordinate(context, coordData, yearColor,historyColor, currentColor, labelWidth,
 			lineChartCanvas.width, lineChartCanvas.height, startY, offsetY, lineChartFontStyle, lineDotStyle, window.dpr);
 
-
+		context.font = lineChartFontStyle;
+		context.fillStyle = '#eb614c';
 		drawCanvas.drawLabel(context, coordData, labelHeight, 8, 20, lineChartCanvas.height, offsetY,
 			labelWidth, lineChartFontStyle, window.dpr, lineChartCanvasClosestWidth);
 

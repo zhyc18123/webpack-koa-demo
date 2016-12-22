@@ -371,7 +371,6 @@ var _renderAnalysisReportPage = function _renderAnalysisReportPage(reportData) {
 	// 分是否设立了目标学校,概率是否存在 三种情况讨论
 	if (reportData.exp_sch && reportData.adm_ratio != null && reportData.adm_ratio >= 0) {
 
-		alert("reportData.adm_ratio.length" + ("" + reportData.adm_ratio).length);
 		_canvasGraph2.default.drawCircleText(context, enrollCanvasFontDpr1, '#f9be00', reportData.adm_ratio, enrollCanvas.width * 0.46, enrollCanvas.height * 0.45);
 		_canvasGraph2.default.drawCircleText(context, enrollCanvasFontDpr2, '#f9be00', '%', ("" + reportData.adm_ratio).length > 1 ? enrollCanvas.width * 0.62 : enrollCanvas.width * 0.58, enrollCanvas.height * 0.5);
 		_canvasGraph2.default.drawCircleText(context, enrollCanvasFontDpr3, '#b6b6b6', '录取概率', centerX, enrollCanvas.height * 0.65);
@@ -386,12 +385,11 @@ var _renderAnalysisReportPage = function _renderAnalysisReportPage(reportData) {
 	// 与目标学校的距离 —— 建议
 	renderEjsTplWithData("#gap-suggest-tpl", "#gap-suggest-wrap", reportData);
 
-	// canvas 折线图 —— 往年该校录取最低省排名(如果设置了目标院校)
 	/**
+  * canvas 折线图 —— 往年该校录取最低省排名(如果设置了目标院校)
   *  width: 100%;
   *  max-width: 600px;
   *  height: 500px;
-  *
   **/
 
 	if (reportData.exp_sch && reportData.sch_min_score_list.length > 1) {
@@ -473,6 +471,8 @@ var _renderAnalysisReportPage = function _renderAnalysisReportPage(reportData) {
 
 		_canvasGraph2.default.drawCoordinate(context, coordData, yearColor, historyColor, currentColor, labelWidth, lineChartCanvas.width, lineChartCanvas.height, startY, offsetY, lineChartFontStyle, lineDotStyle, window.dpr);
 
+		context.font = lineChartFontStyle;
+		context.fillStyle = '#eb614c';
 		_canvasGraph2.default.drawLabel(context, coordData, labelHeight, 8, 20, lineChartCanvas.height, offsetY, labelWidth, lineChartFontStyle, window.dpr, lineChartCanvasClosestWidth);
 	} else {
 		$("#line-chart-wmzy-pro-intro").addClass("hide");
@@ -2775,14 +2775,8 @@ function drawCoordinate(ctx, coord, yearColor, historyColor, currentColor, label
 
 		ctx.font = lineChartFontStyle;
 		ctx.fillStyle = yearColor.dotColor;
-
-		if (dpr && dpr == 1) {
-			ctx.fillText(year, x + labelWidth / 2 - 10, startY);
-		} else if (dpr && dpr == 2) {
-			ctx.fillText(year, x + labelWidth / 2 - 30, startY);
-		} else if (dpr && dpr == 3) {
-			ctx.fillText(year, x + labelWidth / 2 - 50, startY);
-		}
+		var yearTextWidth = ctx.measureText(year).width;
+		ctx.fillText(year, x + labelWidth / 2 - yearTextWidth / 2, startY);
 
 		ctx.setLineDash([8, 4]);
 		ctx.beginPath();
@@ -2846,13 +2840,11 @@ function drawCoordinate(ctx, coord, yearColor, historyColor, currentColor, label
 		linePercent = parseFloat(coord[0].heightPercent);
 		ctx.moveTo(x + labelWidth / 2, lineStartY + lineHeight * linePercent);
 	}
-
 	if (coord[1]) {
 		x = parseFloat(coord[1].x);
 		y = parseFloat(coord[1].y);
 		linePercent = parseFloat(coord[1].heightPercent);
 		ctx.lineTo(x + labelWidth / 2, lineStartY + lineHeight * linePercent);
-
 		if (3 == coordLen) {
 			ctx.stroke();
 		}
@@ -2989,7 +2981,6 @@ function drawLabel(ctx, coord, labelHeight, radius, startY, canvasHeight, offset
 			ctx.font = lineChartFontStyle;
 			ctx.fillStyle = '#ffffff';
 			var textWidth = ctx.measureText(ranking + "名").width;
-			alert(" textWidth " + textWidth);
 			if (dpr && dpr == 1) {
 				ctx.fillText(ranking + "名", x + width / 2 - textWidth / 2, y - labelHeight / 4);
 			} else if (dpr && dpr == 2) {
