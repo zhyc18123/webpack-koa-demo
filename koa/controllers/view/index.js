@@ -6,8 +6,6 @@ module.exports = function*() {
 	try{
 		yield this.render("/index",robot.utils.mixin(config.res, data));
 	}catch(err){
-		console.log(err)
+		throw err;
 	}
-
-	
 };

@@ -9,6 +9,9 @@ $yellowCol: #f9be00;
   opacity: 0.6;
   z-index: 5;
 }
+.clear-margin-left{
+  margin-left:0!important;
+}
 .analyse-report-wrap {
   position: relative;
   width: 100%;
@@ -174,7 +177,7 @@ $yellowCol: #f9be00;
   linear-gradient(225deg, transparent 0px, #3e3a39 0) top right,
   linear-gradient(-45deg, transparent 0.15rem, #3e3a39 0) bottom right,
   linear-gradient(45deg, transparent 0px, #3e3a39 0) bottom left;
-  background-size: 50% 50%;
+  background-size: 60% 55%;
   background-repeat: no-repeat;
   text-align: center;
   span {
@@ -199,7 +202,11 @@ $yellowCol: #f9be00;
   text-align: left;
   padding: 0 percentage(40/750);
   margin-bottom: percentage(30/750);
+  color: #666666;
   @include font-size(3.0)
+}
+.gap-sugest-center{
+  text-align: center!important;
 }
 
 .line-chart-wrap {

@@ -174,7 +174,7 @@ var _init = (function () {
 			},
 			error:function() {
 				alert("服务器错误！");
-				_renderSchoolItemDetail();
+				// _renderSchoolItemDetail();
 			}
 		});
 	};
@@ -311,7 +311,7 @@ var _renderAnalysisReportPage = function (reportData) {
 	 **/
 
 	// reportData.sch_min_score_list = 0;
-	if (reportData.sch_min_score_list) {
+	if (reportData.exp_sch && reportData.sch_min_score_list.length>1) {
 
 		renderEjsTplWithData("#line-chart-wmzy-link-tpl", "#line-chart-wmzy-link-wrap", reportData);
 
@@ -382,34 +382,32 @@ var _renderAnalysisReportPage = function (reportData) {
 		drawCanvas.drawLabel(context, coordData, labelHeight, 8, 20, lineChartCanvas.height, offsetY, labelWitth,
 			lineChartCanvas.width, lineChartFontStyle, lineChartCanvasClosestWidth);
 
+	}else{
+		$("#line-chart-wmzy-pro-intro").addClass("hide");
 	}
 
 
 	// 推荐学校列表
 	renderEjsTplWithData("#school-list-item-tpl", "#school-list-item-wrap", reportData);
+	if(reportData.recommend_sch_num<=0){
+		$("#recommend-school-link-wrap").addClass("hide");
+	}
 
 
 	// 录取人数最多的五个院校
 	var canvas = document.getElementById('trapezoid-canvas');
 	var trapezoidParentNodeWidth = canvas.parentNode.clientWidth;
-
 	var trapezoidCount = reportData.goto_schs_list.length;
 	canvas.width = trapezoidParentNodeWidth - 60;
-
 	var context = canvas.getContext('2d');
 	var width = canvas.width * (360 / 750);
-
 	canvas.height = (canvas.width/2) * (64 / 286) * trapezoidCount + 10 * trapezoidCount + 55; // 286/750 为梯形宽度占比，64/286为高度占比， 50为每个梯形的间隙， 20为标题高度
-
 	var height = width * (64 / 286);
-
-
 	var trapezoidStyle = ["#f9be00", "#fac724", "#fbd149", "#fcda6d", "#fce392"],
 		schoolNumNameStyle = {
 			"numStyle": "#ffffff",
 			"nameStyle": "#000000"
 		};
-
 	var lineDotStyle = {
 		"strokeStyle": "#ccdbe1",
 		"fillStyle": "#ffffff"
@@ -438,6 +436,7 @@ var _renderAnalysisReportPage = function (reportData) {
 
 	drawCanvas.drawTrapezoid(canvas, context, width, height, reportData.goto_schs_list, trapezoidStyle,
 		schoolNumNameStyle, lineDotStyle, contextFontStyle, titleOffsetX,"（考生数量）", 6);
+
 
 	// 其他 x 所推荐院校
 	renderEjsTplWithData("#recommend-school-link-tpl", "#recommend-school-link-wrap", reportData);
@@ -481,9 +480,86 @@ var swipeToAnalysisReportPage = function ( requestParam, xinSwiper ) {
 		},
 		error:function() {
 			alert("服务器错误！");
-			_renderAnalysisReportPage ();
-			_init.initModule();
-			xinSwiper.slideNext();
+			// var testData = {
+			// 	"code":0,//状态码,0-成功，-1-失败
+			// 	"score":600,//分数
+			// 	"rank":4000,//排名
+			// 	"rank_gap":1000,//排名差距
+			// 	"exp_sch":null,//目标学校
+			// 	"diploma_id":7,//学历 5-本科，7-专科
+			// 	"score_gap":30,//与目标学校分差值
+			// 	"adm_ratio":40,//录取概率
+			// 	"recommend_sch":"北京大学",//推荐学校
+			// 	"recommend_sch_num":0,//推荐学校数量
+			// 	"batch":1,//批次编号
+			// 	"batch_name":"本科",//推荐学校的批次名称
+			// 	"choosed_sch":"四川大学",//相近分数的人中去向最多的学校
+			// 	"stu_count":1300,//学生人数
+			// 	"sch_min_score_list":[
+			// 		{
+			// 			"year":"2013",//年份
+			// 			"min_rank":2600//当年最低省排名
+			// 		},
+			// 		{
+			// 			"year":"2014",//年份
+			// 			"min_rank":2700//当年最低省排名
+			// 		},
+			// 		{
+			// 			"year":"2015",//年份
+			// 			"min_rank":2500//当年最低省排名
+			// 		},
+			// 		{
+			// 			"year":"你的排名",//用户的排名
+			// 			"min_rank":3000//用户排名
+			// 		}
+			// 	],
+			// 	"recommend_sch_list":[//推荐学校列表
+			// 		{
+			// 			"sch_id":"52ac2e98747aec013fcf4c46",//学校id
+			// 			"icon_url":"http://school-icon.b0.upaiyun.com/52ac2e98747aec013fcf4c1d.jpg",//学校图标识
+			// 			"sch_name":"北京大学",//学校名称
+			// 			"location":"北京",//所在省份
+			// 			"totalRank":null,//综合排名
+			// 			"adm_ratio":89//录取概率
+			// 		},
+			// 		{
+			// 			"sch_id":"52ac2e98747aec013fcf4c46",//学校id
+			// 			"icon_url":"http://school-icon.b0.upaiyun.com/52ac2e98747aec013fcf4c1d.jpg",
+			// 			"sch_name":"北京大学",//学校名称
+			// 			"location":"北京",//所在省份
+			// 			"totalRank":1,//综合排名
+			// 			"adm_ratio":89//录取概率
+			// 		}
+			// 	],
+			// 	"goto_schs_list":[
+			// 		{
+			// 			"sch_name":"四川大学",
+			// 			"stu_count":1160
+			// 		},
+			// 		{
+			// 			"sch_name":"电子科技大学",
+			// 			"stu_count":720
+			// 		}
+			// 	],
+			// 	"goto_majors_list":[
+			// 		{
+			// 			"major_name":"临床医学",
+			// 			"primary_name":"医学",
+			// 			"stu_count":124
+			// 		},
+			// 		{
+			// 			"major_name":"自动化",
+			// 			"primary_name":"工学",
+			// 			"stu_count":124
+			// 		}
+			// 	]
+            //
+			// };
+			// testData["loc_provinc_name"] = prov.getProvinceName(paramData.provinceId);
+			// testData["loc_wenli"] = REQUESTPARAM.wenli == 1 ? "理科" : "文科";
+			// _renderAnalysisReportPage(testData);
+			// _init.initModule();
+			// xinSwiper.slideNext();
 		}
 	});
 };
