@@ -1,4 +1,5 @@
 
+import chgUrl from "./change-url";
 require("./utils/swiper/swiper-3.3.1.jquery.min");
 require('./analysis-report');
 var getVip=require("./get-vip");
@@ -34,6 +35,53 @@ $(function(){
 		getVip.init(xinSwiper);
 		input.init(xinSwiper);
 		analysisReport.swipeToWmzyIntroPage(xinSwiper);
+
+		var showPage = function(speed,pageInit) {
+			var page;
+			if(pageInit){
+				page=pageInit;
+			}else{
+				page = window.location.hash;
+			};
+			if (speed === "0") {
+				speed = 0;
+			};
+			switch (page) {
+				case "#input":
+					xinSwiper.slideTo(0, speed);
+					break;
+				case "#analyse-result":
+					xinSwiper.slideTo(1, speed);
+					break;
+				case "#introduce":
+					xinSwiper.slideTo(2, speed);
+					break;
+				case "#get-vip":
+					xinSwiper.slideTo(3, speed);
+					break;
+				case "#vip-result":
+					xinSwiper.slideTo(4, speed);
+					break;
+				default :
+					xinSwiper.slideTo(0, speed);
+					break;
+
+			};
+		};
+		///刷新显示相应页面
+		showPage("0","#input");
+		history.go(+1);
+		console.log(window.location)
+		if ('pushState' in history) {
+			if(window.location.hash!=="#input"){
+			history.pushState("01", "", window.location.pathname+window.location.search+"#input");
+			}
+		};
+		///浏览器前进后退事件
+		window.onpopstate = function() {
+			showPage();
+		};
+
 	};
 	init();
 });

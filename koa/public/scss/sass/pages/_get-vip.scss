@@ -1,6 +1,6 @@
 .get-vip-div{
 	background:url("/scss/img/vip-bg.png") no-repeat;
-	// background-size:contain;
+	background-size:cover;
 	text-align: center;
 	background-color:#454242;
 	.bird{
@@ -31,8 +31,8 @@
 			padding:0 .2rem;
 		}
 		a{
-			width: 3rem;
-			padding:0 .3rem;
+			width: 2.6rem;
+			padding:0 .1rem 0 .3rem;
 			color: $red-col;
 		}
 	}

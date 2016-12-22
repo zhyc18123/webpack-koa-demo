@@ -1,4 +1,5 @@
 import url from"./url";
+import chgUrl from "./change-url";
 var init=function(xinSwiper){
 	// 监听获取vip体验卡按钮
 	$("#vip-btn").on("click",function(){
@@ -13,6 +14,7 @@ var init=function(xinSwiper){
 	//监听介绍页面的获取vip按钮
 	$("#get-vip-btn").on("click",function(){
 		xinSwiper.slideNext();
+		chgUrl.changeUrl("04","","#get-vip");
 	});
 	$(document).scroll(function(){
 		if(xinSwiper.activeIndex===2){
@@ -105,6 +107,7 @@ var getVip=function(xinSwiper){
 				case 0:
 				$(".result-text .text").text("领取成功！");
 				xinSwiper.slideNext();
+				chgUrl.changeUrl("05","","#vip-result");
 				break;
 				case 11301:
 				alert("您已领取过体验卡");

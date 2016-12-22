@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 9);
+/******/ 	return __webpack_require__(__webpack_require__.s = 10);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -73,21 +73,25 @@
 "use strict";
 "use strict";
 
-var _url = __webpack_require__(1);
+var _url = __webpack_require__(2);
 
 var _url2 = _interopRequireDefault(_url);
 
-var _canvasGraph = __webpack_require__(6);
+var _canvasGraph = __webpack_require__(7);
 
 var _canvasGraph2 = _interopRequireDefault(_canvasGraph);
 
-var _loc = __webpack_require__(2);
+var _loc = __webpack_require__(3);
 
 var _loc2 = _interopRequireDefault(_loc);
 
+var _changeUrl = __webpack_require__(1);
+
+var _changeUrl2 = _interopRequireDefault(_changeUrl);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var Tpl = __webpack_require__(8);
+var Tpl = __webpack_require__(9);
 
 var REQUESTPARAM = {};
 
@@ -559,10 +563,11 @@ var swipeToAnalysisReportPage = function swipeToAnalysisReportPage(requestParam,
 		success: function success(data) {
 			console.log("data " + JSON.stringify(data, null, 4));
 			REQUESTPARAM.loc_provinc_name = data.loc_provinc_name = _loc2.default.getProvinceName(paramData.provinceId);
-			REQUESTPARAM.loc_wenli = data.loc_wenli = REQUESTPARAM.wenli == 1 ? "理科" : "文科";
+			REQUESTPARAM.loc_wenli = data.loc_wenli = REQUESTPARAM.wenli == 2 ? "理科" : "文科";
 			_renderAnalysisReportPage(data);
 			_init.initModule();
 			xinSwiper.slideNext();
+			_changeUrl2.default.changeUrl("02", "", "#analyse-result");
 		},
 		error: function error() {
 			alert("服务器错误！");
@@ -574,6 +579,7 @@ var swipeToWmzyIntroPage = function swipeToWmzyIntroPage(xinSwiper) {
 
 	$(".goto-wmzy-pro-intro").on("click", function () {
 		xinSwiper.slideNext();
+		_changeUrl2.default.changeUrl("03", "", "#introduce");
 	});
 };
 
@@ -589,6 +595,24 @@ module.exports = {
 "use strict";
 "use strict";
 
+///手动改变url
+var changeUrl = function changeUrl(state, title, url) {
+	history.go(+1);
+	if ('pushState' in history) {
+		history.pushState(state, title, "/score/analyse" + url);
+	};
+};
+module.exports = {
+	changeUrl: changeUrl
+};
+
+/***/ },
+/* 2 */
+/***/ function(module, exports) {
+
+"use strict";
+"use strict";
+
 module.exports = {
 	autoUrl: "/get-auto-code",
 	vipUrl: "/get-vip",
@@ -598,7 +622,7 @@ module.exports = {
 };
 
 /***/ },
-/* 2 */
+/* 3 */
 /***/ function(module, exports) {
 
 "use strict";
@@ -1452,15 +1476,19 @@ module.exports.isNoData2015 = isNoData2015;
 module.exports.isDataDealing = isDataDealing;
 
 /***/ },
-/* 3 */
+/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
 "use strict";
 
-var _url = __webpack_require__(1);
+var _url = __webpack_require__(2);
 
 var _url2 = _interopRequireDefault(_url);
+
+var _changeUrl = __webpack_require__(1);
+
+var _changeUrl2 = _interopRequireDefault(_changeUrl);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -1477,6 +1505,7 @@ var init = function init(xinSwiper) {
 	//监听介绍页面的获取vip按钮
 	$("#get-vip-btn").on("click", function () {
 		xinSwiper.slideNext();
+		_changeUrl2.default.changeUrl("04", "", "#get-vip");
 	});
 	$(document).scroll(function () {
 		if (xinSwiper.activeIndex === 2) {
@@ -1569,6 +1598,7 @@ var getVip = function getVip(xinSwiper) {
 				case 0:
 					$(".result-text .text").text("领取成功！");
 					xinSwiper.slideNext();
+					_changeUrl2.default.changeUrl("05", "", "#vip-result");
 					break;
 				case 11301:
 					alert("您已领取过体验卡");
@@ -1593,21 +1623,21 @@ module.exports = {
 };
 
 /***/ },
-/* 4 */
+/* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
 "use strict";
 
-var _url = __webpack_require__(1);
+var _url = __webpack_require__(2);
 
 var _url2 = _interopRequireDefault(_url);
 
-var _loc = __webpack_require__(2);
+var _loc = __webpack_require__(3);
 
 var _loc2 = _interopRequireDefault(_loc);
 
-var _queryString = __webpack_require__(7);
+var _queryString = __webpack_require__(8);
 
 var _queryString2 = _interopRequireDefault(_queryString);
 
@@ -1834,7 +1864,7 @@ module.exports = {
 };
 
 /***/ },
-/* 5 */
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2606,7 +2636,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ },
-/* 6 */
+/* 7 */
 /***/ function(module, exports) {
 
 "use strict";
@@ -3114,7 +3144,7 @@ module.exports = {
 };
 
 /***/ },
-/* 7 */
+/* 8 */
 /***/ function(module, exports) {
 
 "use strict";
@@ -3146,7 +3176,7 @@ module.exports = {
 };
 
 /***/ },
-/* 8 */
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3388,16 +3418,22 @@ var __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
 }.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
 /***/ },
-/* 9 */
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
 "use strict";
 
-__webpack_require__(5);
+var _changeUrl = __webpack_require__(1);
+
+var _changeUrl2 = _interopRequireDefault(_changeUrl);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+__webpack_require__(6);
 __webpack_require__(0);
-var getVip = __webpack_require__(3);
-var input = __webpack_require__(4);
+var getVip = __webpack_require__(4);
+var input = __webpack_require__(5);
 var analysisReport = __webpack_require__(0);
 $(function () {
 	var init = function init() {
@@ -3429,6 +3465,52 @@ $(function () {
 		getVip.init(xinSwiper);
 		input.init(xinSwiper);
 		analysisReport.swipeToWmzyIntroPage(xinSwiper);
+
+		var showPage = function showPage(speed, pageInit) {
+			var page;
+			if (pageInit) {
+				page = pageInit;
+			} else {
+				page = window.location.hash;
+			};
+			if (speed === "0") {
+				speed = 0;
+			};
+			switch (page) {
+				case "#input":
+					xinSwiper.slideTo(0, speed);
+					break;
+				case "#analyse-result":
+					xinSwiper.slideTo(1, speed);
+					break;
+				case "#introduce":
+					xinSwiper.slideTo(2, speed);
+					break;
+				case "#get-vip":
+					xinSwiper.slideTo(3, speed);
+					break;
+				case "#vip-result":
+					xinSwiper.slideTo(4, speed);
+					break;
+				default:
+					xinSwiper.slideTo(0, speed);
+					break;
+
+			};
+		};
+		///刷新显示相应页面
+		showPage("0", "#input");
+		history.go(+1);
+		console.log(window.location);
+		if ('pushState' in history) {
+			if (window.location.hash !== "#input") {
+				history.pushState("01", "", window.location.pathname + window.location.search + "#input");
+			}
+		};
+		///浏览器前进后退事件
+		window.onpopstate = function () {
+			showPage();
+		};
 	};
 	init();
 });

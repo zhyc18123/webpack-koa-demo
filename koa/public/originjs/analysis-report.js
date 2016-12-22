@@ -1,6 +1,7 @@
 import url from"./url";
 import drawCanvas from './canvasGraph';
 import prov from "./loc.js";
+import chgUrl from "./change-url";
 var Tpl = require('./utils/ejs');
 
 var REQUESTPARAM = {};
@@ -521,10 +522,11 @@ var swipeToAnalysisReportPage = function ( requestParam, xinSwiper ) {
 		success: function(data) {
 			console.log("data "+ JSON.stringify(data, null, 4));
 			REQUESTPARAM.loc_provinc_name = data.loc_provinc_name = prov.getProvinceName(paramData.provinceId);
-			REQUESTPARAM.loc_wenli = data.loc_wenli = REQUESTPARAM.wenli == 1 ? "理科" : "文科";
+			REQUESTPARAM.loc_wenli = data.loc_wenli = REQUESTPARAM.wenli == 2 ? "理科" : "文科";
 			_renderAnalysisReportPage(data);
 			_init.initModule();
 			xinSwiper.slideNext();
+			chgUrl.changeUrl("02","","#analyse-result");
 		},
 		error:function() {
 			alert("服务器错误！");
@@ -536,6 +538,7 @@ var swipeToWmzyIntroPage = function (xinSwiper) {
 
 	$(".goto-wmzy-pro-intro").on("click", function () {
 		xinSwiper.slideNext();
+		chgUrl.changeUrl("03","","#introduce");
 	});
 
 };

@@ -13,6 +13,7 @@ function* getAnalysisReport() {
 
     //请求存储接口
     try {
+        console.log(postdata)
         var data = yield robot.req(robot.url.getAyalysisReport, postdata, this, "", "application/json;charset=UTF-8");
     } catch (err) {
         console.log(err)
