@@ -263,12 +263,11 @@ var _init = function () {
 
 	onClickCloseSchoolDetailBtn = function onClickCloseSchoolDetailBtn() {
 		_toggleModaHide();
-		var schoolListItemModalHtml = '<script id="school-list-item-modal-tpl" type="text/template">' + '<img src="<&= data.icon_url&>" alt="学校logo" class="school-list-img">' + '<ul class="school-info">' + '<li class="school-name-loc" title="">' + '<span class="school-name"><&= data.sch_name&></span>' + '<span class="school-loc"><&= data.city&></span>' + '</li>' + '<li class="school-rank-probability">' + '<span class="school-rank"><em class="dot"></em>综合排名<em class="rank-num"><&= data.total_rank&></em></span>' + '<span class="enroll-probability"><em class="dot"></em>录取概率<em class="probability-num"><&= data.adm_ratio&>%</em></span>' + '</li>' + '<li class="school-label">' + '<span class="school-label-1"><&= data.sch_flag[0]&></span>' + '<span class="school-label-2"><&= data.sch_flag[1]&></span>' + '<span class="school-label-3"><&= data.sch_type[0]&></span>' + '</li>' + '</ul>' + '</script>';
-		var schoolListLineChartModalHtml = '<script id="line-chart-wmzy-link-modal-tpl" type="text/template">' + '<& if(data.sch_min_score_list){ &>' + '<div class="line-chart-wrap">' + '<h3 class="line-chart-tiltle">往年该校录取最低省排名（广东-理科）</h3>' + '<canvas id="line-chart-modal-canvas"></canvas>' + '</div>' + '<&}&>' + '</script>';
+		var schoolListItemModalHtml = '<script id="school-list-item-modal-tpl" type="text/template">' + '<img src="<&= data.icon_url&>" alt="学校logo" class="school-list-img">' + '<ul class="school-info">' + '<li class="school-name-loc" title="">' + '<span class="school-name"><&= data.sch_name&></span>' + '<span class="school-loc"><&= data.city&></span>' + '</li>' + '<li class="school-rank-probability">' + '<&if(data.total_rank){&>' + '<span class="school-rank"><em class="dot"></em>综合排名<em class="rank-num"><&= data.total_rank&></em></span>' + '<&}&>' + '<&if(data.adm_ratio){&>' + '<span class="enroll-probability"><em class="dot"></em>录取概率<em class="probability-num"><&= data.adm_ratio&>%</em></span>' + '<&}&>' + '</li>' + '<li class="school-label">' + '<&if(data.sch_flag.length >= 1){&>' + '<span class="school-label-1"><&= data.sch_flag[0]&></span>' + '<&if(data.sch_flag[1]){&>' + '<span class="school-label-2"><&= data.sch_flag[1]&></span>' + '<&}&>' + '<&}&>' + '<&if(data.sch_type.length > 0){&>' + '<span class="school-label-3"><&= data.sch_type[0]&></span>' + '<&}&>' + '</li>' + '</ul>' + '</script>';
+		var schoolListLineChartModalHtml = '<script id="line-chart-wmzy-link-modal-tpl" type="text/template">' + '<& if(data.sch_min_score_list){ &>' + '<div class="line-chart-wrap">' + '<h3 class="line-chart-tiltle">往年该校录取最低省排名&nbsp;<&= data.loc_provinc_name&> — <&= data.loc_wenli&></h3>' + '<canvas id="line-chart-modal-canvas"></canvas>' + '</div>' + '<&}&>' + '</script>';
 		$("#school-list-item-modal-wrap").html(schoolListItemModalHtml);
 		$("#line-chart-wmzy-link-modal-wrap").html(schoolListLineChartModalHtml);
 	};
-
 	// PUBLIC METHODS
 	initModule = function initModule() {
 		setJqueryMap();
@@ -376,7 +375,6 @@ var _renderAnalysisReportPage = function _renderAnalysisReportPage(reportData) {
 		lineChartCanvasClosestWidth = lineChartCanvas.parentNode.parentNode.clientWidth;
 
 		// alert("lineChartCanvasParentNodeWidth " + lineChartCanvasClosestWidth );
-
 		lineChartCanvas.width = lineChartCanvas.parentNode.clientWidth;
 		lineChartCanvas.height = lineChartCanvas.parentNode.clientHeight * 1.5;
 
@@ -440,47 +438,51 @@ var _renderAnalysisReportPage = function _renderAnalysisReportPage(reportData) {
 	renderEjsTplWithData("#school-list-item-tpl", "#school-list-item-wrap", reportData);
 
 	// 录取人数最多的五个院校
-	var canvas = document.getElementById('trapezoid-canvas');
-	var trapezoidParentNodeWidth = canvas.parentNode.clientWidth;
-	var trapezoidCount = reportData.goto_schs_list.length;
-	canvas.width = trapezoidParentNodeWidth - 60;
-	var context = canvas.getContext('2d');
-	var width = canvas.width * (360 / 750);
-	canvas.height = canvas.width / 2 * (64 / 286) * trapezoidCount + 10 * trapezoidCount + 55; // 286/750 为梯形宽度占比，64/286为高度占比， 50为每个梯形的间隙， 20为标题高度
-	var height = width * (64 / 286);
-	var trapezoidStyle = ["#f9be00", "#fac724", "#fbd149", "#fcda6d", "#fce392"],
-	    schoolNumNameStyle = {
-		"numStyle": "#ffffff",
-		"nameStyle": "#000000"
-	};
-	var lineDotStyle = {
-		"strokeStyle": "#ccdbe1",
-		"fillStyle": "#ffffff"
-	};
-	var contextFontStyle, titleOffsetX;
 
-	if (window.dpr == 1) {
-		lineDotStyle.lineWidth = 1;
-		lineDotStyle.dotRadius = 2;
-	} else if (window.dpr == 2) {
-		lineDotStyle.lineWidth = 2;
-		lineDotStyle.dotRadius = 4;
-	} else if (window.dpr == 3) {
-		lineDotStyle.lineWidth = 3;
-		lineDotStyle.dotRadius = 6;
+	if (reportData.recommend_sch_list.length > 0) {
+		renderEjsTplWithData("#top-five-enroll-school-tpl", "#top-five-enroll-school-wrap", reportData);
+		var canvas = document.getElementById('trapezoid-canvas');
+		var trapezoidParentNodeWidth = canvas.parentNode.clientWidth;
+		var trapezoidCount = reportData.goto_schs_list.length;
+		canvas.width = trapezoidParentNodeWidth - 60;
+		var context = canvas.getContext('2d');
+		var width = canvas.width * (360 / 750);
+		canvas.height = canvas.width / 2 * (64 / 286) * trapezoidCount + 10 * trapezoidCount + 55; // 286/750 为梯形宽度占比，64/286为高度占比， 50为每个梯形的间隙， 20为标题高度
+		var height = width * (64 / 286);
+		var trapezoidStyle = ["#f9be00", "#fac724", "#fbd149", "#fcda6d", "#fce392"],
+		    schoolNumNameStyle = {
+			"numStyle": "#ffffff",
+			"nameStyle": "#000000"
+		};
+		var lineDotStyle = {
+			"strokeStyle": "#ccdbe1",
+			"fillStyle": "#ffffff"
+		};
+		var contextFontStyle, titleOffsetX;
+
+		if (window.dpr == 1) {
+			lineDotStyle.lineWidth = 1;
+			lineDotStyle.dotRadius = 2;
+		} else if (window.dpr == 2) {
+			lineDotStyle.lineWidth = 2;
+			lineDotStyle.dotRadius = 4;
+		} else if (window.dpr == 3) {
+			lineDotStyle.lineWidth = 3;
+			lineDotStyle.dotRadius = 6;
+		}
+
+		contextFontStyle = getFont(canvas, 0.04);
+		if (window.dpr == 3) {
+			// 640 pixes phone
+			titleOffsetX = 20;
+		} else if (window.dpr == 2) {
+			titleOffsetX = 10;
+		} else if (window.dpr == 1) {
+			titleOffsetX = 0;
+		}
+
+		_canvasGraph2.default.drawTrapezoid(canvas, context, width, height, reportData.goto_schs_list, trapezoidStyle, schoolNumNameStyle, lineDotStyle, contextFontStyle, titleOffsetX, "（考生数量）", 6);
 	}
-
-	contextFontStyle = getFont(canvas, 0.04);
-	if (window.dpr == 3) {
-		// 640 pixes phone
-		titleOffsetX = 20;
-	} else if (window.dpr == 2) {
-		titleOffsetX = 10;
-	} else if (window.dpr == 1) {
-		titleOffsetX = 0;
-	}
-
-	_canvasGraph2.default.drawTrapezoid(canvas, context, width, height, reportData.goto_schs_list, trapezoidStyle, schoolNumNameStyle, lineDotStyle, contextFontStyle, titleOffsetX, "（考生数量）", 6);
 
 	// 其他 x 所推荐院校
 	if (reportData.recommend_sch_list.length > 0) {
@@ -502,7 +504,7 @@ var swipeToAnalysisReportPage = function swipeToAnalysisReportPage(requestParam,
 
 	paramData.reqId = requestParam.req_id || "1111";
 	paramData.examNo = requestParam.exam_no || "111";
-	paramData.provinceId = requestParam.province_id || "440000000000";
+	paramData.provinceId = "" + requestParam.province_id;
 	paramData.wenli = requestParam.wenli || "";
 	paramData.score = requestParam.score || "";
 	paramData.expSchId = requestParam.exp_sch_id || "52ac2e98747aec013fcf4c46";
@@ -526,60 +528,71 @@ var swipeToAnalysisReportPage = function swipeToAnalysisReportPage(requestParam,
 		},
 		error: function error() {
 			alert("服务器错误！");
-			var testData = {
-				"code": 0, //状态码,0-成功，-1-失败
-				"score": 600, //分数
-				"rank": 4000, //排名
-				"rank_gap": 1000, //排名差距
-				"exp_sch": null, //目标学校
-				"diploma_id": 7, //学历 5-本科，7-专科
-				"score_gap": 30, //与目标学校分差值
-				"adm_ratio": 40, //录取概率
-				"recommend_sch": "北京大学", //推荐学校
-				"recommend_sch_num": 0, //推荐学校数量
-				"batch": 1, //批次编号
-				"batch_name": "本科", //推荐学校的批次名称
-				"choosed_sch": "四川大学", //相近分数的人中去向最多的学校
-				"stu_count": 1300, //学生人数
-				"sch_min_score_list": [{
-					"year": "2013", //年份
-					"min_rank": 2600 //当年最低省排名
-				}, {
-					"year": "2014", //年份
-					"min_rank": 2700 //当年最低省排名
-				}, {
-					"year": "2015", //年份
-					"min_rank": 2500 //当年最低省排名
-				}, {
-					"year": "你的排名", //用户的排名
-					"min_rank": 3000 //用户排名
-				}],
-				"recommend_sch_list": [//推荐学校列表
-
-				],
-				"goto_schs_list": [{
-					"sch_name": "四川大学",
-					"stu_count": 1160
-				}, {
-					"sch_name": "电子科技大学",
-					"stu_count": 720
-				}],
-				"goto_majors_list": [{
-					"major_name": "临床医学",
-					"primary_name": "医学",
-					"stu_count": 124
-				}, {
-					"major_name": "自动化",
-					"primary_name": "工学",
-					"stu_count": 124
-				}]
-
-			};
-			testData["loc_provinc_name"] = _loc2.default.getProvinceName(paramData.provinceId);
-			testData["loc_wenli"] = REQUESTPARAM.wenli == 1 ? "理科" : "文科";
-			_renderAnalysisReportPage(testData);
-			_init.initModule();
-			xinSwiper.slideNext();
+			// var testData = {
+			// 	"code":0,//状态码,0-成功，-1-失败
+			// 	"score":600,//分数
+			// 	"rank":4000,//排名
+			// 	"rank_gap":1000,//排名差距
+			// 	"exp_sch":null,//目标学校
+			// 	"diploma_id":7,//学历 5-本科，7-专科
+			// 	"score_gap":30,//与目标学校分差值
+			// 	"adm_ratio":40,//录取概率
+			// 	"recommend_sch":"北京大学",//推荐学校
+			// 	"recommend_sch_num":0,//推荐学校数量
+			// 	"batch":1,//批次编号
+			// 	"batch_name":"本科",//推荐学校的批次名称
+			// 	"choosed_sch":"四川大学",//相近分数的人中去向最多的学校
+			// 	"stu_count":1300,//学生人数
+			// 	"sch_min_score_list":[
+			// 		{
+			// 			"year":"2013",//年份
+			// 			"min_rank":2600//当年最低省排名
+			// 		},
+			// 		{
+			// 			"year":"2014",//年份
+			// 			"min_rank":2700//当年最低省排名
+			// 		},
+			// 		{
+			// 			"year":"2015",//年份
+			// 			"min_rank":2500//当年最低省排名
+			// 		},
+			// 		{
+			// 			"year":"你的排名",//用户的排名
+			// 			"min_rank":3000//用户排名
+			// 		}
+			// 	],
+			// 	"recommend_sch_list":[//推荐学校列表
+			//
+			// 	],
+			// 	"goto_schs_list":[
+			// 		{
+			// 			"sch_name":"四川大学",
+			// 			"stu_count":1160
+			// 		},
+			// 		{
+			// 			"sch_name":"电子科技大学",
+			// 			"stu_count":720
+			// 		}
+			// 	],
+			// 	"goto_majors_list":[
+			// 		{
+			// 			"major_name":"临床医学",
+			// 			"primary_name":"医学",
+			// 			"stu_count":124
+			// 		},
+			// 		{
+			// 			"major_name":"自动化",
+			// 			"primary_name":"工学",
+			// 			"stu_count":124
+			// 		}
+			// 	]
+			//
+			// };
+			// testData["loc_provinc_name"] = prov.getProvinceName(paramData.provinceId);
+			// testData["loc_wenli"] = REQUESTPARAM.wenli == 1 ? "理科" : "文科";
+			// _renderAnalysisReportPage(testData);
+			// _init.initModule();
+			// xinSwiper.slideNext();
 		}
 	});
 };
