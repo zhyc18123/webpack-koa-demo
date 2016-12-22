@@ -35,6 +35,12 @@ var init=function(xinSwiper){
 	$("#school-input").on("input porpertychange",function(){
 		guestSchool(this);
 	});
+	// 监听学校联想失去光标
+	$("#school-input").on("focusout",function(){
+		setTimeout(function(){
+			$(".school-list").hide();
+		},200)
+	});
 	//监听选择学校
 	$(document).on("click",".school-list li",function(){
 		selectSchool(this);
@@ -106,7 +112,7 @@ var setProvByName=function(provName){
 };
 var initPage=function(){
 	var provName=queryString.getQueryString("prov_name")||"",
-		score=queryString.getQueryString("score"),
+		score=Math.round(queryString.getQueryString("score")),
 		salesmanId=queryString.getQueryString("salesman_id"),
 		examNo=queryString.getQueryString("exam_no");
 	// 设置省份

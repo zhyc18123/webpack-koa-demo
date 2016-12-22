@@ -20,6 +20,7 @@ html{
 	position:relative;
 	.down-span{
 		padding:0 .2rem;
+		line-height: 1rem;
 		i{
 			font-size: $font-14;
 			cursor: pointer;
@@ -30,17 +31,21 @@ html{
 .xin-input{
 	border:$border solid $bor-col;
 	padding:0 .3rem;
-	line-height:1rem;
+	line-height:.6rem;
 	border-radius: .08rem;
 	display: flex;
 	em{
 		color: $red-col;
 		width: .2rem;
+		padding:.1rem 0;
 	}
 	span{
 		color: $font-heicol;
 		border-right: .02rem solid $bor-col;
 		padding: 0 0.2rem 0 0.1rem;
+		height: .6rem;
+		position:relative;
+		top: .22rem;
 	}
 	input{
 		padding: 0 0.2rem;
@@ -48,7 +53,7 @@ html{
 		height: 1rem;
 		flex: 1;
 		text-align: left;
-		font-size: $font-13;
+		font-size: $font-14;
 	}
 }
 i{
