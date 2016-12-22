@@ -362,15 +362,22 @@ var _renderAnalysisReportPage = function _renderAnalysisReportPage(reportData) {
 	}
 
 	_canvasGraph2.default.drawCircle(context, centerX, centerY, '#ffffff', '#e4e4e4', circleLineWidthInner, radius, 1);
-	_canvasGraph2.default.drawCircle(context, centerX, centerY, '#ffffff', '#f9be00', circleLineWidthOuter, radius, 0.4, 'round');
+	if (reportData.exp_sch && reportData.adm_ratio != null && reportData.adm_ratio >= 0) {
+		_canvasGraph2.default.drawCircle(context, centerX, centerY, '#ffffff', '#f9be00', circleLineWidthOuter, radius, reportData.adm_ratio / 100, 'round');
+	}
 	context.textBaseline = 'middle';
 	context.textAlign = "center";
 
-	// 分是否设立了目标学校两种情况讨论
-	if (reportData.exp_sch && reportData.adm_ratio >= 0) {
+	// 分是否设立了目标学校,概率是否存在 三种情况讨论
+	if (reportData.exp_sch && reportData.adm_ratio != null && reportData.adm_ratio >= 0) {
+
+		alert("reportData.adm_ratio.length" + ("" + reportData.adm_ratio).length);
 		_canvasGraph2.default.drawCircleText(context, enrollCanvasFontDpr1, '#f9be00', reportData.adm_ratio, enrollCanvas.width * 0.46, enrollCanvas.height * 0.45);
-		_canvasGraph2.default.drawCircleText(context, enrollCanvasFontDpr2, '#f9be00', '%', enrollCanvas.width * 0.62, enrollCanvas.height * 0.5);
+		_canvasGraph2.default.drawCircleText(context, enrollCanvasFontDpr2, '#f9be00', '%', ("" + reportData.adm_ratio).length > 1 ? enrollCanvas.width * 0.62 : enrollCanvas.width * 0.58, enrollCanvas.height * 0.5);
 		_canvasGraph2.default.drawCircleText(context, enrollCanvasFontDpr3, '#b6b6b6', '录取概率', centerX, enrollCanvas.height * 0.65);
+	} else if (reportData.adm_ratio == null) {
+		_canvasGraph2.default.drawCircleText(context, enrollCanvasFontDpr3, '#b6b6b6', "暂无", centerX, enrollCanvas.height * 0.48);
+		_canvasGraph2.default.drawCircleText(context, enrollCanvasFontDpr3, '#b6b6b6', '录取概率', centerX, enrollCanvas.height * 0.6);
 	} else {
 		_canvasGraph2.default.drawCircleText(context, enrollCanvasFontDpr3, '#b6b6b6', "未设立", centerX, enrollCanvas.height * 0.48);
 		_canvasGraph2.default.drawCircleText(context, enrollCanvasFontDpr3, '#b6b6b6', '目标学校', centerX, enrollCanvas.height * 0.6);
@@ -404,7 +411,7 @@ var _renderAnalysisReportPage = function _renderAnalysisReportPage(reportData) {
 		var startY = 40;
 		var widthMargin = lineChartCanvas.width / 4;
 		var labelWidth = widthMargin;
-		var labelHeight = 75;
+		var labelHeight = 65;
 		var coordData;
 		var lowestPercent = 1;
 		var offsetY;
@@ -412,7 +419,7 @@ var _renderAnalysisReportPage = function _renderAnalysisReportPage(reportData) {
 
 		var yearColor = {
 			dotColor: "#999999",
-			lineColor: "#999999"
+			lineColor: "#dadada"
 		};
 		var historyColor = {
 			dotColor: "#f9be00",
@@ -438,7 +445,17 @@ var _renderAnalysisReportPage = function _renderAnalysisReportPage(reportData) {
 			labelHeight = 100;
 		}
 
-		setCoordinateReturn = _canvasGraph2.default.setCoordinate(reportData.sch_min_score_list, startX, startY, widthMargin, 400, lowestPercent);
+		var schMinScoreList = [];
+		var schoolDataListLen = reportData.sch_min_score_list.length;
+		if (schoolDataListLen >= 5) {
+			for (var i = 0; i <= 3; i++) {
+				schMinScoreList.push(reportData.sch_min_score_list[schoolDataListLen - 4 + i]); //
+			}
+		} else {
+			schMinScoreList = reportData.sch_min_score_list;
+		}
+
+		setCoordinateReturn = _canvasGraph2.default.setCoordinate(schMinScoreList, startX, startY, widthMargin, 400, lowestPercent);
 		coordData = setCoordinateReturn[0];
 		lowestPercent = setCoordinateReturn[1];
 
@@ -454,7 +471,8 @@ var _renderAnalysisReportPage = function _renderAnalysisReportPage(reportData) {
 			lineDotStyle.dotRadius = 5;
 		}
 
-		_canvasGraph2.default.drawCoordinate(context, coordData, yearColor, historyColor, currentColor, labelWidth, lineChartCanvas.width, lineChartCanvas.height, startY, offsetY, lineChartFontStyle, lineDotStyle);
+		_canvasGraph2.default.drawCoordinate(context, coordData, yearColor, historyColor, currentColor, labelWidth, lineChartCanvas.width, lineChartCanvas.height, startY, offsetY, lineChartFontStyle, lineDotStyle, window.dpr);
+
 		_canvasGraph2.default.drawLabel(context, coordData, labelHeight, 8, 20, lineChartCanvas.height, offsetY, labelWidth, lineChartFontStyle, window.dpr, lineChartCanvasClosestWidth);
 	} else {
 		$("#line-chart-wmzy-pro-intro").addClass("hide");
@@ -464,7 +482,7 @@ var _renderAnalysisReportPage = function _renderAnalysisReportPage(reportData) {
 	renderEjsTplWithData("#school-list-item-tpl", "#school-list-item-wrap", reportData);
 
 	// 录取人数最多的五个院校
-	if (reportData.recommend_sch_list.length > 0) {
+	if (reportData.goto_schs_list.length > 0) {
 		renderEjsTplWithData("#top-five-enroll-school-tpl", "#top-five-enroll-school-wrap", reportData);
 		var canvas = document.getElementById('trapezoid-canvas');
 		var trapezoidParentNodeWidth = canvas.parentNode.clientWidth;
@@ -2731,7 +2749,7 @@ function setCoordinate(originData, startX, startY, widthMargin, canvasHeight, lo
  * @param offsetY Y轴点坐标的偏移量
  * @param lineChartFontStyle 标注年份时的样式
  */
-function drawCoordinate(ctx, coord, yearColor, historyColor, currentColor, labelWidth, canvasWidth, canvasHeight, startY, offsetY, lineChartFontStyle, lineDotStyle) {
+function drawCoordinate(ctx, coord, yearColor, historyColor, currentColor, labelWidth, canvasWidth, canvasHeight, startY, offsetY, lineChartFontStyle, lineDotStyle, dpr) {
 	var len = coord.length;
 
 	// 过往年份 text、竖线、圆点
@@ -2753,9 +2771,11 @@ function drawCoordinate(ctx, coord, yearColor, historyColor, currentColor, label
 		ctx.font = lineChartFontStyle;
 		ctx.fillStyle = yearColor.dotColor;
 
-		if (window.dpr == 1) {
+		if (dpr && dpr == 1) {
 			ctx.fillText(year, x + labelWidth / 2 - 10, startY);
-		} else {
+		} else if (dpr && dpr == 2) {
+			ctx.fillText(year, x + labelWidth / 2 - 30, startY);
+		} else if (dpr && dpr == 3) {
 			ctx.fillText(year, x + labelWidth / 2 - 50, startY);
 		}
 
@@ -2765,7 +2785,7 @@ function drawCoordinate(ctx, coord, yearColor, historyColor, currentColor, label
 		if (lineDotStyle) {
 			ctx.lineWidth = lineDotStyle.lineWidth;
 		}
-		ctx.strokeStyle = "#999999";
+		ctx.strokeStyle = "#dadada";
 		ctx.moveTo(x + labelWidth / 2, lineStartY);
 		ctx.lineTo(x + labelWidth / 2, canvasHeight);
 		ctx.stroke();
@@ -2933,10 +2953,10 @@ function drawLabel(ctx, coord, labelHeight, radius, startY, canvasHeight, offset
 
 		if (dpr && dpr == 1) {
 			width -= 120;
-			y -= 25;
+			y -= 20;
 		} else if (dpr && dpr == 2) {
 			width -= 50;
-			y -= 58;
+			y -= 48;
 		} else {
 			y -= 75;
 		}
@@ -2963,42 +2983,26 @@ function drawLabel(ctx, coord, labelHeight, radius, startY, canvasHeight, offset
 		if (ranking) {
 			ctx.font = lineChartFontStyle;
 			ctx.fillStyle = '#ffffff';
-			switch (rankingStr.length) {
-				case 1:
-				case 2:
-				case 3:
-					x += 35;
-					break;
-				case 4:
-				case 5:
-					x += 10;
-					break;
-				case 6:
-				case 7:
-					x += 10;
-					break;
-				default:
-					x += 10;
-					break;
-
-			}
+			var textWidth = ctx.measureText(ranking + "名").width;
+			alert(" textWidth " + textWidth);
 			if (dpr && dpr == 1) {
-				ctx.fillText(ranking + "名", x, y - labelHeight / 8);
+				ctx.fillText(ranking + "名", x + width / 2 - textWidth / 2, y - labelHeight / 4);
 			} else if (dpr && dpr == 2) {
-				ctx.fillText(ranking + "名", x + 10, y + labelHeight * 0.2); //
+				ctx.fillText(ranking + "名", x + width / 2 - textWidth / 2, y + labelHeight * 0.2); //
 			} else if (dpr && dpr == 3) {
-				ctx.fillText(ranking + "名", x + 10, y + labelHeight * 0.4); //
+				ctx.fillText(ranking + "名", x + width / 2 - textWidth / 2, y + labelHeight * 0.4); //
 			}
 		}
 		if (i == len - 1) {
 			ctx.font = lineChartFontStyle;
 			ctx.fillStyle = '#eb614c';
+			var textWidth = ctx.measureText("你的排名").width;
 			if (dpr && dpr == 1) {
-				ctx.fillText("你的排名", x, y + labelHeight * 1.5);
+				ctx.fillText("你的排名", x + width / 2 - textWidth / 2, y + labelHeight * 1.2);
 			} else if (dpr && dpr == 2) {
-				ctx.fillText("你的排名", x + 10, y + labelHeight * 1.5);
+				ctx.fillText("你的排名", x + width / 2 - textWidth / 2, y + labelHeight * 1.5);
 			} else if (dpr && dpr == 3) {
-				ctx.fillText("你的排名", x + 10, y + labelHeight * 1.5);
+				ctx.fillText("你的排名", x + width / 2 - textWidth / 2, y + labelHeight * 1.5);
 			}
 		}
 	}

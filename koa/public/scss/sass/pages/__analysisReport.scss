@@ -15,6 +15,9 @@ $yellowCol: #f9be00;
 .text-align-left{
   text-align: left!important;
 }
+.helvetica-font{
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
 .analyse-report-wrap {
   position: relative;
   width: 100%;
@@ -119,7 +122,6 @@ $yellowCol: #f9be00;
 
 .score-value, .rank-value {
   em {
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     @include font-size(7.2)
   }
 }
@@ -145,7 +147,6 @@ $yellowCol: #f9be00;
   width: 100%;
   margin-top: percentage(70/620);
   color: $black;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   i {
     position: relative;
     vertical-align: top;
@@ -384,7 +385,7 @@ $yellowCol: #f9be00;
 }
 
 .rank-num, .probability-num {
-  margin-left: 5px;
+  margin-left: 0.2rem;
   font-style: normal;
 }
 
@@ -439,6 +440,13 @@ $yellowCol: #f9be00;
   position: relative;
   width: 100%;
   margin-top: percentage(80/750);
+}
+
+.other-pepole-go{
+  position: relative;
+  background: $whi-col;
+  margin-top: percentage(10/750);
+  overflow: hidden;
 }
 
 .enroll-major-wrap {
