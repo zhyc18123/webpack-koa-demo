@@ -62,6 +62,7 @@ i.down{
 }
 .subject-type{
 	display: flex;
+	padding:0 2px;
 	span{
 		flex: 1;
 		border: 1px solid $bor-col;
@@ -89,6 +90,9 @@ i.down{
 }
 .get-report{
 	margin:.7rem 0 .8rem 0;
+	width:99.6% !important;
+	position:relative;
+	left:0.2%;
 }
 .red-btn{
 	@extend %inline-block;

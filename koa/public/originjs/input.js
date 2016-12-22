@@ -9,6 +9,14 @@ var init=function(xinSwiper){
 	// 初始化省份列表
 	createProv();
 	//监听打开选择省份
+	$(document).on("click","#prov-name",function(){
+		console.log($(".js-close"))
+		if($(".js-open").length){
+			$(".js-open").click();
+		}else{
+			$(".js-close").click();
+		};
+	});
 	$(document).on("click",".js-open",function(){
 		openProv(this);
 	});
