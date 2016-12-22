@@ -1611,12 +1611,13 @@ var init = function init(xinSwiper) {
 		var provId = $("#prov-name").data("val"),
 		    score = $("#score").val(),
 		    prevName = $("#prov-name").val(),
-		    schoolName = $("#school-input").val();
+		    schoolName = $("#school-input").val(),
+		    schoolId = $("#school-input").data("val");
 		if (!provId) {
 			alert("请选择省份！");
 			return;
 		};
-		if (!score) {
+		if (!$.trim(score)) {
 			alert("请输入你的联考成绩！");
 			return;
 		} else {
@@ -1644,6 +1645,12 @@ var init = function init(xinSwiper) {
 		if (schoolName.length > 40) {
 			alert("学校名长度不允许大于40字！");
 			return;
+		};
+		if ($.trim(schoolName).length) {
+			if (!schoolId) {
+				alert("学校名无效！请清空或重新输入并选择下拉列表学校！");
+				return;
+			};
 		};
 		var examNum = $("#exam-no").val();
 		var data = {
