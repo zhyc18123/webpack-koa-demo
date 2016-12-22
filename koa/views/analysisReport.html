@@ -14,10 +14,12 @@
                             <span class="score-value"><em><&= data.score&></em> 分</span>
                         </li>
                         <li class="score-rank-divider"></li>
+                        <& if(data.rank) {&>
                         <li class="about-ranking">
                             <span class="rank-key">经推算，省排名约：</span>
                             <span class="rank-value"><em><&= data.rank&></em> 名</span>
                         </li>
+                        <&}&>
                     </ul>
                 </script>
             </div>
@@ -26,35 +28,28 @@
                     <& if(data.exp_sch && data.adm_ratio){ &>
                     <li class="item-detail">
                         <i class="iconfont icon-sch-gap id-first"></i>
-                        <span>目标学校
-                            <em class="black-strong">&nbsp;<&= data.exp_sch&>&nbsp;</em>的录取概率为
-                            <em class="black-strong">&nbsp;<&= data.adm_ratio&>%&nbsp;</em>，距离该校还有
-                            <em class="black-strong">&nbsp;<&= data.score_gap&>&nbsp;</em>分的差距
-                        </span>
+                        <span>目标学校<em class="black-strong">&nbsp;<&= data.exp_sch&>&nbsp;</em>的录取概率为<em class="black-strong">&nbsp;<&= data.adm_ratio&>%&nbsp;</em>，距离该校还有<em class="black-strong">&nbsp;<&= data.score_gap&>&nbsp;</em>分的差距</span>
                     </li>
-                    <li class="item-detail">
-                        <i class="iconfont icon-roc-sch id-second"></i>
-                        <span>你的分数还可以考上
-                            <em class="black-strong">&nbsp;<&= data.recommend_sch&>&nbsp;</em>等
-                            <em class="black-strong">&nbsp;<&= data.recommend_sch_num&>&nbsp;</em>所<&= data.batch_name&>学校
-                        </span>
-                    </li>
+                        <&if(data.recommend_sch){&>
+                        <li class="item-detail">
+                            <i class="iconfont icon-roc-sch id-second"></i>
+                            <span>你的分数还可以考上<em class="black-strong">&nbsp;<&= data.recommend_sch&>&nbsp;</em>等<em class="black-strong">&nbsp;<&= data.recommend_sch_num&>&nbsp;</em>所<&= data.batch_name&>学校</span>
+                        </li>
+                        <&}&>
                     <&}else{&>
-                    <li class="item-detail">
-                        <i class="iconfont icon-roc-sch id-second"></i>
-                        <span>你的分数可以考上
-                            <em class="black-strong">&nbsp;<&= data.recommend_sch&>&nbsp;</em>等
-                            <em class="black-strong">&nbsp;<&= data.recommend_sch_num&>&nbsp;</em>所<&= data.batch_name&>学校
-                        </span>
-                    </li>
+                        <&if(data.recommend_sch){&>
+                        <li class="item-detail">
+                            <i class="iconfont icon-roc-sch id-second"></i>
+                            <span>你的分数可以考上<em class="black-strong">&nbsp;<&= data.recommend_sch&>&nbsp;</em>等<em class="black-strong">&nbsp;<&= data.recommend_sch_num&>&nbsp;</em>所<&= data.batch_name&>学校</span>
+                        </li>
+                        <&}&>
                     <&}&>
+                    <&if(data.choosed_sch){&>
                     <li class="item-detail">
                         <i class="iconfont icon-pop-sch id-third"></i>
-                        <span>2015年与你成绩相近的人当中，被
-                        <em class="black-strong">&nbsp;<&= data.choosed_sch&>&nbsp;</em>录取的考生最多
-                        <em class="black-strong">&nbsp;(<&= data.stu_count&>)&nbsp;</em>
-                    </span>
+                        <span>2015年与你成绩相近的人当中，被<em class="black-strong">&nbsp;<&= data.choosed_sch&>&nbsp;</em>录取的考生最多<em class="black-strong">&nbsp;(<&= data.stu_count&>)&nbsp;</em></span>
                     </li>
+                    <&}&>
                 </script>
             </ul>
         </div>
@@ -72,29 +67,29 @@
             <script id="gap-suggest-tpl" type="text/template">
                 <& if(data.exp_sch){ &>
                     <& if(data.score_gap <= -5) {&>
-                        <p class="gap-sugest">你的成绩比该校的最低分还高出<em class="black-strong">&nbsp;<&= Math.abs(data.score_gap)-5&>~<&= Math.abs(data.score_gap)+5&>&nbsp;</em>分</p>
+                    <p class="gap-sugest">你的成绩比该校的最低分还高出<em class="black-strong">&nbsp;<&= Math.abs(data.score_gap)-5&>~<&= Math.abs(data.score_gap)+5&>&nbsp;</em>分</p>
                     <& }else if( data.score_gap > -5 && data.score_gap <=5 ) {&>
-                        <p class="gap-sugest">以你目前的成绩，勉强可以考上该校</p>
+                    <p class="gap-sugest">以你目前的成绩，勉强可以考上该校</p>
                     <&} else {&>
-                        <p class="gap-sugest">如果你想稳妥考上<em class="black-strong">&nbsp;<&= data.exp_sch&>&nbsp;</em>分数还需要提高<em class="black-strong">&nbsp;<&= data.score_gap-5&>~<&= data.score_gap+5&>&nbsp;</em>分，省排名提高约<em class="black-strong">&nbsp;<&= data.rank_gap&>&nbsp;</em>名。</p>
+                    <p class="gap-sugest">如果你想稳妥考上<em class="black-strong">&nbsp;<&= data.exp_sch&>&nbsp;</em>分数还需要提高<em class="black-strong">&nbsp;<&= data.score_gap-5&>~<&= data.score_gap+5&>&nbsp;</em>分，省排名提高约<em class="black-strong">&nbsp;<&= data.rank_gap&>&nbsp;</em>名。</p>
                     <&}&>
                 <& }else{ &>
-                <p class="gap-sugest">无法查看目标学校的录取概率分析</p>
+                    <p class="gap-sugest gap-sugest-center">无法查看目标学校的录取概率分析</p>
                 <& } &>
             </script>
         </div>
 
         <div id="line-chart-wmzy-link-wrap">
             <script id="line-chart-wmzy-link-tpl" type="text/template">
-                <& if(data.sch_min_score_list){ &>
+                <& if(data.exp_sch && data.sch_min_score_list.length>1){ &>
                 <div class="line-chart-wrap">
-                    <h3 class="line-chart-tiltle">往年该校录取最低省排名（广东-理科）</h3>
+                    <h3 class="line-chart-tiltle">往年该校录取最低省排名&nbsp;<&= data.loc_provinc_name&> — <&= data.loc_wenli&></h3>
                     <canvas id="line-chart-canvas"></canvas>
                 </div>
                 <&}&>
             </script>
         </div>
-        <p class="wmzy-link goto-wmzy-pro-intro">
+        <p class="wmzy-link goto-wmzy-pro-intro" id="line-chart-wmzy-pro-intro">
             <span>更详尽院校录取数据，尽在完美志愿 >></span>
         </p>
 
@@ -112,13 +107,23 @@
                             <span class="school-loc"><&= data.city&></span>
                         </li>
                         <li class="school-rank-probability">
+                            <&if(data.total_rank){&>
                             <span class="school-rank"><em class="dot"></em>综合排名<em class="rank-num"><&= data.total_rank&></em></span>
+                            <&}&>
+                            <&if(data.adm_ratio){&>
                             <span class="enroll-probability"><em class="dot"></em>录取概率<em class="probability-num"><&= data.adm_ratio&>%</em></span>
+                            <&}&>
                         </li>
                         <li class="school-label">
+                            <&if(data.sch_flag.length >= 1){&>
                             <span class="school-label-1"><&= data.sch_flag[0]&></span>
-                            <span class="school-label-2"><&= data.sch_flag[1]&></span>
+                                <&if(data.sch_flag[1]){&>
+                                <span class="school-label-2"><&= data.sch_flag[1]&></span>
+                                <&}&>
+                            <&}&>
+                            <&if(data.sch_type.length > 0){&>
                             <span class="school-label-3"><&= data.sch_type[0]&></span>
+                            <&}&>
                         </li>
                     </ul>
                 </script>
@@ -127,7 +132,7 @@
                 <script id="line-chart-wmzy-link-modal-tpl" type="text/template">
                     <& if(data.sch_min_score_list){ &>
                     <div class="line-chart-wrap">
-                        <h3 class="line-chart-tiltle">往年该校录取最低省排名（广东-理科）</h3>
+                        <h3 class="line-chart-tiltle">往年该校录取最低省排名&nbsp;<&= data.loc_provinc_name&> — <&= data.loc_wenli&></h3>
                         <canvas id="line-chart-modal-canvas"></canvas>
                     </div>
                     <&}&>
@@ -136,29 +141,38 @@
             <p class="wmzy-link goto-wmzy-pro-intro">
                 <span>更详尽院校录取数据，尽在完美志愿 >></span>
             </p>
-
         </div>
         <p class="rectangular-title">
             <span class="yellow-col">你的成绩能上什么学校</span>
         </p>
         <div id="school-list-item-wrap">
             <script id="school-list-item-tpl" type="text/template">
-                <& for(var i = 0, len = data.recommend_sch_list.length; i < len; i++ ) {
-                    var recomendSchoolItem = data.recommend_sch_list[i];
-                &>
-                <div class="school-list-item <& if(i == 0) {&>school-list-margin<&}&> <&if(i==len-1){&>school-list-last<&}&>" data-schoolid="<&= recomendSchoolItem.sch_id&>">
-                    <img src="<&= recomendSchoolItem.icon_url&>" alt="学校logo" class="school-list-img">
-                    <ul class="school-info">
-                        <li class="school-name-loc" title="">
-                            <span class="school-name"><&= recomendSchoolItem.sch_name&></span>
-                            <span class="school-loc"><&= recomendSchoolItem.location&></span>
-                        </li>
-                        <li class="school-rank-probability">
-                            <span class="school-rank"><em class="dot"></em>综合排名<em class="rank-num"><&= recomendSchoolItem.totalRank&></em></span>
-                            <span class="enroll-probability"><em class="dot"></em>录取概率<em class="probability-num"><&= recomendSchoolItem.adm_ratio&>%</em></span>
-                        </li>
-                    </ul>
-                </div>
+                <&if(data.recommend_sch_list.length>0){&>
+                    <& for(var i = 0, len = data.recommend_sch_list.length; i < len; i++ ) {
+                    var recommendSchoolItem = data.recommend_sch_list[i];&>
+                    <div class="school-list-item <& if(i == 0) {&>school-list-margin<&}&> <&if(i==len-1){&>school-list-last<&}&>" data-schoolid="<&= recommendSchoolItem.sch_id&>">
+                        <img src="<&= recommendSchoolItem.icon_url&>" alt="学校logo" class="school-list-img">
+                        <ul class="school-info">
+                            <li class="school-name-loc" title="">
+                                <span class="school-name"><&= recommendSchoolItem.sch_name&></span>
+                                <&if(recommendSchoolItem.location){&>
+                                <span class="school-loc"><&= recommendSchoolItem.location&></span>
+                                <&}&>
+                            </li>
+                            <li class="school-rank-probability">
+                                <&if(recommendSchoolItem.totalRank){&>
+                                <span class="school-rank"><em class="dot"></em>综合排名<em class="rank-num"><&= recommendSchoolItem.totalRank&></em></span>
+                                <&}&>
+                                <&if(recommendSchoolItem.adm_ratio){&>
+                                <span class="enroll-probability <&= recommendSchoolItem.totalRank?'':'clear-margin-left'&>"><em class="dot"></em>录取概率<em class="probability-num"><&= recommendSchoolItem.adm_ratio&>%</em></span>
+                                <&}&>
+                            </li>
+                        </ul>
+                    </div>
+                    <&}&>
+                <&}else{&>
+                    <div class="div-icon-search"></div>
+                    <p class="school-list-none-tip">没有找到你能上的<&= data.batch_name&>第<&= data.batch==1?"一":"二"&>批院校</p>
                 <&}&>
             </script>
         </div>
@@ -187,27 +201,27 @@
         <div class="top-five-major">
             <p class="top-five-enroll"><i class="iconfont icon-lingxin"></i><span class="title">录取人数最多的 5 个 <em>专业</em></span></p>
             <div id="top-five-enroll-major-wrap">
-            <script id="top-five-enroll-major-tpl" type="text/template">
-                <& if(data.goto_majors_list.length>0){&>
-                <ul class="enroll-major-wrap">
-                    <li class="enroll-major-header">
-                        <span class="major-name-header">专业名称</span>
-                        <span class="major-category-header">所属大类</span>
-                        <span class="major-examinee-header">考生数量</span>
-                    </li>
-                    <&  var maxMajorStuCount = data.goto_majors_list[0].stu_count;&>
-                    <& for(var j=0, len = data.goto_majors_list.length; j < len ;j++){
+                <script id="top-five-enroll-major-tpl" type="text/template">
+                    <& if(data.goto_majors_list.length>0){&>
+                    <ul class="enroll-major-wrap">
+                        <li class="enroll-major-header">
+                            <span class="major-name-header">专业名称</span>
+                            <span class="major-category-header">所属大类</span>
+                            <span class="major-examinee-header">考生数量</span>
+                        </li>
+                        <&  var maxMajorStuCount = data.goto_majors_list[0].stu_count;&>
+                        <& for(var j=0, len = data.goto_majors_list.length; j < len ;j++){
                         var gotoMajorItem = data.goto_majors_list[j];
                         var itemInvalidPercent = (1-gotoMajorItem.stu_count/maxMajorStuCount)*0.5*100 &>
-                    <li class="enroll-major-detail">
-                        <span class="major-name-detail"><&= gotoMajorItem.major_name&></span>
-                        <span class="major-category-detail"><&= gotoMajorItem.primary_name&></span>
-                        <span class="major-examinee-detail"><&= gotoMajorItem.stu_count&> <em class="valid-bg"></em><em class="invalid-bg" style="width: <&= itemInvalidPercent&>%"></em></span>
-                    </li>
+                        <li class="enroll-major-detail">
+                            <span class="major-name-detail"><&= gotoMajorItem.major_name&></span>
+                            <span class="major-category-detail"><&= gotoMajorItem.primary_name&></span>
+                            <span class="major-examinee-detail"><&= gotoMajorItem.stu_count&> <em class="valid-bg"></em><em class="invalid-bg" style="width: <&= itemInvalidPercent&>%"></em></span>
+                        </li>
+                        <&}&>
+                    </ul>
                     <&}&>
-                </ul>
-                <&}&>
-            </script>
+                </script>
             </div>
             <p class="wmzy-link goto-wmzy-pro-intro">
             <span>

@@ -406,8 +406,8 @@ function drawTrapezoid(canvas, ctx, initWidth, initHeight, schoolList, trapezoid
 	if (title) {
 		ctx.font = contextFontStyle;
 		ctx.fillStyle = '#bebebe';
-		ctx.fillText(title, canvas.width*0.12+titleOffsetX, canvas.height*0.08);
-		offsetY = canvas.height*0.12;
+		ctx.fillText(title, canvas.width*0.12+titleOffsetX, canvas.height*0.12);
+		offsetY = canvas.height*0.15;
 	}
 
 	for (var i = 0, len = schoolList.length; i < len; i++) {

@@ -21,8 +21,6 @@ var server = {
     }
 };
 
-
-
 if (config.debug) {
     app.init();
 } else {
