@@ -178,9 +178,15 @@
         </div>
 
         <p class="wmzy-link goto-wmzy-pro-intro" id="recommend-school-link-wrap">
+            <&if(data.recommend_sch_list.length>0){&>
             <script id="recommend-school-link-tpl" type="text/template">
                 <span>其余 <&= data.recommend_sch_num&> 所推荐院校，尽在完美志愿 >></span>
             </script>
+            <&}else{&>
+            <script id="recommend-school-link-tpl-none" type="text/template">
+                <span>建议下载完美志愿，查看其它批次推荐院校 >></span>
+            </script>
+            <}>
         </p>
 
         <p class="rectangular-title rectangular-title-l-w">

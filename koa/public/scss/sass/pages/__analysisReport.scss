@@ -285,6 +285,37 @@ $yellowCol: #f9be00;
   }
 }
 
+.div-icon-search{
+  position: relative;
+  display: inline-block;
+  width: 0.8rem;
+  height: 0.8rem;
+  border: 0.15rem solid #eaeaea;
+  border-radius: 50%;
+  transform: rotate(45deg);
+  left: 50%;
+  margin-top: percentage(85/750);
+  margin-left: -0.4rem;
+}
+.div-icon-search:after{
+  content: " ";
+  position: absolute;
+  background: #eaeaea;
+  width: 0.5rem;
+  height: 0.15rem;
+  top: 50%;
+  margin-top: -0.075rem;
+  right: -0.5rem;
+  border-radius: 0.05rem;
+}
+.school-list-none-tip{
+  position: relative;
+  margin-top: percentage(20/750);
+  text-align: center;
+  color: #666666;
+  @include font-size(2.8);
+}
+
 .school-list-margin {
   margin-top: percentage(10/750);
 }

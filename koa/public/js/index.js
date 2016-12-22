@@ -438,9 +438,6 @@ var _renderAnalysisReportPage = function _renderAnalysisReportPage(reportData) {
 
 	// 推荐学校列表
 	renderEjsTplWithData("#school-list-item-tpl", "#school-list-item-wrap", reportData);
-	if (reportData.recommend_sch_num <= 0) {
-		$("#recommend-school-link-wrap").addClass("hide");
-	}
 
 	// 录取人数最多的五个院校
 	var canvas = document.getElementById('trapezoid-canvas');
@@ -486,7 +483,11 @@ var _renderAnalysisReportPage = function _renderAnalysisReportPage(reportData) {
 	_canvasGraph2.default.drawTrapezoid(canvas, context, width, height, reportData.goto_schs_list, trapezoidStyle, schoolNumNameStyle, lineDotStyle, contextFontStyle, titleOffsetX, "（考生数量）", 6);
 
 	// 其他 x 所推荐院校
-	renderEjsTplWithData("#recommend-school-link-tpl", "#recommend-school-link-wrap", reportData);
+	if (reportData.recommend_sch_list.length > 0) {
+		renderEjsTplWithData("#recommend-school-link-tpl", "#recommend-school-link-wrap", reportData);
+	} else {
+		renderEjsTplWithData("#recommend-school-link-tpl-none", "#recommend-school-link-wrap", reportData);
+	}
 
 	// 根据排名的数据来源
 	renderEjsTplWithData("#recommend-data-origin-tpl", "#recommend-data-origin-wrap", reportData);
@@ -559,22 +560,7 @@ var swipeToAnalysisReportPage = function swipeToAnalysisReportPage(requestParam,
 			// 		}
 			// 	],
 			// 	"recommend_sch_list":[//推荐学校列表
-			// 		{
-			// 			"sch_id":"52ac2e98747aec013fcf4c46",//学校id
-			// 			"icon_url":"http://school-icon.b0.upaiyun.com/52ac2e98747aec013fcf4c1d.jpg",//学校图标识
-			// 			"sch_name":"北京大学",//学校名称
-			// 			"location":"北京",//所在省份
-			// 			"totalRank":null,//综合排名
-			// 			"adm_ratio":89//录取概率
-			// 		},
-			// 		{
-			// 			"sch_id":"52ac2e98747aec013fcf4c46",//学校id
-			// 			"icon_url":"http://school-icon.b0.upaiyun.com/52ac2e98747aec013fcf4c1d.jpg",
-			// 			"sch_name":"北京大学",//学校名称
-			// 			"location":"北京",//所在省份
-			// 			"totalRank":1,//综合排名
-			// 			"adm_ratio":89//录取概率
-			// 		}
+			//
 			// 	],
 			// 	"goto_schs_list":[
 			// 		{
