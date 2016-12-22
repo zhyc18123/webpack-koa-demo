@@ -65,7 +65,7 @@
         <div class="gap-suggest-wrap" id="gap-suggest-wrap">
 
             <script id="gap-suggest-tpl" type="text/template">
-                <& if(data.exp_sch){ &>
+                <& if(data.exp_sch && data.score_gap){ &>
                     <& if(data.score_gap <= -5) {&>
                     <p class="gap-sugest">你的成绩比该校的最低分还高出<em class="black-strong">&nbsp;<&= Math.abs(data.score_gap)-5&>~<&= Math.abs(data.score_gap)+5&>&nbsp;</em>分</p>
                     <& }else if( data.score_gap <=5 ) {&>
@@ -207,10 +207,10 @@
         </div>
 
         <div class="top-five-major">
-            <p class="top-five-enroll"><i class="iconfont icon-lingxin"></i><span class="title">录取人数最多的 5 个 <em>专业</em></span></p>
             <div id="top-five-enroll-major-wrap">
                 <script id="top-five-enroll-major-tpl" type="text/template">
                     <& if(data.goto_majors_list.length>0){&>
+                    <p class="top-five-enroll"><i class="iconfont icon-lingxin"></i><span class="title">录取人数最多的 <&= data.goto_majors_list.length&> 个 <em>专业</em></span></p>
                     <ul class="enroll-major-wrap">
                         <li class="enroll-major-header">
                             <span class="major-name-header">专业名称</span>

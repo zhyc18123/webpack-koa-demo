@@ -263,12 +263,11 @@ var _init = function () {
 
 	onClickCloseSchoolDetailBtn = function onClickCloseSchoolDetailBtn() {
 		_toggleModaHide();
-		var schoolListItemModalHtml = '<script id="school-list-item-modal-tpl" type="text/template">' + '<img src="<&= data.icon_url&>" alt="学校logo" class="school-list-img">' + '<ul class="school-info">' + '<li class="school-name-loc" title="">' + '<span class="school-name"><&= data.sch_name&></span>' + '<span class="school-loc"><&= data.city&></span>' + '</li>' + '<li class="school-rank-probability">' + '<span class="school-rank"><em class="dot"></em>综合排名<em class="rank-num"><&= data.total_rank&></em></span>' + '<span class="enroll-probability"><em class="dot"></em>录取概率<em class="probability-num"><&= data.adm_ratio&>%</em></span>' + '</li>' + '<li class="school-label">' + '<span class="school-label-1"><&= data.sch_flag[0]&></span>' + '<span class="school-label-2"><&= data.sch_flag[1]&></span>' + '<span class="school-label-3"><&= data.sch_type[0]&></span>' + '</li>' + '</ul>' + '</script>';
-		var schoolListLineChartModalHtml = '<script id="line-chart-wmzy-link-modal-tpl" type="text/template">' + '<& if(data.sch_min_score_list){ &>' + '<div class="line-chart-wrap">' + '<h3 class="line-chart-tiltle">往年该校录取最低省排名（广东-理科）</h3>' + '<canvas id="line-chart-modal-canvas"></canvas>' + '</div>' + '<&}&>' + '</script>';
+		var schoolListItemModalHtml = '<script id="school-list-item-modal-tpl" type="text/template">' + '<img src="<&= data.icon_url&>" alt="学校logo" class="school-list-img">' + '<ul class="school-info">' + '<li class="school-name-loc" title="">' + '<span class="school-name"><&= data.sch_name&></span>' + '<span class="school-loc"><&= data.city&></span>' + '</li>' + '<li class="school-rank-probability">' + '<&if(data.total_rank){&>' + '<span class="school-rank"><em class="dot"></em>综合排名<em class="rank-num"><&= data.total_rank&></em></span>' + '<&}&>' + '<&if(data.adm_ratio){&>' + '<span class="enroll-probability"><em class="dot"></em>录取概率<em class="probability-num"><&= data.adm_ratio&>%</em></span>' + '<&}&>' + '</li>' + '<li class="school-label">' + '<&if(data.sch_flag.length >= 1){&>' + '<span class="school-label-1"><&= data.sch_flag[0]&></span>' + '<&if(data.sch_flag[1]){&>' + '<span class="school-label-2"><&= data.sch_flag[1]&></span>' + '<&}&>' + '<&}&>' + '<&if(data.sch_type.length > 0){&>' + '<span class="school-label-3"><&= data.sch_type[0]&></span>' + '<&}&>' + '</li>' + '</ul>' + '</script>';
+		var schoolListLineChartModalHtml = '<script id="line-chart-wmzy-link-modal-tpl" type="text/template">' + '<& if(data.sch_min_score_list){ &>' + '<div class="line-chart-wrap">' + '<h3 class="line-chart-tiltle">往年该校录取最低省排名&nbsp;<&= data.loc_provinc_name&> — <&= data.loc_wenli&></h3>' + '<canvas id="line-chart-modal-canvas"></canvas>' + '</div>' + '<&}&>' + '</script>';
 		$("#school-list-item-modal-wrap").html(schoolListItemModalHtml);
 		$("#line-chart-wmzy-link-modal-wrap").html(schoolListLineChartModalHtml);
 	};
-
 	// PUBLIC METHODS
 	initModule = function initModule() {
 		setJqueryMap();
@@ -355,7 +354,6 @@ var _renderAnalysisReportPage = function _renderAnalysisReportPage(reportData) {
 	}
 
 	// 与目标学校的距离 —— 建议
-	alert("data.score_gap " + reportData.score_gap);
 	renderEjsTplWithData("#gap-suggest-tpl", "#gap-suggest-wrap", reportData);
 
 	// canvas 折线图 —— 往年该校录取最低省排名(如果设置了目标院校)
@@ -377,7 +375,6 @@ var _renderAnalysisReportPage = function _renderAnalysisReportPage(reportData) {
 		lineChartCanvasClosestWidth = lineChartCanvas.parentNode.parentNode.clientWidth;
 
 		// alert("lineChartCanvasParentNodeWidth " + lineChartCanvasClosestWidth );
-
 		lineChartCanvas.width = lineChartCanvas.parentNode.clientWidth;
 		lineChartCanvas.height = lineChartCanvas.parentNode.clientHeight * 1.5;
 
