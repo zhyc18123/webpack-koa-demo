@@ -70,7 +70,7 @@ function setCoordinate(originData, startX, startY, widthMargin, canvasHeight, lo
 	}else if(rankMaxStr.length <= 5){
 		rankMax += 4 * Math.pow(10, rankMaxStr.length-1);
 	}else{
-		rankMax += 5 * Math.pow(10, rankMaxStr.length-1);
+		rankMax += 2 * Math.pow(10, rankMaxStr.length-1);
 	}
 
 	for(var i = 0; i < len; i++){
@@ -236,8 +236,8 @@ function drawCoordinate(ctx, coord, yearColor, historyColor, currentColor, label
  * @param lineChartFontStyle 标注标签时的字体样式
  * @param lineChartCanvasClosestWidth  cavas祖父元素的宽度，用于调整label的宽度
  */
-function drawLabel(ctx, coord, labelHeight, radius, startY, canvasHeight, offsetY, labelWidth,
-				   canvasWidth, lineChartFontStyle, lineChartCanvasClosestWidth) {
+function drawLabel(ctx, coord, labelHeight, radius, startY, canvasHeight, offsetY,
+				   labelWidth, lineChartFontStyle, dpr, lineChartCanvasClosestWidth) {
 
 	if (typeof radius === 'undefined') {
 		radius = 5;
@@ -270,14 +270,14 @@ function drawLabel(ctx, coord, labelHeight, radius, startY, canvasHeight, offset
 		switch (rankingStr.length) {
 			case 1:
 			case 2:
-				width = 150;
+				width = 185;
 				break;
 			case 3:
 			case 4:
 				width = 185;
 				break;
 			case 5:
-				width = 195;
+				width = 210;
 				break;
 			case 6:
 				width = 225;
@@ -298,6 +298,15 @@ function drawLabel(ctx, coord, labelHeight, radius, startY, canvasHeight, offset
 		}
 
 
+		if(dpr && dpr ==1){
+			width = 195;
+		}
+
+		if(dpr && dpr >1 && lineChartCanvasClosestWidth == 640){
+			width -= 30;
+		}
+
+
 		ctx.strokeStyle = "#3e3a39";
 		ctx.fillStyle = "#3e3a39";
 		if (i == len-1){
@@ -305,15 +314,14 @@ function drawLabel(ctx, coord, labelHeight, radius, startY, canvasHeight, offset
 			ctx.fillStyle = "#eb614c";
 		}
 
-
-		if(window.dpr == 1) {
+		if(dpr && dpr == 1) {
 			width -= 120;
 			y -= 25;
-		} else if(window.dpr == 2){
+		} else if(dpr && dpr == 2){
 			width -= 50;
 			y -= 58;
 		} else {
-			y -= 58;
+			y -= 75;
 		}
 		x += (labelWidth/2- width/2);
 		var labelYPoint = 20;
@@ -346,7 +354,7 @@ function drawLabel(ctx, coord, labelHeight, radius, startY, canvasHeight, offset
 					break;
 				case 4:
 				case 5:
-					x += 15;
+					x += 10;
 					break;
 				case 6:
 				case 7:
@@ -357,16 +365,25 @@ function drawLabel(ctx, coord, labelHeight, radius, startY, canvasHeight, offset
 					break;
 
 			}
-			if (window.dpr == 1) {
+			if ( dpr && dpr == 1) {
 				ctx.fillText(ranking+"名", x,  y - labelHeight/8 );
-			} else if (window.dpr >= 2) {
-				ctx.fillText(ranking+"名", x,  y + 20 ); //
+			} else if (dpr && dpr == 2) {
+				ctx.fillText(ranking+"名", x + 10,  y + labelHeight*0.2); //
+			} else if (dpr && dpr == 3) {
+				ctx.fillText(ranking+"名", x + 10,  y + labelHeight*0.4); //
 			}
 		}
-		if (i==len-1) {
+		if (i == len-1) {
 			ctx.font = lineChartFontStyle;
 			ctx.fillStyle = '#eb614c';
-			ctx.fillText("你的排名", x+width/2-100, y+130);
+			if ( dpr && dpr == 1) {
+				ctx.fillText("你的排名", x, y + labelHeight*1.5 );
+			} else if (dpr && dpr == 2) {
+				ctx.fillText("你的排名", x+10, y + labelHeight*1.5);
+
+			} else if (dpr && dpr == 3) {
+				ctx.fillText("你的排名", x+10, y + labelHeight*1.5 );
+			}
 		}
 	}
 

@@ -328,8 +328,6 @@ var _renderAnalysisReportPage = function _renderAnalysisReportPage(reportData) {
 	var circleLineWidthInner = 4;
 	var circleLineWidthOuter = 6;
 
-	if (window.dpr == 1) {}
-
 	if (window.dpr >= 2) {
 		circleLineWidthInner = 10;
 		circleLineWidthOuter = 12;
@@ -344,12 +342,12 @@ var _renderAnalysisReportPage = function _renderAnalysisReportPage(reportData) {
 	context.textAlign = "center";
 
 	// 分是否设立了目标学校两种情况讨论
-	if (reportData.exp_sch && reportData.adm_ratio) {
+	if (reportData.exp_sch && reportData.adm_ratio >= 0) {
 		_canvasGraph2.default.drawCircleText(context, enrollCanvasFontDpr1, '#f9be00', reportData.adm_ratio, enrollCanvas.width * 0.46, enrollCanvas.height * 0.45);
 		_canvasGraph2.default.drawCircleText(context, enrollCanvasFontDpr2, '#f9be00', '%', enrollCanvas.width * 0.62, enrollCanvas.height * 0.5);
 		_canvasGraph2.default.drawCircleText(context, enrollCanvasFontDpr3, '#b6b6b6', '录取概率', centerX, enrollCanvas.height * 0.65);
 	} else {
-		_canvasGraph2.default.drawCircleText(context, enrollCanvasFontDpr3, '#b6b6b6', "未设立", centerX, enrollCanvas.height * 0.5);
+		_canvasGraph2.default.drawCircleText(context, enrollCanvasFontDpr3, '#b6b6b6', "未设立", centerX, enrollCanvas.height * 0.48);
 		_canvasGraph2.default.drawCircleText(context, enrollCanvasFontDpr3, '#b6b6b6', '目标学校', centerX, enrollCanvas.height * 0.6);
 	}
 
@@ -364,7 +362,6 @@ var _renderAnalysisReportPage = function _renderAnalysisReportPage(reportData) {
   *
   **/
 
-	// reportData.sch_min_score_list = 0;
 	if (reportData.exp_sch && reportData.sch_min_score_list.length > 1) {
 
 		renderEjsTplWithData("#line-chart-wmzy-link-tpl", "#line-chart-wmzy-link-wrap", reportData);
@@ -381,7 +378,7 @@ var _renderAnalysisReportPage = function _renderAnalysisReportPage(reportData) {
 		var startX = 0;
 		var startY = 40;
 		var widthMargin = lineChartCanvas.width / 4;
-		var labelWitth = widthMargin;
+		var labelWidth = widthMargin;
 		var labelHeight = 75;
 		var coordData;
 		var lowestPercent = 1;
@@ -402,14 +399,18 @@ var _renderAnalysisReportPage = function _renderAnalysisReportPage(reportData) {
 		};
 		// alert(" the win.dpr " + window.dpr);
 		var lineChartFontStyle = getFont(lineChartCanvas, 0.03);
-		var lineDotStyle = {};
+		var lineDotStyle = {
+			lineWidth: 2,
+			dotRadius: 8
+		};
 
-		if (window.dpr) {
+		if (window.dpr == 1) {
 			startX = 20;
 		} else if (window.dpr == 2) {
 			lineChartFontStyle = getFont(lineChartCanvas, 0.04);
 		} else if (window.dpr === 3) {
 			lineChartFontStyle = getFont(lineChartCanvas, 0.04);
+			labelHeight = 100;
 		}
 
 		setCoordinateReturn = _canvasGraph2.default.setCoordinate(reportData.sch_min_score_list, startX, startY, widthMargin, 400, lowestPercent);
@@ -419,7 +420,7 @@ var _renderAnalysisReportPage = function _renderAnalysisReportPage(reportData) {
 		offsetY = lowestPercent < 0.01 ? 140 : lowestPercent < 0.1 ? 130 : 50;
 
 		if (window.dpr == 1) {
-			labelWitth = labelWitth / 2;
+			labelWidth = labelWidth / 2;
 			lineChartCanvas.height = lineChartCanvas.height / 2;
 			startY = startY / 2;
 			offsetY = offsetY / 2;
@@ -428,8 +429,8 @@ var _renderAnalysisReportPage = function _renderAnalysisReportPage(reportData) {
 			lineDotStyle.dotRadius = 5;
 		}
 
-		_canvasGraph2.default.drawCoordinate(context, coordData, yearColor, historyColor, currentColor, labelWitth, lineChartCanvas.width, lineChartCanvas.height, startY, offsetY, lineChartFontStyle, lineDotStyle);
-		_canvasGraph2.default.drawLabel(context, coordData, labelHeight, 8, 20, lineChartCanvas.height, offsetY, labelWitth, lineChartCanvas.width, lineChartFontStyle, lineChartCanvasClosestWidth);
+		_canvasGraph2.default.drawCoordinate(context, coordData, yearColor, historyColor, currentColor, labelWidth, lineChartCanvas.width, lineChartCanvas.height, startY, offsetY, lineChartFontStyle, lineDotStyle);
+		_canvasGraph2.default.drawLabel(context, coordData, labelHeight, 8, 20, lineChartCanvas.height, offsetY, labelWidth, lineChartFontStyle, window.dpr, lineChartCanvasClosestWidth);
 	} else {
 		$("#line-chart-wmzy-pro-intro").addClass("hide");
 	}
@@ -438,7 +439,6 @@ var _renderAnalysisReportPage = function _renderAnalysisReportPage(reportData) {
 	renderEjsTplWithData("#school-list-item-tpl", "#school-list-item-wrap", reportData);
 
 	// 录取人数最多的五个院校
-
 	if (reportData.recommend_sch_list.length > 0) {
 		renderEjsTplWithData("#top-five-enroll-school-tpl", "#top-five-enroll-school-wrap", reportData);
 		var canvas = document.getElementById('trapezoid-canvas');
@@ -507,7 +507,7 @@ var swipeToAnalysisReportPage = function swipeToAnalysisReportPage(requestParam,
 	paramData.provinceId = "" + requestParam.province_id;
 	paramData.wenli = requestParam.wenli || "";
 	paramData.score = requestParam.score || "";
-	paramData.expSchId = requestParam.exp_sch_id || "52ac2e98747aec013fcf4c46";
+	paramData.expSchId = requestParam.exp_sch_id || "";
 	paramData.batch = requestParam.batch || "";
 
 	REQUESTPARAM = paramData;
@@ -521,78 +521,12 @@ var swipeToAnalysisReportPage = function swipeToAnalysisReportPage(requestParam,
 			console.log("data " + JSON.stringify(data, null, 4));
 			data.loc_provinc_name = _loc2.default.getProvinceName(paramData.provinceId);
 			data.loc_wenli = REQUESTPARAM.wenli == 1 ? "理科" : "文科";
-
 			_renderAnalysisReportPage(data);
 			_init.initModule();
 			xinSwiper.slideNext();
 		},
 		error: function error() {
 			alert("服务器错误！");
-			// var testData = {
-			// 	"code":0,//状态码,0-成功，-1-失败
-			// 	"score":600,//分数
-			// 	"rank":4000,//排名
-			// 	"rank_gap":1000,//排名差距
-			// 	"exp_sch":null,//目标学校
-			// 	"diploma_id":7,//学历 5-本科，7-专科
-			// 	"score_gap":30,//与目标学校分差值
-			// 	"adm_ratio":40,//录取概率
-			// 	"recommend_sch":"北京大学",//推荐学校
-			// 	"recommend_sch_num":0,//推荐学校数量
-			// 	"batch":1,//批次编号
-			// 	"batch_name":"本科",//推荐学校的批次名称
-			// 	"choosed_sch":"四川大学",//相近分数的人中去向最多的学校
-			// 	"stu_count":1300,//学生人数
-			// 	"sch_min_score_list":[
-			// 		{
-			// 			"year":"2013",//年份
-			// 			"min_rank":2600//当年最低省排名
-			// 		},
-			// 		{
-			// 			"year":"2014",//年份
-			// 			"min_rank":2700//当年最低省排名
-			// 		},
-			// 		{
-			// 			"year":"2015",//年份
-			// 			"min_rank":2500//当年最低省排名
-			// 		},
-			// 		{
-			// 			"year":"你的排名",//用户的排名
-			// 			"min_rank":3000//用户排名
-			// 		}
-			// 	],
-			// 	"recommend_sch_list":[//推荐学校列表
-			//
-			// 	],
-			// 	"goto_schs_list":[
-			// 		{
-			// 			"sch_name":"四川大学",
-			// 			"stu_count":1160
-			// 		},
-			// 		{
-			// 			"sch_name":"电子科技大学",
-			// 			"stu_count":720
-			// 		}
-			// 	],
-			// 	"goto_majors_list":[
-			// 		{
-			// 			"major_name":"临床医学",
-			// 			"primary_name":"医学",
-			// 			"stu_count":124
-			// 		},
-			// 		{
-			// 			"major_name":"自动化",
-			// 			"primary_name":"工学",
-			// 			"stu_count":124
-			// 		}
-			// 	]
-			//
-			// };
-			// testData["loc_provinc_name"] = prov.getProvinceName(paramData.provinceId);
-			// testData["loc_wenli"] = REQUESTPARAM.wenli == 1 ? "理科" : "文科";
-			// _renderAnalysisReportPage(testData);
-			// _init.initModule();
-			// xinSwiper.slideNext();
 		}
 	});
 };
@@ -2692,7 +2626,7 @@ function setCoordinate(originData, startX, startY, widthMargin, canvasHeight, lo
 	} else if (rankMaxStr.length <= 5) {
 		rankMax += 4 * Math.pow(10, rankMaxStr.length - 1);
 	} else {
-		rankMax += 5 * Math.pow(10, rankMaxStr.length - 1);
+		rankMax += 2 * Math.pow(10, rankMaxStr.length - 1);
 	}
 
 	for (var i = 0; i < len; i++) {
@@ -2853,7 +2787,7 @@ function drawCoordinate(ctx, coord, yearColor, historyColor, currentColor, label
  * @param lineChartFontStyle 标注标签时的字体样式
  * @param lineChartCanvasClosestWidth  cavas祖父元素的宽度，用于调整label的宽度
  */
-function drawLabel(ctx, coord, labelHeight, radius, startY, canvasHeight, offsetY, labelWidth, canvasWidth, lineChartFontStyle, lineChartCanvasClosestWidth) {
+function drawLabel(ctx, coord, labelHeight, radius, startY, canvasHeight, offsetY, labelWidth, lineChartFontStyle, dpr, lineChartCanvasClosestWidth) {
 
 	if (typeof radius === 'undefined') {
 		radius = 5;
@@ -2886,14 +2820,14 @@ function drawLabel(ctx, coord, labelHeight, radius, startY, canvasHeight, offset
 		switch (rankingStr.length) {
 			case 1:
 			case 2:
-				width = 150;
+				width = 185;
 				break;
 			case 3:
 			case 4:
 				width = 185;
 				break;
 			case 5:
-				width = 195;
+				width = 210;
 				break;
 			case 6:
 				width = 225;
@@ -2913,6 +2847,14 @@ function drawLabel(ctx, coord, labelHeight, radius, startY, canvasHeight, offset
 
 		}
 
+		if (dpr && dpr == 1) {
+			width = 195;
+		}
+
+		if (dpr && dpr > 1 && lineChartCanvasClosestWidth == 640) {
+			width -= 30;
+		}
+
 		ctx.strokeStyle = "#3e3a39";
 		ctx.fillStyle = "#3e3a39";
 		if (i == len - 1) {
@@ -2920,14 +2862,14 @@ function drawLabel(ctx, coord, labelHeight, radius, startY, canvasHeight, offset
 			ctx.fillStyle = "#eb614c";
 		}
 
-		if (window.dpr == 1) {
+		if (dpr && dpr == 1) {
 			width -= 120;
 			y -= 25;
-		} else if (window.dpr == 2) {
+		} else if (dpr && dpr == 2) {
 			width -= 50;
 			y -= 58;
 		} else {
-			y -= 58;
+			y -= 75;
 		}
 		x += labelWidth / 2 - width / 2;
 		var labelYPoint = 20;
@@ -2960,7 +2902,7 @@ function drawLabel(ctx, coord, labelHeight, radius, startY, canvasHeight, offset
 					break;
 				case 4:
 				case 5:
-					x += 15;
+					x += 10;
 					break;
 				case 6:
 				case 7:
@@ -2971,16 +2913,24 @@ function drawLabel(ctx, coord, labelHeight, radius, startY, canvasHeight, offset
 					break;
 
 			}
-			if (window.dpr == 1) {
+			if (dpr && dpr == 1) {
 				ctx.fillText(ranking + "名", x, y - labelHeight / 8);
-			} else if (window.dpr >= 2) {
-				ctx.fillText(ranking + "名", x, y + 20); //
+			} else if (dpr && dpr == 2) {
+				ctx.fillText(ranking + "名", x + 10, y + labelHeight * 0.2); //
+			} else if (dpr && dpr == 3) {
+				ctx.fillText(ranking + "名", x + 10, y + labelHeight * 0.4); //
 			}
 		}
 		if (i == len - 1) {
 			ctx.font = lineChartFontStyle;
 			ctx.fillStyle = '#eb614c';
-			ctx.fillText("你的排名", x + width / 2 - 100, y + 130);
+			if (dpr && dpr == 1) {
+				ctx.fillText("你的排名", x, y + labelHeight * 1.5);
+			} else if (dpr && dpr == 2) {
+				ctx.fillText("你的排名", x + 10, y + labelHeight * 1.5);
+			} else if (dpr && dpr == 3) {
+				ctx.fillText("你的排名", x + 10, y + labelHeight * 1.5);
+			}
 		}
 	}
 }
