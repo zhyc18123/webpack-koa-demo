@@ -230,11 +230,11 @@ $yellowCol: #f9be00;
 }
 
 .line-chart-wrap:after {
-  top: -20px;
+  top: -0.2rem;
   left: 50%;
-  margin-left: -5px;
+  margin-left: -0.2rem;
   border-bottom-color: #f3f3f3;
-  border-width: 20px;
+  border-width: 0.4rem;
 }
 
 .line-chart-tiltle {
@@ -273,7 +273,9 @@ $yellowCol: #f9be00;
   text-align: left;
   overflow: hidden;
 }
-
+#school-list-item-wrap{
+  margin-top: percentage(45/750);
+}
 .school-list-item {
   position: relative;
   width: 100%;
