@@ -106,7 +106,7 @@ var setProvByName=function(provName){
 			    .val(provObj.name);
 };
 var initPage=function(){
-	var provName=queryString.getQueryString("prev_name")||"",
+	var provName=queryString.getQueryString("prov_name")||"",
 		score=queryString.getQueryString("score"),
 		salesmanId=queryString.getQueryString("salesman_id"),
 		examNo=queryString.getQueryString("exam_no");

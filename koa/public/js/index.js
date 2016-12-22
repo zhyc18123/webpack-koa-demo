@@ -1691,7 +1691,7 @@ var setProvByName = function setProvByName(provName) {
 	$("#prov-name").data("val", provObj.loc_id).val(provObj.name);
 };
 var initPage = function initPage() {
-	var provName = _queryString2.default.getQueryString("prev_name") || "",
+	var provName = _queryString2.default.getQueryString("prov_name") || "",
 	    score = _queryString2.default.getQueryString("score"),
 	    salesmanId = _queryString2.default.getQueryString("salesman_id"),
 	    examNo = _queryString2.default.getQueryString("exam_no");

@@ -61,7 +61,7 @@ var _init = (function () {
 		// 	]
 		// };
 
-		
+
 		var schoolData = data;
 		schoolData.loc_provinc_name = REQUESTPARAM.loc_provinc_name;
 		schoolData.loc_wenli = REQUESTPARAM.loc_wenli;
