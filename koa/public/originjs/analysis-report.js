@@ -61,27 +61,34 @@ var _init = (function () {
 		// 	]
 		// };
 
+		
 		var schoolData = data;
+		schoolData.loc_provinc_name = REQUESTPARAM.loc_provinc_name;
+		schoolData.loc_wenli = REQUESTPARAM.loc_wenli;
 
 		ejsTpl = $("#school-list-item-modal-tpl").html();
 		ejsHtml = Tpl.ejs(ejsTpl, schoolData, ejsOptions);
 		console.log("ejsHtml >> " + ejsHtml);
 		$("#school-list-item-modal-wrap").html(ejsHtml);
 
-		if (schoolData.sch_min_score_list.length>0) {
+		if (schoolData.sch_min_score_list.length>2) {
+			var schMinScoreList = [];
 
 			renderEjsTplWithData("#line-chart-wmzy-link-modal-tpl", "#line-chart-wmzy-link-modal-wrap", schoolData);
 
+			var lineChartCanvasClosestWidth;
 			var lineChartCanvas = document.getElementById('line-chart-modal-canvas'),
 				context = lineChartCanvas.getContext('2d');
-			lineChartCanvas.width = lineChartCanvas.parentNode.clientWidth ;
-			lineChartCanvas.height = lineChartCanvas.parentNode.clientHeight*1.5;
+			lineChartCanvasClosestWidth = lineChartCanvas.parentNode.parentNode.clientWidth;
 
+			// alert("lineChartCanvasParentNodeWidth " + lineChartCanvasClosestWidth );
+			lineChartCanvas.width = lineChartCanvas.parentNode.clientWidth;
+			lineChartCanvas.height = lineChartCanvas.parentNode.clientHeight*1.5;
 
 			var startX = 0;
 			var startY = 40;
 			var widthMargin = lineChartCanvas.width/4;
-			var labelWitth = widthMargin;
+			var labelWidth = widthMargin;
 			var labelHeight=75;
 			var coordData;
 			var lowestPercent = 1;
@@ -102,18 +109,30 @@ var _init = (function () {
 			};
 			// alert(" the win.dpr " + window.dpr);
 			var lineChartFontStyle = getFont(lineChartCanvas,0.03);
-			var lineDotStyle = {};
+			var lineDotStyle = {
+				lineWidth: 2,
+				dotRadius: 8
+			};
 
-			if (window.dpr) {
+			if (window.dpr==1) {
 				startX = 20;
 			} else if(window.dpr == 2){
 				lineChartFontStyle = getFont(lineChartCanvas,0.04);
 			}else if(window.dpr === 3){
 				lineChartFontStyle = getFont(lineChartCanvas, 0.04);
+				labelHeight = 100;
 			}
 
+			var schoolDataListLen = schoolData.sch_min_score_list.length;
+			if(schoolDataListLen >=5){
+				for(var i = 0; i <= 3; i++){
+					schMinScoreList.push(schoolData.sch_min_score_list[schoolDataListLen-4+i]); //
+				}
+			}else {
+				schMinScoreList = schoolData.sch_min_score_list;
+			}
 
-			setCoordinateReturn = drawCanvas.setCoordinate(schoolData.sch_min_score_list, startX, startY, widthMargin, 400, lowestPercent);
+			setCoordinateReturn = drawCanvas.setCoordinate(schMinScoreList, startX, startY, widthMargin, 400, lowestPercent);
 			coordData = setCoordinateReturn[0];
 			lowestPercent = setCoordinateReturn[1];
 
@@ -121,7 +140,7 @@ var _init = (function () {
 				lowestPercent < 0.1 ? 130 : 50;
 
 			if(window.dpr == 1) {
-				labelWitth = labelWitth/2;
+				labelWidth = labelWidth/2;
 				lineChartCanvas.height = lineChartCanvas.height / 2;
 				startY = startY / 2;
 				offsetY = offsetY / 2;
@@ -130,10 +149,10 @@ var _init = (function () {
 				lineDotStyle.dotRadius = 5;
 			}
 
-			drawCanvas.drawCoordinate(context, coordData, yearColor,historyColor, currentColor, labelWitth,
+			drawCanvas.drawCoordinate(context, coordData, yearColor,historyColor, currentColor, labelWidth,
 				lineChartCanvas.width, lineChartCanvas.height, startY, offsetY, lineChartFontStyle, lineDotStyle);
-			drawCanvas.drawLabel(context, coordData, labelHeight, 8, 20, lineChartCanvas.height, offsetY, labelWitth,
-				lineChartCanvas.width, lineChartFontStyle);
+			drawCanvas.drawLabel(context, coordData, labelHeight, 8, 20, lineChartCanvas.height, offsetY,
+				labelWidth, lineChartFontStyle, window.dpr, lineChartCanvasClosestWidth);
 
 		}
 	};
@@ -483,8 +502,8 @@ var swipeToAnalysisReportPage = function ( requestParam, xinSwiper ) {
 		data: paramData,
 		success: function(data) {
 			console.log("data "+ JSON.stringify(data, null, 4));
-			data.loc_provinc_name = prov.getProvinceName(paramData.provinceId);
-			data.loc_wenli = REQUESTPARAM.wenli == 1 ? "理科" : "文科";
+			REQUESTPARAM.loc_provinc_name = data.loc_provinc_name = prov.getProvinceName(paramData.provinceId);
+			REQUESTPARAM.loc_wenli = data.loc_wenli = REQUESTPARAM.wenli == 1 ? "理科" : "文科";
 			_renderAnalysisReportPage(data);
 			_init.initModule();
 			xinSwiper.slideNext();
