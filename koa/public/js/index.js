@@ -526,71 +526,60 @@ var swipeToAnalysisReportPage = function swipeToAnalysisReportPage(requestParam,
 		},
 		error: function error() {
 			alert("服务器错误！");
-			// var testData = {
-			// 	"code":0,//状态码,0-成功，-1-失败
-			// 	"score":600,//分数
-			// 	"rank":4000,//排名
-			// 	"rank_gap":1000,//排名差距
-			// 	"exp_sch":null,//目标学校
-			// 	"diploma_id":7,//学历 5-本科，7-专科
-			// 	"score_gap":30,//与目标学校分差值
-			// 	"adm_ratio":40,//录取概率
-			// 	"recommend_sch":"北京大学",//推荐学校
-			// 	"recommend_sch_num":0,//推荐学校数量
-			// 	"batch":1,//批次编号
-			// 	"batch_name":"本科",//推荐学校的批次名称
-			// 	"choosed_sch":"四川大学",//相近分数的人中去向最多的学校
-			// 	"stu_count":1300,//学生人数
-			// 	"sch_min_score_list":[
-			// 		{
-			// 			"year":"2013",//年份
-			// 			"min_rank":2600//当年最低省排名
-			// 		},
-			// 		{
-			// 			"year":"2014",//年份
-			// 			"min_rank":2700//当年最低省排名
-			// 		},
-			// 		{
-			// 			"year":"2015",//年份
-			// 			"min_rank":2500//当年最低省排名
-			// 		},
-			// 		{
-			// 			"year":"你的排名",//用户的排名
-			// 			"min_rank":3000//用户排名
-			// 		}
-			// 	],
-			// 	"recommend_sch_list":[//推荐学校列表
-			//
-			// 	],
-			// 	"goto_schs_list":[
-			// 		{
-			// 			"sch_name":"四川大学",
-			// 			"stu_count":1160
-			// 		},
-			// 		{
-			// 			"sch_name":"电子科技大学",
-			// 			"stu_count":720
-			// 		}
-			// 	],
-			// 	"goto_majors_list":[
-			// 		{
-			// 			"major_name":"临床医学",
-			// 			"primary_name":"医学",
-			// 			"stu_count":124
-			// 		},
-			// 		{
-			// 			"major_name":"自动化",
-			// 			"primary_name":"工学",
-			// 			"stu_count":124
-			// 		}
-			// 	]
-			//
-			// };
-			// testData["loc_provinc_name"] = prov.getProvinceName(paramData.provinceId);
-			// testData["loc_wenli"] = REQUESTPARAM.wenli == 1 ? "理科" : "文科";
-			// _renderAnalysisReportPage(testData);
-			// _init.initModule();
-			// xinSwiper.slideNext();
+			var testData = {
+				"code": 0, //状态码,0-成功，-1-失败
+				"score": 600, //分数
+				"rank": 4000, //排名
+				"rank_gap": 1000, //排名差距
+				"exp_sch": null, //目标学校
+				"diploma_id": 7, //学历 5-本科，7-专科
+				"score_gap": 30, //与目标学校分差值
+				"adm_ratio": 40, //录取概率
+				"recommend_sch": "北京大学", //推荐学校
+				"recommend_sch_num": 0, //推荐学校数量
+				"batch": 1, //批次编号
+				"batch_name": "本科", //推荐学校的批次名称
+				"choosed_sch": "四川大学", //相近分数的人中去向最多的学校
+				"stu_count": 1300, //学生人数
+				"sch_min_score_list": [{
+					"year": "2013", //年份
+					"min_rank": 2600 //当年最低省排名
+				}, {
+					"year": "2014", //年份
+					"min_rank": 2700 //当年最低省排名
+				}, {
+					"year": "2015", //年份
+					"min_rank": 2500 //当年最低省排名
+				}, {
+					"year": "你的排名", //用户的排名
+					"min_rank": 3000 //用户排名
+				}],
+				"recommend_sch_list": [//推荐学校列表
+
+				],
+				"goto_schs_list": [{
+					"sch_name": "四川大学",
+					"stu_count": 1160
+				}, {
+					"sch_name": "电子科技大学",
+					"stu_count": 720
+				}],
+				"goto_majors_list": [{
+					"major_name": "临床医学",
+					"primary_name": "医学",
+					"stu_count": 124
+				}, {
+					"major_name": "自动化",
+					"primary_name": "工学",
+					"stu_count": 124
+				}]
+
+			};
+			testData["loc_provinc_name"] = _loc2.default.getProvinceName(paramData.provinceId);
+			testData["loc_wenli"] = REQUESTPARAM.wenli == 1 ? "理科" : "文科";
+			_renderAnalysisReportPage(testData);
+			_init.initModule();
+			xinSwiper.slideNext();
 		}
 	});
 };
