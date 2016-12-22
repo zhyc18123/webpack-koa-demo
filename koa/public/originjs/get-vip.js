@@ -14,6 +14,12 @@ var init=function(xinSwiper){
 	$("#get-vip-btn").on("click",function(){
 		xinSwiper.slideNext();
 	});
+	$(document).scroll(function(){
+		if(xinSwiper.activeIndex===2){
+			var bottomNum=$(".swiper-slide").eq(xinSwiper.activeIndex).height()-$(window).height()-$(document).scrollTop()-1;
+			$("#get-vip-btn").css({"bottom":bottomNum+"px"});
+		};
+	});
 };
 ///检查输入的手机号码
 var checkMobile=function(mobile){

@@ -68,6 +68,9 @@
 	}
 }
 .get-vip{
+	position: fixed;  
+	bottom: 0;//这里换成top:0;就悬浮在头部  
+	z-index: 100; 
 	@extend %inline-block;
 	height:1rem;
 	width:100%;
@@ -80,4 +83,7 @@
 	img{
 		width: 100%;
 	}
+}
+.vip-btn-div{
+	height:1rem;
 }

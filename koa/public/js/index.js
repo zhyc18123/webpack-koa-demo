@@ -1460,6 +1460,12 @@ var init = function init(xinSwiper) {
 	$("#get-vip-btn").on("click", function () {
 		xinSwiper.slideNext();
 	});
+	$(document).scroll(function () {
+		if (xinSwiper.activeIndex === 2) {
+			var bottomNum = $(".swiper-slide").eq(xinSwiper.activeIndex).height() - $(window).height() - $(document).scrollTop() - 1;
+			$("#get-vip-btn").css({ "bottom": bottomNum + "px" });
+		};
+	});
 };
 ///检查输入的手机号码
 var checkMobile = function checkMobile(mobile) {
@@ -1622,6 +1628,10 @@ var init = function init(xinSwiper) {
 	$("#school-input").on("input porpertychange", function () {
 		guestSchool(this);
 	});
+	// 监听学校联想失去光标
+	$("#school-input").on("focusout", function () {
+		$(".school-list").hide();
+	});
 	//监听选择学校
 	$(document).on("click", ".school-list li", function () {
 		selectSchool(this);
@@ -1691,7 +1701,7 @@ var setProvByName = function setProvByName(provName) {
 };
 var initPage = function initPage() {
 	var provName = _queryString2.default.getQueryString("prov_name") || "",
-	    score = _queryString2.default.getQueryString("score"),
+	    score = Math.round(_queryString2.default.getQueryString("score")),
 	    salesmanId = _queryString2.default.getQueryString("salesman_id"),
 	    examNo = _queryString2.default.getQueryString("exam_no");
 	// 设置省份
