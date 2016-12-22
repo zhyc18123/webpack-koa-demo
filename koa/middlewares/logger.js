@@ -11,7 +11,7 @@ var $depth = 11;
 log4js.configure({
     appenders: [{
         type: "file",
-        filename: './log.log',
+        filename: './log/log.log',
         maxLogSize: 1024 * 1024 * 1024,
         backups: 1,
         category: 'url',
@@ -21,7 +21,7 @@ log4js.configure({
         }
     }, {
         type: "file",
-        filename: '/var/log/node/detail.log',
+        filename: './log/detail.log',
         maxLogSize: 1024 * 1024 * 1024,
         backups: 1,
         category: 'detail',
@@ -31,7 +31,7 @@ log4js.configure({
         }
     }, {
         type: "file",
-        filename: '/var/log/node/err.log',
+        filename: './log/err.log',
         maxLogSize: 1024 * 1024 * 1024,
         backups: 1,
         category: 'err',

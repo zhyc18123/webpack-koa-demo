@@ -1,8 +1,8 @@
 var env = process.argv.slice(2);
 if(env[0] === "release") {
     var debug = false;
-    var redisHost = "192.168.1.50";
-    var redisPort = 36391;
+    var redisHost = "192.168.1.42";
+    var redisPort = 6379;
 }else{
     var debug = true;
     var redisHost = "192.168.1.42";
@@ -34,14 +34,14 @@ var getHostIpAddress = function() {
 var config = {
     "name": "新东方",
     hosts: getHostIpAddress() || "0.0.0.0",
-    port: 3005, // 端口
+    port:8090, // 端口
     numCPUs: numCPUs,
     debug: debug,
     "cookieKey": "sf8dsfasd8sd7fsda8a123bbrc23ch41", //cookie 签名
     "expires": 7 * 24 * 60 * 60 * 1000, // 7Day
     "routerDir": "./router/", // 路由所在目录
     "viewDir": path.join(__dirname, "..", "views"), // 模板所在的目录
-    "logDir": path.join(__dirname, "..", "/var/log/node/"), // log所在的目录
+    "logDir": path.join(__dirname, "..", "./"), // log所在的目录
     "staticDir": path.join(__dirname, "..", "/public/"), // 静态文件所在的目录
     "faviconDir": path.join(__dirname, "..", "/public/favicon.ico"), // logo icon 所在目录
     "interfaceStatus": "online", // 接口状态
@@ -63,7 +63,9 @@ var config = {
     redisOpt:{
         host: redisHost,
         port: redisPort,
-        db:0
+        db:10,
+        password:123456,
+        timeout:3000
     }
 };
 
