@@ -10,7 +10,6 @@ var init=function(xinSwiper){
 	createProv();
 	//监听打开选择省份
 	$(document).on("click","#prov-name",function(){
-		alert("xd")
 		if($(".js-open").length){
 			$(".js-open").click();
 		}else{
