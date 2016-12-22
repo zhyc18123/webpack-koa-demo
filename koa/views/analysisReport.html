@@ -2,7 +2,7 @@
 <div class="analyse-report-wrap">
     <div class="report-header">
         <img src="/scss/images/score-analysis-banner.png" alt="" class="header-bg">
-        <p class="data-origin-header">本报告由&nbsp;<span class="yellow-col">完美志愿</span>&nbsp;提供</p>
+        <p class="data-origin-header">本报告由&nbsp;<span class="yellow-col goto-wmzy-pro-intro">完美志愿</span>&nbsp;提供</p>
         <div class="report-summary">
             <div class="beveled-boder" id="score-rank-wrap">
 
@@ -17,7 +17,7 @@
                         <& if(data.rank) {&>
                         <li class="about-ranking">
                             <span class="rank-key">经推算，省排名约：</span>
-                            <span class="rank-value"><em><&= data.rank&></em> 名</span>
+                            <span class="rank-value">第 <em><&= data.rank&></em> 名</span>
                         </li>
                         <&}&>
                     </ul>
@@ -28,7 +28,13 @@
                     <& if(data.exp_sch && data.adm_ratio>=0){ &>
                     <li class="item-detail">
                         <i class="iconfont icon-sch-gap id-first"></i>
+                        <&if(data.score_gap<=-5){&>
+                        <span>你的成绩比该校的最低分高出约<em class="black-strong">&nbsp;<&=Math.abs(data.score_gap)&>&nbsp;</em>分</span>
+                        <&}else if(data.score_gap<=5){&>
+                        <span>以你目前的成绩，勉强可以考上该校</span>
+                        <&}else{&>
                         <span>目标学校<em class="black-strong">&nbsp;<&= data.exp_sch&>&nbsp;</em>的录取概率为<em class="black-strong">&nbsp;<&= data.adm_ratio&>%&nbsp;</em>，距离该校还有<em class="black-strong">&nbsp;<&= data.score_gap&>&nbsp;</em>分的差距</span>
+                        <&}&>
                     </li>
                         <&if(data.recommend_sch){&>
                         <li class="item-detail">
@@ -47,7 +53,7 @@
                     <&if(data.choosed_sch){&>
                     <li class="item-detail">
                         <i class="iconfont icon-pop-sch id-third"></i>
-                        <span>2015年与你成绩相近的人当中，被<em class="black-strong">&nbsp;<&= data.choosed_sch&>&nbsp;</em>录取的考生最多<em class="black-strong">&nbsp;(<&= data.stu_count&>人)&nbsp;</em></span>
+                        <span>近三年与你成绩相近的人当中，被<em class="black-strong">&nbsp;<&= data.choosed_sch&>&nbsp;</em>录取的考生最多<em class="black-strong">&nbsp;(<&= data.stu_count&>人)&nbsp;</em></span>
                     </li>
                     <&}&>
                 </script>

@@ -485,8 +485,8 @@ var swipeToAnalysisReportPage = function ( requestParam, xinSwiper ) {
 
 	var paramData  = {};
 
-	paramData.reqId = requestParam.req_id || "1111";
-	paramData.examNo = requestParam.exam_no || "111";
+	paramData.reqId = requestParam.req_id || "";
+	paramData.examNo = requestParam.exam_no || "";
 	paramData.provinceId = ""+requestParam.province_id;
 	paramData.wenli = requestParam.wenli || "";
 	paramData.score = requestParam.score || "";
