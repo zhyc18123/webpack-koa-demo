@@ -1630,7 +1630,9 @@ var init = function init(xinSwiper) {
 	});
 	// 监听学校联想失去光标
 	$("#school-input").on("focusout", function () {
-		$(".school-list").hide();
+		setTimeout(function () {
+			$(".school-list").hide();
+		}, 200);
 	});
 	//监听选择学校
 	$(document).on("click", ".school-list li", function () {
