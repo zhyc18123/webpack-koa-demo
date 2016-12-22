@@ -68,7 +68,7 @@
                 <& if(data.exp_sch){ &>
                     <& if(data.score_gap <= -5) {&>
                     <p class="gap-sugest">你的成绩比该校的最低分还高出<em class="black-strong">&nbsp;<&= Math.abs(data.score_gap)-5&>~<&= Math.abs(data.score_gap)+5&>&nbsp;</em>分</p>
-                    <& }else if( data.score_gap > -5 && data.score_gap <=5 ) {&>
+                    <& }else if( data.score_gap <=5 ) {&>
                     <p class="gap-sugest">以你目前的成绩，勉强可以考上该校</p>
                     <&} else {&>
                     <p class="gap-sugest">如果你想稳妥考上<em class="black-strong">&nbsp;<&= data.exp_sch&>&nbsp;</em>分数还需要提高<em class="black-strong">&nbsp;<&= data.score_gap-5&>~<&= data.score_gap+5&>&nbsp;</em>分，省排名提高约<em class="black-strong">&nbsp;<&= data.rank_gap&>&nbsp;</em>名。</p>
@@ -199,9 +199,11 @@
             </script>
         </p>
 
-        <div class="trapezoid-canvas-wrap">
-            <p class="top-five-enroll"><i class="iconfont icon-lingxin"></i><span class="title">录取人数最多的 5 个 <em>学校</em></span></p>
+        <div class="trapezoid-canvas-wrap" id="top-five-enroll-school-wrap">
+            <script id="top-five-enroll-school-tpl" type="text/template">
+            <p class="top-five-enroll"><i class="iconfont icon-lingxin"></i><span class="title">录取人数最多的 <&= data.recommend_sch_list.length&> 个 <em>学校</em></span></p>
             <canvas id="trapezoid-canvas"></canvas>
+            </script>
         </div>
 
         <div class="top-five-major">
