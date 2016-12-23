@@ -3471,6 +3471,8 @@ $(function () {
 		showPage("0", "#input");
 		// history.go(+1);
 		console.log("window.location" + window.location);
+		var analyseTpl = $(".analyse-html").html();
+		console.log(analyseTpl);
 		if ('pushState' in history) {
 			history.pushState("01", "", window.location.pathname + window.location.search + "#input");
 			document.title = "联考成绩定位分析报告";
@@ -3478,7 +3480,7 @@ $(function () {
 		///浏览器前进后退事件
 		window.onpopstate = function () {
 			if (window.location.hash == "#input") {
-				window.location.reload();
+				$(".analyse-html").html(analyseTpl);
 			}
 			showPage();
 		};
