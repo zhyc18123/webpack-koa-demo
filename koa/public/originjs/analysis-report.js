@@ -163,6 +163,7 @@ var _init = (function () {
 				data.total_rank = schoolRankNum;
 				data.adm_ratio = schoolAdmratio;
 				_renderSchoolItemDetail(data);
+				
 			},
 			error:function() {
 				alert("服务器错误！");
