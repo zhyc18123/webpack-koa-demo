@@ -38,16 +38,16 @@ html{
 	display: -webkit-box; 
 	display: box; 
 	em{
+		display: block;
 		color: $red-col;
 		width: .2rem;
 		padding:.3rem 0;
-		top: .3rem;
 		position:relative;
 	}
 	span{
 		color: $font-heicol;
 		border-right: 1px solid $bor-col;
-		padding: 0 0.2rem 0 0.1rem;
+		padding: 0 0.2rem 0 0;
 		height: .4rem;
 		position:relative;
 		top: .31rem;
@@ -142,6 +142,8 @@ i.down{
 			// margin-right: .2rem;
 			font-size: .48rem;
 			color: $yellow-col;
+			position:relative;
+			top: -.01rem;
 		}
 		span{
 			position:relative;
@@ -164,9 +166,10 @@ i.down{
 	background:$whi-col;
 	padding:0 .2rem .2rem .2rem;
 	border-radius:0 0 $radius $radius;
-	height:6rem;
+	height:4.4rem;
 	overflow: scroll;
 	z-index: 100;
+	box-shadow: 2px 4px 5px #cccccc;
 	li{
 		padding:0 .3rem;
 		line-height: .7rem;
@@ -186,7 +189,8 @@ i.down{
 	}
 }
 .school-list{
-	height:auto;
+	// height:auto;
+	font-size:.28rem;
 }
 .input-div-title{
 	margin-top:.1rem;
