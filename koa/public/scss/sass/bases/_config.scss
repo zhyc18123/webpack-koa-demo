@@ -81,6 +81,13 @@ $staff-col:#5baf3f;
   -webkit-transform: scale($scale);
   -ms-transform: scale($scale);
 }
+@mixin my-transform-rotate($rotate:30deg){
+  transform:rotate($rotate);
+  -ms-transform:rotate($rotate); 	/* IE 9 */
+  -moz-transform:rotate($rotate); 	/* Firefox */
+  -webkit-transform:rotate($rotate); /* Safari 和 Chrome */
+  -o-transform:rotate($rotate); 	    /* Opera */
+}
 
 $red-col:#de614c;
 $yellow-col:#f9be00;

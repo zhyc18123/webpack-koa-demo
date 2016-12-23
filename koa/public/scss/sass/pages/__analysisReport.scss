@@ -210,6 +210,15 @@ $yellowCol: #f9be00;
   color: #666666;
   @include font-size(3.0)
 }
+.gap-sugest-none {
+  position: relative;
+  width: 100%;
+  text-align: left;
+  padding: 0 percentage(40/750);
+  margin-bottom: percentage(30/750);
+  color: #666666;
+  @include font-size(2.6)
+}
 .gap-sugest-center{
   text-align: center!important;
 }
@@ -299,10 +308,10 @@ $yellowCol: #f9be00;
   height: 0.8rem;
   border: 0.15rem solid #eaeaea;
   border-radius: 50%;
-  transform: rotate(45deg);
   left: 50%;
   margin-top: percentage(25/750);
   margin-left: -0.4rem;
+  @include my-transform-rotate(45deg)
 }
 .div-icon-search:after{
   content: " ";
@@ -558,7 +567,7 @@ $yellowCol: #f9be00;
     position: absolute;
     top: 0.2rem;
     right: 0.25rem;
-    @include font-size(3.8);
+    @include font-size(6);
     color: #999999;
     z-index: 30;
   }

@@ -34,7 +34,6 @@ $(function(){
 		});
 		getVip.init(xinSwiper);
 		input.init(xinSwiper);
-		analysisReport.swipeToWmzyIntroPage(xinSwiper);
 
 		var showPage = function(speed,pageInit) {
 			var page;
@@ -79,7 +78,6 @@ $(function(){
 		// history.go(+1);
 		console.log("window.location"+ window.location);
 		const analyseTpl=$(".analyse-html").html();
-		console.log(analyseTpl)
 		if ('pushState' in history) {
 			history.pushState("01", "", window.location.pathname+window.location.search+"#input");
 			document.title="联考成绩定位分析报告";
@@ -88,7 +86,6 @@ $(function(){
 		window.onpopstate = function() {
 			if(window.location.hash == "#input"){
 				$(".analyse-html").html(analyseTpl);
-
 			}
 			showPage();
 		};
