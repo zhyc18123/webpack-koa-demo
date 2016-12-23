@@ -104,6 +104,7 @@ var _init = function () {
 	    _renderSchoolItemDetail,
 	    onClickSchoolListItem,
 	    onClickCloseSchoolDetailBtn,
+	    onClickSetScoreSch,
 	    initModule;
 
 	// UTILITY METHODS
@@ -219,12 +220,14 @@ var _init = function () {
 	};
 
 	// DOM METHODS
-	setJqueryMap = function setJqueryMap() {
+	setJqueryMap = function setJqueryMap(xinSwiper) {
 		jqueryMap = {
+			_xinSwiper: xinSwiper,
 			$blackMasking: $("#modal-black-masking"),
 			$schoolListItem: $(".school-list-item-btn"),
 			$schoolDetailModal: $("#school-detail-modal"),
-			$schoolDetailClose: $("#school-modal-close-btn")
+			$schoolDetailClose: $("#school-modal-close-btn"),
+			$gotoSetScoreSch: $(".goto-set-score-school")
 		};
 	};
 
@@ -250,6 +253,9 @@ var _init = function () {
 				data.total_rank = schoolRankNum;
 				data.adm_ratio = schoolAdmratio;
 				_renderSchoolItemDetail(data);
+
+				var scroolTopHeight = $("#school-list-wrap-top").offset().top;
+				$(window).scrollTop(scroolTopHeight);
 			},
 			error: function error() {
 				alert("服务器错误！");
@@ -264,11 +270,19 @@ var _init = function () {
 		$("#school-list-item-modal-wrap").html(schoolListItemModalHtml);
 		$("#line-chart-wmzy-link-modal-wrap").html(schoolListLineChartModalHtml);
 	};
+
+	onClickSetScoreSch = function onClickSetScoreSch() {
+		jqueryMap._xinSwiper.slidePrev();
+		_changeUrl2.default.changeUrl("0", "", "#input");
+		document.title = "联考成绩定位分析报告";
+	};
+
 	// PUBLIC METHODS
-	initModule = function initModule() {
-		setJqueryMap();
+	initModule = function initModule(xinSwiper) {
+		setJqueryMap(xinSwiper);
 		jqueryMap.$schoolListItem.click(onClickSchoolListItem);
 		jqueryMap.$schoolDetailClose.click(onClickCloseSchoolDetailBtn);
+		jqueryMap.$gotoSetScoreSch.click(onClickSetScoreSch);
 	};
 
 	return {
@@ -519,8 +533,10 @@ var swipeToAnalysisReportPage = function swipeToAnalysisReportPage(requestParam,
 	paramData.score = requestParam.score || "";
 	paramData.expSchId = requestParam.exp_sch_id || "";
 	paramData.batch = requestParam.batch || "";
+	paramData.source = requestParam.type;
 
 	REQUESTPARAM = paramData;
+	// REQUESTPARAM.xinSwiper = xinSwiper;
 
 	$.ajax({
 		type: "post",
@@ -537,7 +553,7 @@ var swipeToAnalysisReportPage = function swipeToAnalysisReportPage(requestParam,
 				REQUESTPARAM.rank = data.rank;
 			}
 			_renderAnalysisReportPage(data);
-			_init.initModule();
+			_init.initModule(xinSwiper);
 			xinSwiper.slideNext();
 			_changeUrl2.default.changeUrl("02", "", "#analyse-result");
 			document.title = "成绩定位分析报告";

@@ -69,7 +69,6 @@
             <canvas id="enroll-canvas"></canvas>
         </div>
         <div class="gap-suggest-wrap" id="gap-suggest-wrap">
-
             <script id="gap-suggest-tpl" type="text/template">
                 <& if(data.exp_sch && data.score_gap && data.adm_ratio){ &>
                     <& if(data.score_gap <= -5) {&>
@@ -85,6 +84,7 @@
                     <p class="gap-sugest gap-sugest-center">因数据缺失，暂时无法预测录取概率</p>
                 <& }else{ &>
                     <p class="gap-sugest gap-sugest-center">无法查看目标学校的录取概率分析</p>
+                    <p class="goto-set-score-school">去设立目标学校>></p>
                 <& } &>
             </script>
         </div>
@@ -105,7 +105,7 @@
 
     </div>
 
-    <div class="school-list-wrap">
+    <div class="school-list-wrap" id="school-list-wrap-top">
         <div class="school-list-modal hide" id="school-detail-modal">
             <p class="school-modal-close" id="school-modal-close-btn"><i class="iconfont icon-close"></i></p>
             <div class="school-list-item" id="school-list-item-modal-wrap">
