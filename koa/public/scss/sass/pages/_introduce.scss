@@ -69,7 +69,7 @@
 }
 .get-vip{
 	position: fixed;  
-	bottom: 0;//这里换成top:0;就悬浮在头部  
+	bottom: 0 !important; 
 	z-index: 100; 
 	@extend %inline-block;
 	height:1rem;
@@ -86,4 +86,7 @@
 }
 .vip-btn-div{
 	height:1rem;
+}
+.introduce-body{
+	position:absolute;width:100%;top:0;bottom:1rem; overflow-y:auto;-webkit-overflow-scrolling:touch;-webkit-text-size-adjust:none;
 }

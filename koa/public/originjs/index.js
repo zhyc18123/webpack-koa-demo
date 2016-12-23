@@ -49,21 +49,27 @@ $(function(){
 			switch (page) {
 				case "#input":
 					xinSwiper.slideTo(0, speed);
+					document.title="联考成绩定位分析报告";
 					break;
 				case "#analyse-result":
 					xinSwiper.slideTo(1, speed);
+					document.title="成绩定位分析报告";
 					break;
 				case "#introduce":
 					xinSwiper.slideTo(2, speed);
+					document.title="完美志愿，让你上更好的大学";
 					break;
 				case "#get-vip":
 					xinSwiper.slideTo(3, speed);
+					document.title="领取体验卡";
 					break;
 				case "#vip-result":
 					xinSwiper.slideTo(4, speed);
+					document.title="领取体验卡";
 					break;
 				default :
 					xinSwiper.slideTo(0, speed);
+					document.title="联考成绩定位分析报告";
 					break;
 
 			};
@@ -71,12 +77,16 @@ $(function(){
 		///刷新显示相应页面
 		showPage("0","#input");
 		// history.go(+1);
-		console.log(window.location)
+		console.log("window.location"+ window.location);
 		if ('pushState' in history) {
 			history.pushState("01", "", window.location.pathname+window.location.search+"#input");
+			document.title="联考成绩定位分析报告";
 		};
 		///浏览器前进后退事件
 		window.onpopstate = function() {
+			if(window.location.hash == "#input"){
+				window.location.reload();
+			}
 			showPage();
 		};
 

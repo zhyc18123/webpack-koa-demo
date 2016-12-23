@@ -34,34 +34,6 @@ var _init = (function () {
 			open:"<&",
 			close:"&>"
 		};
-		// var schoolData = {
-		// 	"code": 0,
-		// 	"msg": "",
-		// 	"sch_id":"52ac2e98747aec013fcf4c46",//学校id
-		// 	"icon_url":"http://school-icon.b0.upaiyun.com/52ac2e98747aec013fcf4c1d.jpg",//学校图标识
-		// 	"sch_name":"北京大学",//学校名称
-		// 	"city":"北京",//所在地区
-		// 	"province":"广州",//用户所选省份
-		// 	"total_rank":1,//综合排名
-		// 	"adm_ratio":89,//录取概率
-		// 	"sch_flag":[985,211],//985、211
-		// 	"sch_type":['综合院校'],//学校类型
-		// 	"sch_min_score_list":[
-		// 		{
-		// 			"year":"2013",//年份
-		// 			"min_rank":2600//当年最低省排名
-		// 		},
-		// 		{
-		// 			"year":"2014",//年份
-		// 			"min_rank":2700//当年最低省排名
-		// 		},
-		// 		{
-		// 			"year":"2015",//年份
-		// 			"min_rank":2500//当年最低省排名
-		// 		}
-		// 	]
-		// };
-
 
 		var schoolData = data;
 		schoolData.loc_provinc_name = REQUESTPARAM.loc_provinc_name;
@@ -72,33 +44,31 @@ var _init = (function () {
 		console.log("ejsHtml >> " + ejsHtml);
 		$("#school-list-item-modal-wrap").html(ejsHtml);
 
-		if (schoolData.sch_min_score_list.length>2) {
+		if (schoolData.sch_min_score_list.length>1) {
 			var schMinScoreList = [];
 
 			renderEjsTplWithData("#line-chart-wmzy-link-modal-tpl", "#line-chart-wmzy-link-modal-wrap", schoolData);
 
-			var lineChartCanvasClosestWidth;
 			var lineChartCanvas = document.getElementById('line-chart-modal-canvas'),
 				context = lineChartCanvas.getContext('2d');
-			lineChartCanvasClosestWidth = lineChartCanvas.parentNode.parentNode.clientWidth;
 
-			// alert("lineChartCanvasParentNodeWidth " + lineChartCanvasClosestWidth );
 			lineChartCanvas.width = lineChartCanvas.parentNode.clientWidth;
 			lineChartCanvas.height = lineChartCanvas.parentNode.clientHeight*1.5;
-
 			var startX = 0;
 			var startY = 40;
 			var widthMargin = lineChartCanvas.width/4;
 			var labelWidth = widthMargin;
-			var labelHeight=75;
 			var coordData;
 			var lowestPercent = 1;
 			var offsetY;
 			var setCoordinateReturn;
+			var triangleSide = 20;
+			var labelBorderRadius = 10;
+			var labelHeight;
 
 			var yearColor = {
 				dotColor: "#999999",
-				lineColor:　"#999999"
+				lineColor:　"#dadada"
 			};
 			var historyColor = {
 				dotColor: "#f9be00",
@@ -108,8 +78,7 @@ var _init = (function () {
 				dotColor: "#eb614c",
 				lineColor: "#eda89d"
 			};
-			// alert(" the win.dpr " + window.dpr);
-			var lineChartFontStyle = getFont(lineChartCanvas,0.03);
+			var lineChartFontStyle = getFont(lineChartCanvas,0.04);
 			var lineDotStyle = {
 				lineWidth: 2,
 				dotRadius: 8
@@ -121,39 +90,52 @@ var _init = (function () {
 				lineChartFontStyle = getFont(lineChartCanvas,0.04);
 			}else if(window.dpr === 3){
 				lineChartFontStyle = getFont(lineChartCanvas, 0.04);
-				labelHeight = 100;
 			}
 
+			var schMinScoreList = [];
 			var schoolDataListLen = schoolData.sch_min_score_list.length;
 			if(schoolDataListLen >=5){
 				for(var i = 0; i <= 3; i++){
 					schMinScoreList.push(schoolData.sch_min_score_list[schoolDataListLen-4+i]); //
 				}
+				schMinScoreList.push({
+					"year":"你的排名",//用户的排名
+					"min_rank":REQUESTPARAM.rank//用户排名
+				});
 			}else {
 				schMinScoreList = schoolData.sch_min_score_list;
+				schMinScoreList.push({
+					"year":"你的排名",//用户的排名
+					"min_rank":REQUESTPARAM.rank//用户排名
+				});
 			}
+
 
 			setCoordinateReturn = drawCanvas.setCoordinate(schMinScoreList, startX, startY, widthMargin, 400, lowestPercent);
 			coordData = setCoordinateReturn[0];
 			lowestPercent = setCoordinateReturn[1];
 
 			offsetY = lowestPercent < 0.01 ? 140 :
-				lowestPercent < 0.1 ? 130 : 50;
+				lowestPercent < 0.1 ? 130 : 100;
 
 			if(window.dpr == 1) {
 				labelWidth = labelWidth/2;
 				lineChartCanvas.height = lineChartCanvas.height / 2;
 				startY = startY / 2;
 				offsetY = offsetY / 2;
-				labelHeight = labelHeight / 2;
 				lineDotStyle.lineWidth = 1;
 				lineDotStyle.dotRadius = 5;
+				triangleSide = 5;
+				labelBorderRadius /= 2;
 			}
 
 			drawCanvas.drawCoordinate(context, coordData, yearColor,historyColor, currentColor, labelWidth,
-				lineChartCanvas.width, lineChartCanvas.height, startY, offsetY, lineChartFontStyle, lineDotStyle);
-			drawCanvas.drawLabel(context, coordData, labelHeight, 8, 20, lineChartCanvas.height, offsetY,
-				labelWidth, lineChartFontStyle, window.dpr, lineChartCanvasClosestWidth);
+				lineChartCanvas.width, lineChartCanvas.height, startY, offsetY, lineChartFontStyle, lineDotStyle, window.dpr);
+
+			context.font = lineChartFontStyle;
+			labelHeight = context.measureText("排").width*2;
+			drawCanvas.drawLabel(context, coordData, labelHeight, labelBorderRadius, startY, lineChartCanvas.height, offsetY,
+				labelWidth, lineChartFontStyle, lineDotStyle, triangleSide);
 
 		}
 	};
@@ -162,7 +144,7 @@ var _init = (function () {
 	setJqueryMap = function () {
 		jqueryMap = {
 			$blackMasking: $("#modal-black-masking"),
-			$schoolListItem: $(".school-list-item"),
+			$schoolListItem: $(".school-list-item-btn"),
 			$schoolDetailModal: $("#school-detail-modal"),
 			$schoolDetailClose: $("#school-modal-close-btn")
 		};
@@ -170,16 +152,11 @@ var _init = (function () {
 
 	onClickSchoolListItem = function() {
 
-		// alert("REQUESTPARAM " + JSON.stringify(REQUESTPARAM, null, 4));
-
 		var schoolId = $(this).data("schoolid");
-
-		// alert("schoolId " + schoolId);
-
 		var param = {};
-		param.reqId = REQUESTPARAM.req_id || "1111";
-		param.schId = schoolId || "111";
-		param.provinceId = REQUESTPARAM.province_id || "440000000000";
+		param.reqId = REQUESTPARAM.reqId || "";
+		param.schId = schoolId || "";
+		param.provinceId = REQUESTPARAM.provinceId || "";
 		param.wenli = REQUESTPARAM.wenli || "";
 		param.batch = REQUESTPARAM.batch || "";
 
@@ -194,7 +171,6 @@ var _init = (function () {
 			},
 			error:function() {
 				alert("服务器错误！");
-				// _renderSchoolItemDetail();
 			}
 		});
 	};
@@ -276,7 +252,7 @@ var renderEjsTplWithData = function(tplId, htmlId, data) {
  */
 function getFont(canvas, ratio) {
 	var size = canvas.width * ratio;  // get font size based on current width
-	return (size|0) + 'px sans-serif'; // set font
+	return (size|0) + 'px 微软雅黑'; // set font
 }
 
 var _renderAnalysisReportPage = function (reportData) {
@@ -346,24 +322,22 @@ var _renderAnalysisReportPage = function (reportData) {
 
 		renderEjsTplWithData("#line-chart-wmzy-link-tpl", "#line-chart-wmzy-link-wrap", reportData);
 
-		var lineChartCanvasClosestWidth;
 		var lineChartCanvas = document.getElementById('line-chart-canvas'),
 			context = lineChartCanvas.getContext('2d');
-		lineChartCanvasClosestWidth = lineChartCanvas.parentNode.parentNode.clientWidth;
 
-		// alert("lineChartCanvasParentNodeWidth " + lineChartCanvasClosestWidth );
 		lineChartCanvas.width = lineChartCanvas.parentNode.clientWidth;
 		lineChartCanvas.height = lineChartCanvas.parentNode.clientHeight*1.5;
-
 		var startX = 0;
 		var startY = 40;
 		var widthMargin = lineChartCanvas.width/4;
 		var labelWidth = widthMargin;
-		var labelHeight = 65;
 		var coordData;
 		var lowestPercent = 1;
 		var offsetY;
 		var setCoordinateReturn;
+		var triangleSide = 20;
+		var labelBorderRadius = 10;
+		var labelHeight;
 
 		var yearColor = {
 			dotColor: "#999999",
@@ -377,8 +351,7 @@ var _renderAnalysisReportPage = function (reportData) {
 			dotColor: "#eb614c",
 			lineColor: "#eda89d"
 		};
-		// alert(" the win.dpr " + window.dpr);
-		var lineChartFontStyle = getFont(lineChartCanvas,0.03);
+		var lineChartFontStyle = getFont(lineChartCanvas,0.04);
 		var lineDotStyle = {
 			lineWidth: 2,
 			dotRadius: 8
@@ -390,7 +363,6 @@ var _renderAnalysisReportPage = function (reportData) {
 			lineChartFontStyle = getFont(lineChartCanvas,0.04);
 		}else if(window.dpr === 3){
 			lineChartFontStyle = getFont(lineChartCanvas, 0.04);
-			labelHeight = 100;
 		}
 
 		var schMinScoreList = [];
@@ -403,31 +375,31 @@ var _renderAnalysisReportPage = function (reportData) {
 			schMinScoreList = reportData.sch_min_score_list;
 		}
 
-
 		setCoordinateReturn = drawCanvas.setCoordinate(schMinScoreList, startX, startY, widthMargin, 400, lowestPercent);
 		coordData = setCoordinateReturn[0];
 		lowestPercent = setCoordinateReturn[1];
 
 		offsetY = lowestPercent < 0.01 ? 140 :
-			lowestPercent < 0.1 ? 130 : 50;
+			lowestPercent < 0.1 ? 130 : 100;
 
 		if(window.dpr == 1) {
 			labelWidth = labelWidth/2;
 			lineChartCanvas.height = lineChartCanvas.height / 2;
 			startY = startY / 2;
 			offsetY = offsetY / 2;
-			labelHeight = labelHeight / 2;
 			lineDotStyle.lineWidth = 1;
 			lineDotStyle.dotRadius = 5;
+			triangleSide = 5;
+			labelBorderRadius /= 2;
 		}
 
 		drawCanvas.drawCoordinate(context, coordData, yearColor,historyColor, currentColor, labelWidth,
 			lineChartCanvas.width, lineChartCanvas.height, startY, offsetY, lineChartFontStyle, lineDotStyle, window.dpr);
 
 		context.font = lineChartFontStyle;
-		context.fillStyle = '#eb614c';
-		drawCanvas.drawLabel(context, coordData, labelHeight, 8, 20, lineChartCanvas.height, offsetY,
-			labelWidth, lineChartFontStyle, window.dpr, lineChartCanvasClosestWidth);
+		labelHeight = context.measureText("排").width*2;
+		drawCanvas.drawLabel(context, coordData, labelHeight, labelBorderRadius, startY, lineChartCanvas.height, offsetY,
+			labelWidth, lineChartFontStyle, lineDotStyle, triangleSide);
 
 	}else{
 		$("#line-chart-wmzy-pro-intro").addClass("hide");
@@ -497,7 +469,6 @@ var _renderAnalysisReportPage = function (reportData) {
 	// 录取人数最多的五个专业，如果有的话
 	renderEjsTplWithData("#top-five-enroll-major-tpl", "#top-five-enroll-major-wrap", reportData);
 
-
 };
 
 var swipeToAnalysisReportPage = function ( requestParam, xinSwiper ) {
@@ -520,13 +491,19 @@ var swipeToAnalysisReportPage = function ( requestParam, xinSwiper ) {
 		url: url.getAnalysisReportUrl,
 		data: paramData,
 		success: function(data) {
-			console.log("data "+ JSON.stringify(data, null, 4));
+
 			REQUESTPARAM.loc_provinc_name = data.loc_provinc_name = prov.getProvinceName(paramData.provinceId);
 			REQUESTPARAM.loc_wenli = data.loc_wenli = REQUESTPARAM.wenli == 2 ? "理科" : "文科";
+			console.log("data "+ JSON.stringify(data, null, 4));
+
+			if(data.rank){
+				REQUESTPARAM.rank = data.rank;
+			}
 			_renderAnalysisReportPage(data);
 			_init.initModule();
 			xinSwiper.slideNext();
 			chgUrl.changeUrl("02","","#analyse-result");
+			document.title="成绩定位分析报告";
 		},
 		error:function() {
 			alert("服务器错误！");
@@ -539,6 +516,7 @@ var swipeToWmzyIntroPage = function (xinSwiper) {
 	$(".goto-wmzy-pro-intro").on("click", function () {
 		xinSwiper.slideNext();
 		chgUrl.changeUrl("03","","#introduce");
+		document.title="完美志愿，让你上更好的大学";
 	});
 
 };

@@ -33,7 +33,7 @@
                         <&}else if(data.score_gap && data.score_gap<=5){&>
                         <span>以你目前的成绩，勉强可以考上该校</span>
                         <&}else if(data.score_gap){&>
-                        <span>目标学校<em class="black-strong">&nbsp;<&= data.exp_sch&>&nbsp;</em>的录取概率为<em class="black-strong helvetica-font">&nbsp;<&= data.adm_ratio&>%&nbsp;</em>，距离该校还有<em class="black-strong helvetica-font">&nbsp;<&= data.score_gap&>&nbsp;</em>分的差距</span>
+                        <span>目标学校<em class="black-strong">&nbsp;<&= data.exp_sch&>&nbsp;</em>的录取概率为<em class="black-strong helvetica-font">&nbsp;<&= data.adm_ratio&>%&nbsp;</em>，距离该校还有<em class="black-strong helvetica-font">&nbsp;<&= data.score_gap-5&>~<&= data.score_gap+5&>&nbsp;</em>分的差距</span>
                         <&}&>
                     </li>
                         <&if(data.recommend_sch){&>
@@ -158,7 +158,8 @@
                 <&if(data.recommend_sch_list.length>0){&>
                     <& for(var i = 0, len = data.recommend_sch_list.length; i < len; i++ ) {
                     var recommendSchoolItem = data.recommend_sch_list[i];&>
-                    <div class="school-list-item <& if(i == 0) {&>school-list-margin<&}&> <&if(i==len-1){&>school-list-last<&}&>" data-schoolid="<&= recommendSchoolItem.sch_id&>">
+                    <div class="school-list-item-btn school-list-item <& if(i == 0) {&>school-list-margin<&}&> <&if(i==len-1){&>school-list-last<&}&>"
+                         data-schoolid="<&= recommendSchoolItem.sch_id&>" data-ranknum ="<&= recommendSchoolItem.totalRank&>" data-admratio="<&= recommendSchoolItem.adm_ratio&>">
                         <img src="<&= recommendSchoolItem.icon_url&>" alt="学校logo" class="school-list-img">
                         <ul class="school-info">
                             <li class="school-name-loc" title="">

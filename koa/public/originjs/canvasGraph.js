@@ -108,7 +108,7 @@ function setCoordinate(originData, startX, startY, widthMargin, canvasHeight, lo
  * @param lineChartFontStyle 标注年份时的样式
  */
 function drawCoordinate(ctx, coord, yearColor, historyColor, currentColor, labelWidth, canvasWidth, canvasHeight,
-						startY, offsetY, lineChartFontStyle, lineDotStyle, dpr){
+						startY, offsetY, lineChartFontStyle, lineDotStyle){
 	var len = coord.length;
 
 	// 过往年份 text、竖线、圆点
@@ -151,7 +151,6 @@ function drawCoordinate(ctx, coord, yearColor, historyColor, currentColor, label
 		} else {
 			ctx.arc(x + labelWidth/2, lineStartY + lineHeight*linePercent , 12, 0, 2 * Math.PI);
 		}
-
 		ctx.fill();
 	}
 
@@ -230,7 +229,7 @@ function drawCoordinate(ctx, coord, yearColor, historyColor, currentColor, label
  * @param lineChartCanvasClosestWidth  cavas祖父元素的宽度，用于调整label的宽度
  */
 function drawLabel(ctx, coord, labelHeight, radius, startY, canvasHeight, offsetY,
-				   labelWidth, lineChartFontStyle, dpr, lineChartCanvasClosestWidth) {
+				   labelWidth, lineChartFontStyle, coordinateLineDotStyle, triangleSide) {
 
 	if (typeof radius === 'undefined') {
 		radius = 5;
@@ -252,53 +251,17 @@ function drawLabel(ctx, coord, labelHeight, radius, startY, canvasHeight, offset
 	var linePercent;
 	var lineStartY = startY + offsetY;
 	var lineHeight = canvasHeight - lineStartY;
+	var labelPointY;
+	var uRankPointY;
 	for (var i = 0; i <　len; i++) {
 		x = coord[i].x;
-		y = coord[i].y;
+		y = parseFloat(coord[i].y);
 		ranking = coord[i].ranking;
-		linePercent = coord[i].heightPercent;
+		linePercent = parseFloat(coord[i].heightPercent);
 		rankingStr = ""+ranking;
 		y = lineStartY + lineHeight*linePercent;
-
-		switch (rankingStr.length) {
-			case 1:
-			case 2:
-				width = 185;
-				break;
-			case 3:
-			case 4:
-				width = 185;
-				break;
-			case 5:
-				width = 210;
-				break;
-			case 6:
-				width = 225;
-				break;
-			case 7:
-				width = 255;
-				break;
-			case 8:
-				width = 190;
-				break;
-			case 9:
-				width = 195;
-				break;
-			default:
-				width = 200;
-				break;
-
-		}
-
-
-		if(dpr && dpr ==1){
-			width = 195;
-		}
-
-		if(dpr && dpr >1 && lineChartCanvasClosestWidth == 640){
-			width -= 30;
-		}
-
+		labelPointY = lineStartY + lineHeight*linePercent - coordinateLineDotStyle.dotRadius*2; // 标注 y 轴的起始点
+		uRankPointY = lineStartY + lineHeight*linePercent + coordinateLineDotStyle.dotRadius*2;
 
 		ctx.strokeStyle = "#3e3a39";
 		ctx.fillStyle = "#3e3a39";
@@ -307,32 +270,38 @@ function drawLabel(ctx, coord, labelHeight, radius, startY, canvasHeight, offset
 			ctx.fillStyle = "#eb614c";
 		}
 
-		if(dpr && dpr == 1) {
-			width -= 120;
-			y -= 20;
-		} else if(dpr && dpr == 2){
-			width -= 50;
-			y -= 48;
-		} else {
-			y -= 75;
-		}
-		x += (labelWidth/2- width/2);
-		var labelYPoint = 20;
-		var labelYOffset = labelYPoint+10;
+		ctx.font = lineChartFontStyle;
+		var rankTextWidth = ctx.measureText("8"+ranking+"名"+"8").width ;
+		width = labelWidth ;
 
 		ctx.beginPath();
-		ctx.lineTo(x+width/2 , y + labelHeight - labelYPoint);
-		ctx.lineTo(x+width/2 - 10, y + labelHeight-labelYOffset);
-		ctx.lineTo(x + radius.bl, y + labelHeight-labelYOffset);
-		ctx.quadraticCurveTo(x, y + labelHeight-labelYOffset, x, y + labelHeight - radius.bl-labelYOffset);
-		ctx.lineTo(x, y + radius.tl-labelYOffset);
-		ctx.quadraticCurveTo(x, y-labelYOffset, x + radius.tl, y-labelYOffset);
-		ctx.lineTo(x + radius.tl, y-labelYOffset);
-		ctx.lineTo(x + width - radius.tr, y-labelYOffset);
-		ctx.quadraticCurveTo(x + width, y-labelYOffset, x + width, y + radius.tr-labelYOffset);
-		ctx.lineTo(x + width, y + labelHeight - radius.br-labelYOffset);
-		ctx.quadraticCurveTo(x + width, y + labelHeight-labelYOffset, x + width - radius.br, y + labelHeight-labelYOffset);
-		ctx.lineTo(x+width/2 + 10, y + labelHeight-labelYOffset);
+		ctx.lineTo(x+width/2 , labelPointY);
+		ctx.lineTo(x+width/2 - triangleSide, labelPointY -triangleSide );
+
+		ctx.lineTo(x + width/2 - rankTextWidth/2 + radius.bl, labelPointY - triangleSide);
+
+		ctx.quadraticCurveTo(x + width/2 - rankTextWidth/2, labelPointY -triangleSide,
+							x + width/2 - rankTextWidth/2, labelPointY- triangleSide - radius.bl);
+
+		ctx.lineTo(x + width/2 - rankTextWidth/2, labelPointY - labelHeight - triangleSide + radius.tl);
+
+		ctx.quadraticCurveTo(x + width/2 - rankTextWidth/2, labelPointY - labelHeight - triangleSide,
+							x + width/2 - rankTextWidth/2 + radius.tl, labelPointY - labelHeight - triangleSide);
+
+		ctx.lineTo(x + width/2 + radius.tl, labelPointY - labelHeight - triangleSide);
+
+		ctx.lineTo(x + width/2+rankTextWidth/2 - radius.tr, labelPointY - labelHeight - triangleSide);
+
+		ctx.quadraticCurveTo(x + width/2 +rankTextWidth/2 , labelPointY - labelHeight - triangleSide,
+			x + width/2 +rankTextWidth/2, labelPointY - labelHeight - triangleSide + radius.tr);
+
+		ctx.lineTo(x + width/2 +rankTextWidth/2, labelPointY -triangleSide - radius.br);
+
+		ctx.quadraticCurveTo(x + width/2 +rankTextWidth/2, labelPointY - triangleSide,
+							x + width/2 +rankTextWidth/2 - radius.br, labelPointY -triangleSide);
+
+		ctx.lineTo(x+width/2 + triangleSide, labelPointY -triangleSide );
+
 		ctx.closePath();
 		ctx.fill();
 
@@ -340,25 +309,14 @@ function drawLabel(ctx, coord, labelHeight, radius, startY, canvasHeight, offset
 			ctx.font = lineChartFontStyle;
 			ctx.fillStyle = '#ffffff';
 			var textWidth = ctx.measureText(ranking+"名").width;
-			if ( dpr && dpr == 1) {
-				ctx.fillText(ranking+"名", x+width/2 - textWidth/2,  y - labelHeight/4 );
-			} else if (dpr && dpr == 2) {
-				ctx.fillText(ranking+"名", x+width/2 - textWidth/2,  y + labelHeight*0.2); //
-			} else if (dpr && dpr == 3) {
-				ctx.fillText(ranking+"名", x+width/2 - textWidth/2,  y + labelHeight*0.4); //
-			}
+			ctx.fillText(ranking+"名", x+width/2 - textWidth/2,  labelPointY - labelHeight/2 );
 		}
+
 		if (i == len-1) {
 			ctx.font = lineChartFontStyle;
 			ctx.fillStyle = '#eb614c';
 			var textWidth = ctx.measureText("你的排名").width;
-			if ( dpr && dpr == 1) {
-				ctx.fillText("你的排名", x+width/2 - textWidth/2, y + labelHeight*1.2 );
-			} else if (dpr && dpr == 2) {
-				ctx.fillText("你的排名", x+width/2 - textWidth/2, y + labelHeight*1.5);
-			} else if (dpr && dpr == 3) {
-				ctx.fillText("你的排名", x+width/2 - textWidth/2, y + labelHeight*1.5 );
-			}
+			ctx.fillText("你的排名", x+width/2 - textWidth/2, uRankPointY + (textWidth/4)*1.2 );
 		}
 	}
 

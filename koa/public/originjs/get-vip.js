@@ -4,24 +4,32 @@ var init=function(xinSwiper){
 	// 监听获取vip体验卡按钮
 	$("#vip-btn").on("click",function(){
 		getVip(xinSwiper);
+		ga('send', 'event', '领取页面', '领取按钮', '点击领取按钮');
 	});
 	// 监听获取验证码按钮
 	$(document).on("click",".get-auto-code",function(){
 		console.log("xdd")
 		getAutoCode(xinSwiper);
+		ga('send', 'event', '领取页面', '发送验证码', '发送按钮');
 
 	});
 	//监听介绍页面的获取vip按钮
 	$("#get-vip-btn").on("click",function(){
 		xinSwiper.slideNext();
 		chgUrl.changeUrl("04","","#get-vip");
+		document.title="领取体验卡";
+		ga('send', 'event', '产品介绍页', '领取体验卡按钮', '领取按钮');
 	});
-	$(document).scroll(function(){
-		if(xinSwiper.activeIndex===2){
-			var bottomNum=$(".swiper-slide").eq(xinSwiper.activeIndex).height()-$(window).height()-$(document).scrollTop()-1;
-			$("#get-vip-btn").css({"bottom":bottomNum+"px"});
-		};
+	///监听下载按钮
+	$("#download-btn").on("click",function(){
+		ga('send', 'event', '领取成功', '下载APP', '下载按钮');
 	});
+	// $(document).scroll(function(){
+	// 	if(xinSwiper.activeIndex===2){
+	// 		var bottomNum=$(".swiper-slide").eq(xinSwiper.activeIndex).height()-$(window).height()-$(document).scrollTop()-1;
+	// 		$("#get-vip-btn").css({"bottom":bottomNum+"px"});
+	// 	};
+	// });
 };
 ///检查输入的手机号码
 var checkMobile=function(mobile){
@@ -115,6 +123,7 @@ var getVip=function(xinSwiper){
 				$(".result-text .text").text("领取成功！");
 				xinSwiper.slideNext();
 				chgUrl.changeUrl("05","","#vip-result");
+				document.title="领取体验卡";
 				break;
 				case 11301:
 				alert("您已领取过体验卡");
@@ -123,7 +132,7 @@ var getVip=function(xinSwiper){
 				alert("体验卡已经被领取完了");
 				break;
 				case 10005 :
-				alert("短信验证码不合法");
+				alert("短信验证码已失效");
 				break;
 				default:
 				break;

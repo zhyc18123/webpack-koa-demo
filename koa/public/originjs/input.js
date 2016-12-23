@@ -60,23 +60,24 @@ var init=function(xinSwiper){
 			alert("请输入你的联考成绩！");
 			return;
 		}else{
-			if(isNaN(score)){
-			   alert("分数必须为数字");
+			var res = /^(\d+\.\d{1,1}|\d+)$/ ;
+    			if(!res.test(score)){
+			   alert("分数最多输入一位小数点");
 			   return;
 			};
 		};
 		if(prevName==="江苏"){
-			if(score<0||score>480){
+			if(score<=0||score>480){
 				alert("江苏的分数范围为0~480");
 				return;
 			};
 		}else if(prevName==="海南"){
-			if(score<0||score>900){
+			if(score<=0||score>900){
 				alert("海南的分数范围为0~900");
 				return;
 			};
 		}else{
-			if(score<0||score>750){
+			if(score<=0||score>750){
 				alert("请输入正确的分数！");
 				return;
 			};
@@ -102,7 +103,7 @@ var init=function(xinSwiper){
 			wenli:$(".subject-type .active").data("val"),
 		};
 		analysisReport.swipeToAnalysisReportPage(data,xinSwiper);
-
+		ga('send', 'event', '输入界面', '生成定位分析报告', '生成报告');
 	});
 };
 var setProvByName=function(provName){
