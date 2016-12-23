@@ -519,8 +519,6 @@ var swipeToAnalysisReportPage = function swipeToAnalysisReportPage(requestParam,
 
 	REQUESTPARAM = paramData;
 
-	alert("paramData " + JSON.stringify(paramData, null, 4));
-
 	$.ajax({
 		type: "post",
 		cache: false,
@@ -530,9 +528,6 @@ var swipeToAnalysisReportPage = function swipeToAnalysisReportPage(requestParam,
 
 			REQUESTPARAM.loc_provinc_name = data.loc_provinc_name = _loc2.default.getProvinceName(paramData.provinceId);
 			REQUESTPARAM.loc_wenli = data.loc_wenli = REQUESTPARAM.wenli == 2 ? "理科" : "文科";
-
-			alert(" success ");
-
 			console.log("data " + JSON.stringify(data, null, 4));
 			_renderAnalysisReportPage(data);
 			_init.initModule();
@@ -3435,7 +3430,6 @@ $(function () {
 		};
 		///浏览器前进后退事件
 		window.onpopstate = function () {
-			alert("window.location.hash  " + window.location.hash);
 			if (window.location.hash == "#input") {
 				window.location.reload();
 			}

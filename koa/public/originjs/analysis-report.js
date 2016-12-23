@@ -477,8 +477,6 @@ var swipeToAnalysisReportPage = function ( requestParam, xinSwiper ) {
 
 	REQUESTPARAM = paramData;
 
-	alert("paramData " + JSON.stringify(paramData, null, 4));
-
 	$.ajax({
 		type: "post",
 		cache: false,
@@ -488,9 +486,6 @@ var swipeToAnalysisReportPage = function ( requestParam, xinSwiper ) {
 
 			REQUESTPARAM.loc_provinc_name = data.loc_provinc_name = prov.getProvinceName(paramData.provinceId);
 			REQUESTPARAM.loc_wenli = data.loc_wenli = REQUESTPARAM.wenli == 2 ? "理科" : "文科";
-
-			alert(" success ");
-
 			console.log("data "+ JSON.stringify(data, null, 4));
 			_renderAnalysisReportPage(data);
 			_init.initModule();
