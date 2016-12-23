@@ -35,6 +35,14 @@ var init=function(xinSwiper){
 	$("#school-input").on("input porpertychange",function(){
 		guestSchool(this);
 	});
+	// 监听分数输入
+	$("#score").on("input porpertychange",function(){
+		var score=$(this).val();
+		var patrn=/^([1-9]\d*|0)(\.\d*[1-9])?$/; 
+		if (!patrn.exec(score)){
+			$(this).val("");
+		};
+	});
 	// 监听学校联想失去光标
 	$("#school-input").on("focusout",function(){
 		setTimeout(function(){
@@ -68,17 +76,17 @@ var init=function(xinSwiper){
 		};
 		if(prevName==="江苏"){
 			if(score<=0||score>480){
-				alert("江苏的分数范围为0~480");
+				alert("您输入的成绩已超过满分，请重新输入");
 				return;
 			};
 		}else if(prevName==="海南"){
 			if(score<=0||score>900){
-				alert("海南的分数范围为0~900");
+				alert("您输入的成绩已超过满分，请重新输入");
 				return;
 			};
 		}else{
 			if(score<=0||score>750){
-				alert("请输入正确的分数！");
+				alert("您输入的成绩已超过满分，请重新输入");
 				return;
 			};
 		};
@@ -101,6 +109,7 @@ var init=function(xinSwiper){
 			exp_sch_id:$("#school-input").data("val")||"",
 			batch:$("#school-input").data("batch")||"",
 			wenli:$(".subject-type .active").data("val"),
+			type:"spt"
 		};
 		analysisReport.swipeToAnalysisReportPage(data,xinSwiper);
 		ga('send', 'event', '输入界面', '生成定位分析报告', '生成报告');
