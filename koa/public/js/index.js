@@ -1529,6 +1529,7 @@ var checkMobile = function checkMobile(mobile) {
 // 改变获取验证码按钮
 var countdown = 120,
     $getAutoCode = $("#get-auto-code");
+var timeoutEvent;
 var changeAutoCode = function changeAutoCode() {
 	if (countdown === 0) {
 		$getAutoCode.addClass('get-auto-code');
@@ -1538,7 +1539,7 @@ var changeAutoCode = function changeAutoCode() {
 		$getAutoCode.removeClass("get-auto-code");
 		$getAutoCode.text("重新发送(" + countdown + ")");
 		countdown--;
-		setTimeout(function () {
+		timeoutEvent = setTimeout(function () {
 			changeAutoCode();
 		}, 1000);
 	};
@@ -1561,12 +1562,18 @@ var getAutoCode = function getAutoCode(xinSwiper) {
 					break;
 				case 11007:
 					alert("短信验证码已经发送");
+					$("#get-auto-code").text("发送验证码");
+					clearTimeout(timeoutEvent);
 					break;
 				case 12001:
 					alert("手机号码格式错误");
+					$("#get-auto-code").text("发送验证码");
+					clearTimeout(timeoutEvent);
 					break;
 				case 11301:
 					alert("您已领取过体验卡");
+					$("#get-auto-code").text("发送验证码");
+					clearTimeout(timeoutEvent);
 					break;
 				default:
 					break;
@@ -1808,18 +1815,19 @@ var createSchoolList = function createSchoolList(list) {
 };
 var guestSchool = function guestSchool(that) {
 	var schString = $(that).val();
-	// var provId=$("#prov-name").data("val");
+	var provId = $("#prov-name").data("val");
 	if (!schString) {
 		return;
 	};
-	// if(!provId){
-	// 	alert("请先选择省份！");
-	// 	return;
-	// };
+	if (!provId) {
+		alert("请先选择省份！");
+		return;
+	};
 	var data = {
 		req_id: $("#exam-no").val() + Date.parse(new Date()),
 		search_key: schString,
-		wenli: $(".subject-type .active").data("val")
+		wenli: $(".subject-type .active").data("val"),
+		province_id: provId
 	};
 	$.ajax({
 		type: "post",

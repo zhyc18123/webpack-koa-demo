@@ -38,6 +38,7 @@ var checkMobile=function(mobile){
 // 改变获取验证码按钮
 var countdown=120,
  $getAutoCode=$("#get-auto-code");
+ var timeoutEvent;
 var changeAutoCode=function(){
 	if (countdown === 0) { 
 	$getAutoCode.addClass('get-auto-code');    
@@ -47,8 +48,8 @@ var changeAutoCode=function(){
 	$getAutoCode.removeClass("get-auto-code"); 
 	$getAutoCode.text("重新发送(" + countdown + ")"); 
 	countdown--; 
-	setTimeout(function() { 
-	changeAutoCode();
+	timeoutEvent= setTimeout(function() { 
+		changeAutoCode();
 	},1000) ;
 	} ;
 } 
@@ -70,12 +71,18 @@ var getAutoCode=function(xinSwiper){
 				break;
 				case 11007:
 				alert("短信验证码已经发送");
+				$("#get-auto-code").text("发送验证码");
+				clearTimeout(timeoutEvent);
 				break;
 				case 12001:
 				alert("手机号码格式错误");
+				$("#get-auto-code").text("发送验证码");
+				clearTimeout(timeoutEvent);
 				break;
 				case 11301:
 				alert("您已领取过体验卡");
+				$("#get-auto-code").text("发送验证码");
+				clearTimeout(timeoutEvent);
 				break;
 				default:
 				break;
