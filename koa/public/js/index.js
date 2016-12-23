@@ -185,15 +185,7 @@ var _init = function () {
 
 			var schMinScoreList = [];
 			var schoolDataListLen = schoolData.sch_min_score_list.length;
-			if (schoolDataListLen >= 5) {
-				for (var i = 0; i <= 3; i++) {
-					schMinScoreList.push(schoolData.sch_min_score_list[schoolDataListLen - 4 + i]); //
-				}
-				schMinScoreList.push({
-					"year": "你的排名", //用户的排名
-					"min_rank": REQUESTPARAM.rank //用户排名
-				});
-			} else {
+			if (schoolDataListLen > 0) {
 				schMinScoreList = schoolData.sch_min_score_list;
 				schMinScoreList.push({
 					"year": "你的排名", //用户的排名
@@ -239,6 +231,8 @@ var _init = function () {
 	onClickSchoolListItem = function onClickSchoolListItem() {
 
 		var schoolId = $(this).data("schoolid");
+		var schoolRankNum = $(this).data("ranknum");
+		var schoolAdmratio = $(this).data("admratio");
 		var param = {};
 		param.reqId = REQUESTPARAM.reqId || "";
 		param.schId = schoolId || "";
@@ -253,6 +247,8 @@ var _init = function () {
 			data: param,
 			success: function success(data) {
 				console.log("data " + JSON.stringify(data, null, 4));
+				data.total_rank = schoolRankNum;
+				data.adm_ratio = schoolAdmratio;
 				_renderSchoolItemDetail(data);
 			},
 			error: function error() {
@@ -416,12 +412,12 @@ var _renderAnalysisReportPage = function _renderAnalysisReportPage(reportData) {
 
 		var schMinScoreList = [];
 		var schoolDataListLen = reportData.sch_min_score_list.length;
-		if (schoolDataListLen >= 5) {
-			for (var i = 0; i <= 3; i++) {
-				schMinScoreList.push(reportData.sch_min_score_list[schoolDataListLen - 4 + i]); //
-			}
-		} else {
+		if (schoolDataListLen > 0) {
 			schMinScoreList = reportData.sch_min_score_list;
+			schMinScoreList.push({
+				"year": "你的排名", //用户的排名
+				"min_rank": REQUESTPARAM.rank //用户排名
+			});
 		}
 
 		setCoordinateReturn = _canvasGraph2.default.setCoordinate(schMinScoreList, startX, startY, widthMargin, 400, lowestPercent);
@@ -1507,7 +1503,7 @@ var checkMobile = function checkMobile(mobile) {
 		alert("请先输入手机号码！");
 		return false;
 	} else if (!/^1[34578]\d{9}$/.test(mobile)) {
-		alert("手机号码格式不正确，请检查");
+		alert("手机号码不正确，请检查");
 		return false;
 	} else {
 		return true;

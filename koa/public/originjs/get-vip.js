@@ -37,7 +37,7 @@ var checkMobile=function(mobile){
 		alert("请先输入手机号码！");
 		return false;
 	}else if(!(/^1[34578]\d{9}$/.test(mobile))){
-		alert("手机号码格式不正确，请检查");  
+		alert("手机号码不正确，请检查");  
         		return false; 
 	}else{
 		return true;

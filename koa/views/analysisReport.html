@@ -79,6 +79,8 @@
                     <&} else {&>
                     <p class="gap-sugest">如果你想稳妥考上<em class="black-strong">&nbsp;<&= data.exp_sch&>&nbsp;</em>分数还需要提高<em class="black-strong">&nbsp;<&= data.score_gap-5&>~<&= data.score_gap+5&>&nbsp;</em>分，省排名提高约<em class="black-strong">&nbsp;<&= data.rank_gap&>&nbsp;</em>名。</p>
                     <&}&>
+                <&} else if(data.adm_ratio==0){&>
+                <p class="gap-sugest">如果你想稳妥考上<em class="black-strong">&nbsp;<&= data.exp_sch&>&nbsp;</em>分数还需要提高<em class="black-strong">&nbsp;<&= data.score_gap-5&>~<&= data.score_gap+5&>&nbsp;</em>分，省排名提高约<em class="black-strong">&nbsp;<&= data.rank_gap&>&nbsp;</em>名。</p>
                 <&}else if(data.exp_sch && data.score_gap){&>
                     <p class="gap-sugest gap-sugest-center">因数据缺失，暂时无法预测录取概率</p>
                 <& }else{ &>
@@ -181,7 +183,7 @@
                     <&}&>
                 <&}else{&>
                     <div class="div-icon-search"></div>
-                    <p class="school-list-none-tip">没有找到你能上的<&= data.batch_name&>第<&= data.batch==1?"一":"二"&>批院校</p>
+                    <p class="school-list-none-tip">没有找到你能上的<&if(data.batch_name){&><&= data.batch_name&><&}&>院校</p>
                 <&}&>
             </script>
         </div>
@@ -189,7 +191,12 @@
         <p class="wmzy-link goto-wmzy-pro-intro" id="recommend-school-link-wrap">
             <&if(data.recommend_sch_list.length>0){&>
             <script id="recommend-school-link-tpl" type="text/template">
-                <span>其余 <&= data.recommend_sch_num&> 所推荐院校，尽在完美志愿 >></span>
+                <&var otherRecommendSch = data.recommend_sch_num - data.recommend_sch_list.length;&>
+                <&if(otherRecommendSch > 0){&>
+                <span>其余 <&= otherRecommendSch&> 所推荐院校，尽在完美志愿 >></span>
+                <&}else{&>
+                <span>更多推荐院校，尽在完美志愿 >></span>
+                <&}&>
             </script>
             <&}else{&>
             <script id="recommend-school-link-tpl-none" type="text/template">
@@ -214,7 +221,7 @@
 
         <div class="trapezoid-canvas-wrap" id="top-five-enroll-school-wrap">
             <script id="top-five-enroll-school-tpl" type="text/template">
-                <p class="top-five-enroll"><i class="iconfont icon-lingxin"></i><span class="title">录取人数最多的 <&= data.recommend_sch_list.length&> 个 <em>学校</em></span></p>
+                <p class="top-five-enroll"><i class="iconfont icon-lingxin"></i><span class="title">录取人数最多的 <&= data.goto_schs_list.length&> 所 <em>学校</em></span></p>
                 <canvas id="trapezoid-canvas"></canvas>
             </script>
         </div>

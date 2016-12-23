@@ -381,7 +381,7 @@ $yellowCol: #f9be00;
 }
 
 .enroll-probability {
-  margin-left: percentage(100/718); /* 100/718*/
+  margin-left: percentage(80/718); /* 100/718*/
 }
 
 .rank-num, .probability-num {
@@ -391,6 +391,8 @@ $yellowCol: #f9be00;
 
 .rank-num {
   color: #666666;
+  display: inline-block;
+  width: 1rem;
   @include font-size(3.0);
 }
 

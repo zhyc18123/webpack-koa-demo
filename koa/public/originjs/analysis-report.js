@@ -94,22 +94,13 @@ var _init = (function () {
 
 			var schMinScoreList = [];
 			var schoolDataListLen = schoolData.sch_min_score_list.length;
-			if(schoolDataListLen >=5){
-				for(var i = 0; i <= 3; i++){
-					schMinScoreList.push(schoolData.sch_min_score_list[schoolDataListLen-4+i]); //
-				}
-				schMinScoreList.push({
-					"year":"你的排名",//用户的排名
-					"min_rank":REQUESTPARAM.rank//用户排名
-				});
-			}else {
+			if(schoolDataListLen >0){
 				schMinScoreList = schoolData.sch_min_score_list;
 				schMinScoreList.push({
 					"year":"你的排名",//用户的排名
 					"min_rank":REQUESTPARAM.rank//用户排名
 				});
 			}
-
 
 			setCoordinateReturn = drawCanvas.setCoordinate(schMinScoreList, startX, startY, widthMargin, 400, lowestPercent);
 			coordData = setCoordinateReturn[0];
@@ -153,6 +144,8 @@ var _init = (function () {
 	onClickSchoolListItem = function() {
 
 		var schoolId = $(this).data("schoolid");
+		var schoolRankNum = $(this).data("ranknum");
+		var schoolAdmratio = $(this).data("admratio");
 		var param = {};
 		param.reqId = REQUESTPARAM.reqId || "";
 		param.schId = schoolId || "";
@@ -167,6 +160,8 @@ var _init = (function () {
 			data: param,
 			success: function(data) {
 				console.log("data "+ JSON.stringify(data, null, 4));
+				data.total_rank = schoolRankNum;
+				data.adm_ratio = schoolAdmratio;
 				_renderSchoolItemDetail(data);
 			},
 			error:function() {
@@ -367,12 +362,12 @@ var _renderAnalysisReportPage = function (reportData) {
 
 		var schMinScoreList = [];
 		var schoolDataListLen = reportData.sch_min_score_list.length;
-		if(schoolDataListLen >=5){
-			for(var i = 0; i <= 3; i++){
-				schMinScoreList.push(reportData.sch_min_score_list[schoolDataListLen-4+i]); //
-			}
-		}else {
+		if(schoolDataListLen > 0){
 			schMinScoreList = reportData.sch_min_score_list;
+			schMinScoreList.push({
+				"year":"你的排名",//用户的排名
+				"min_rank":REQUESTPARAM.rank//用户排名
+			});
 		}
 
 		setCoordinateReturn = drawCanvas.setCoordinate(schMinScoreList, startX, startY, widthMargin, 400, lowestPercent);
