@@ -498,6 +498,7 @@ var swipeToAnalysisReportPage = function ( requestParam, xinSwiper ) {
 			_init.initModule();
 			xinSwiper.slideNext();
 			chgUrl.changeUrl("02","","#analyse-result");
+			document.title="成绩定位分析报告";
 		},
 		error:function() {
 			alert("服务器错误！");
@@ -510,6 +511,7 @@ var swipeToWmzyIntroPage = function (xinSwiper) {
 	$(".goto-wmzy-pro-intro").on("click", function () {
 		xinSwiper.slideNext();
 		chgUrl.changeUrl("03","","#introduce");
+		document.title="完美志愿，让你上更好的大学";
 	});
 
 };

@@ -540,6 +540,7 @@ var swipeToAnalysisReportPage = function swipeToAnalysisReportPage(requestParam,
 			_init.initModule();
 			xinSwiper.slideNext();
 			_changeUrl2.default.changeUrl("02", "", "#analyse-result");
+			document.title = "成绩定位分析报告";
 		},
 		error: function error() {
 			alert("服务器错误！");
@@ -552,6 +553,7 @@ var swipeToWmzyIntroPage = function swipeToWmzyIntroPage(xinSwiper) {
 	$(".goto-wmzy-pro-intro").on("click", function () {
 		xinSwiper.slideNext();
 		_changeUrl2.default.changeUrl("03", "", "#introduce");
+		document.title = "完美志愿，让你上更好的大学";
 	});
 };
 
@@ -1468,23 +1470,31 @@ var init = function init(xinSwiper) {
 	// 监听获取vip体验卡按钮
 	$("#vip-btn").on("click", function () {
 		getVip(xinSwiper);
+		ga('send', 'event', '领取页面', '领取按钮', '点击领取按钮');
 	});
 	// 监听获取验证码按钮
 	$(document).on("click", ".get-auto-code", function () {
 		console.log("xdd");
 		getAutoCode(xinSwiper);
+		ga('send', 'event', '领取页面', '发送验证码', '发送按钮');
 	});
 	//监听介绍页面的获取vip按钮
 	$("#get-vip-btn").on("click", function () {
 		xinSwiper.slideNext();
 		_changeUrl2.default.changeUrl("04", "", "#get-vip");
+		document.title = "领取体验卡";
+		ga('send', 'event', '产品介绍页', '领取体验卡按钮', '领取按钮');
 	});
-	$(document).scroll(function () {
-		if (xinSwiper.activeIndex === 2) {
-			var bottomNum = $(".swiper-slide").eq(xinSwiper.activeIndex).height() - $(window).height() - $(document).scrollTop() - 1;
-			$("#get-vip-btn").css({ "bottom": bottomNum + "px" });
-		};
+	///监听下载按钮
+	$("#download-btn").on("click", function () {
+		ga('send', 'event', '领取成功', '下载APP', '下载按钮');
 	});
+	// $(document).scroll(function(){
+	// 	if(xinSwiper.activeIndex===2){
+	// 		var bottomNum=$(".swiper-slide").eq(xinSwiper.activeIndex).height()-$(window).height()-$(document).scrollTop()-1;
+	// 		$("#get-vip-btn").css({"bottom":bottomNum+"px"});
+	// 	};
+	// });
 };
 ///检查输入的手机号码
 var checkMobile = function checkMobile(mobile) {
@@ -1492,7 +1502,7 @@ var checkMobile = function checkMobile(mobile) {
 		alert("请先输入手机号码！");
 		return false;
 	} else if (!/^1[34578]\d{9}$/.test(mobile)) {
-		alert("手机号码格式不正确，请检查");
+		alert("手机号码不正确，请检查");
 		return false;
 	} else {
 		return true;
@@ -1578,6 +1588,7 @@ var getVip = function getVip(xinSwiper) {
 					$(".result-text .text").text("领取成功！");
 					xinSwiper.slideNext();
 					_changeUrl2.default.changeUrl("05", "", "#vip-result");
+					document.title = "领取体验卡";
 					break;
 				case 11301:
 					alert("您已领取过体验卡");
@@ -1586,7 +1597,7 @@ var getVip = function getVip(xinSwiper) {
 					alert("体验卡已经被领取完了");
 					break;
 				case 10005:
-					alert("短信验证码不合法");
+					alert("短信验证码已失效");
 					break;
 				default:
 					break;
@@ -1655,6 +1666,14 @@ var init = function init(xinSwiper) {
 	$("#school-input").on("input porpertychange", function () {
 		guestSchool(this);
 	});
+	// 监听分数输入
+	$("#score").on("input porpertychange", function () {
+		var score = $(this).val();
+		var patrn = /^([1-9]\d*|0)(\.\d*[1-9])?$/;
+		if (!patrn.exec(score)) {
+			$(this).val("");
+		};
+	});
 	// 监听学校联想失去光标
 	$("#school-input").on("focusout", function () {
 		setTimeout(function () {
@@ -1680,24 +1699,25 @@ var init = function init(xinSwiper) {
 			alert("请输入你的联考成绩！");
 			return;
 		} else {
-			if (isNaN(score)) {
-				alert("分数必须为数字");
+			var res = /^(\d+\.\d{1,1}|\d+)$/;
+			if (!res.test(score)) {
+				alert("分数最多输入一位小数点");
 				return;
 			};
 		};
 		if (prevName === "江苏") {
-			if (score < 0 || score > 480) {
-				alert("江苏的分数范围为0~480");
+			if (score <= 0 || score > 480) {
+				alert("您输入的成绩已超过满分，请重新输入");
 				return;
 			};
 		} else if (prevName === "海南") {
-			if (score < 0 || score > 900) {
-				alert("海南的分数范围为0~900");
+			if (score <= 0 || score > 900) {
+				alert("您输入的成绩已超过满分，请重新输入");
 				return;
 			};
 		} else {
-			if (score < 0 || score > 750) {
-				alert("请输入正确的分数！");
+			if (score <= 0 || score > 750) {
+				alert("您输入的成绩已超过满分，请重新输入");
 				return;
 			};
 		};
@@ -1719,9 +1739,11 @@ var init = function init(xinSwiper) {
 			score: score,
 			exp_sch_id: $("#school-input").data("val") || "",
 			batch: $("#school-input").data("batch") || "",
-			wenli: $(".subject-type .active").data("val")
+			wenli: $(".subject-type .active").data("val"),
+			type: "spt"
 		};
 		analysisReport.swipeToAnalysisReportPage(data, xinSwiper);
+		ga('send', 'event', '输入界面', '生成定位分析报告', '生成报告');
 	});
 };
 var setProvByName = function setProvByName(provName) {
@@ -3420,21 +3442,27 @@ $(function () {
 			switch (page) {
 				case "#input":
 					xinSwiper.slideTo(0, speed);
+					document.title = "联考成绩定位分析报告";
 					break;
 				case "#analyse-result":
 					xinSwiper.slideTo(1, speed);
+					document.title = "成绩定位分析报告";
 					break;
 				case "#introduce":
 					xinSwiper.slideTo(2, speed);
+					document.title = "完美志愿，让你上更好的大学";
 					break;
 				case "#get-vip":
 					xinSwiper.slideTo(3, speed);
+					document.title = "领取体验卡";
 					break;
 				case "#vip-result":
 					xinSwiper.slideTo(4, speed);
+					document.title = "领取体验卡";
 					break;
 				default:
 					xinSwiper.slideTo(0, speed);
+					document.title = "联考成绩定位分析报告";
 					break;
 
 			};
@@ -3445,6 +3473,7 @@ $(function () {
 		console.log("window.location" + window.location);
 		if ('pushState' in history) {
 			history.pushState("01", "", window.location.pathname + window.location.search + "#input");
+			document.title = "联考成绩定位分析报告";
 		};
 		///浏览器前进后退事件
 		window.onpopstate = function () {
