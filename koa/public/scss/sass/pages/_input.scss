@@ -166,7 +166,7 @@ i.down{
 	background:$whi-col;
 	padding:0 .2rem .2rem .2rem;
 	border-radius:0 0 $radius $radius;
-	height:4.4rem;
+	max-height:4.4rem;
 	overflow: scroll;
 	z-index: 100;
 	box-shadow: 2px 4px 5px #cccccc;
