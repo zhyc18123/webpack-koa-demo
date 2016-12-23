@@ -341,16 +341,15 @@ var _renderAnalysisReportPage = function _renderAnalysisReportPage(reportData) {
 
 	// 分是否设立了目标学校,概率是否存在 三种情况讨论
 	if (reportData.exp_sch && reportData.adm_ratio != null && reportData.adm_ratio >= 0) {
-
 		_canvasGraph2.default.drawCircleText(context, enrollCanvasFontDpr1, '#f9be00', reportData.adm_ratio, enrollCanvas.width * 0.46, enrollCanvas.height * 0.45);
 		_canvasGraph2.default.drawCircleText(context, enrollCanvasFontDpr2, '#f9be00', '%', ("" + reportData.adm_ratio).length > 1 ? enrollCanvas.width * 0.62 : enrollCanvas.width * 0.58, enrollCanvas.height * 0.5);
 		_canvasGraph2.default.drawCircleText(context, enrollCanvasFontDpr3, '#b6b6b6', '录取概率', centerX, enrollCanvas.height * 0.65);
-	} else if (reportData.adm_ratio == null) {
-		_canvasGraph2.default.drawCircleText(context, enrollCanvasFontDpr3, '#b6b6b6', "暂无", centerX, enrollCanvas.height * 0.48);
-		_canvasGraph2.default.drawCircleText(context, enrollCanvasFontDpr3, '#b6b6b6', '录取概率', centerX, enrollCanvas.height * 0.6);
-	} else {
+	} else if (reportData.exp_sch == null) {
 		_canvasGraph2.default.drawCircleText(context, enrollCanvasFontDpr3, '#b6b6b6', "未设立", centerX, enrollCanvas.height * 0.48);
 		_canvasGraph2.default.drawCircleText(context, enrollCanvasFontDpr3, '#b6b6b6', '目标学校', centerX, enrollCanvas.height * 0.6);
+	} else {
+		_canvasGraph2.default.drawCircleText(context, enrollCanvasFontDpr3, '#b6b6b6', "暂无", centerX, enrollCanvas.height * 0.48);
+		_canvasGraph2.default.drawCircleText(context, enrollCanvasFontDpr3, '#b6b6b6', '录取概率', centerX, enrollCanvas.height * 0.6);
 	}
 
 	// 与目标学校的距离 —— 建议
