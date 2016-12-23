@@ -44,7 +44,7 @@ var _init = (function () {
 		console.log("ejsHtml >> " + ejsHtml);
 		$("#school-list-item-modal-wrap").html(ejsHtml);
 
-		if (schoolData.sch_min_score_list.length>2) {
+		if (schoolData.sch_min_score_list.length>1) {
 			var schMinScoreList = [];
 
 			renderEjsTplWithData("#line-chart-wmzy-link-modal-tpl", "#line-chart-wmzy-link-modal-wrap", schoolData);
@@ -98,9 +98,18 @@ var _init = (function () {
 				for(var i = 0; i <= 3; i++){
 					schMinScoreList.push(schoolData.sch_min_score_list[schoolDataListLen-4+i]); //
 				}
+				schMinScoreList.push({
+					"year":"你的排名",//用户的排名
+					"min_rank":REQUESTPARAM.rank//用户排名
+				});
 			}else {
 				schMinScoreList = schoolData.sch_min_score_list;
+				schMinScoreList.push({
+					"year":"你的排名",//用户的排名
+					"min_rank":REQUESTPARAM.rank//用户排名
+				});
 			}
+
 
 			setCoordinateReturn = drawCanvas.setCoordinate(schMinScoreList, startX, startY, widthMargin, 400, lowestPercent);
 			coordData = setCoordinateReturn[0];
@@ -145,9 +154,9 @@ var _init = (function () {
 
 		var schoolId = $(this).data("schoolid");
 		var param = {};
-		param.reqId = REQUESTPARAM.req_id || "";
+		param.reqId = REQUESTPARAM.reqId || "";
 		param.schId = schoolId || "";
-		param.provinceId = REQUESTPARAM.province_id || "";
+		param.provinceId = REQUESTPARAM.provinceId || "";
 		param.wenli = REQUESTPARAM.wenli || "";
 		param.batch = REQUESTPARAM.batch || "";
 
@@ -460,7 +469,6 @@ var _renderAnalysisReportPage = function (reportData) {
 	// 录取人数最多的五个专业，如果有的话
 	renderEjsTplWithData("#top-five-enroll-major-tpl", "#top-five-enroll-major-wrap", reportData);
 
-
 };
 
 var swipeToAnalysisReportPage = function ( requestParam, xinSwiper ) {
@@ -487,6 +495,10 @@ var swipeToAnalysisReportPage = function ( requestParam, xinSwiper ) {
 			REQUESTPARAM.loc_provinc_name = data.loc_provinc_name = prov.getProvinceName(paramData.provinceId);
 			REQUESTPARAM.loc_wenli = data.loc_wenli = REQUESTPARAM.wenli == 2 ? "理科" : "文科";
 			console.log("data "+ JSON.stringify(data, null, 4));
+
+			if(data.rank){
+				REQUESTPARAM.rank = data.rank;
+			}
 			_renderAnalysisReportPage(data);
 			_init.initModule();
 			xinSwiper.slideNext();

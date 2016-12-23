@@ -135,7 +135,7 @@ var _init = function () {
 		console.log("ejsHtml >> " + ejsHtml);
 		$("#school-list-item-modal-wrap").html(ejsHtml);
 
-		if (schoolData.sch_min_score_list.length > 2) {
+		if (schoolData.sch_min_score_list.length > 1) {
 			var schMinScoreList = [];
 
 			renderEjsTplWithData("#line-chart-wmzy-link-modal-tpl", "#line-chart-wmzy-link-modal-wrap", schoolData);
@@ -189,8 +189,16 @@ var _init = function () {
 				for (var i = 0; i <= 3; i++) {
 					schMinScoreList.push(schoolData.sch_min_score_list[schoolDataListLen - 4 + i]); //
 				}
+				schMinScoreList.push({
+					"year": "你的排名", //用户的排名
+					"min_rank": REQUESTPARAM.rank //用户排名
+				});
 			} else {
 				schMinScoreList = schoolData.sch_min_score_list;
+				schMinScoreList.push({
+					"year": "你的排名", //用户的排名
+					"min_rank": REQUESTPARAM.rank //用户排名
+				});
 			}
 
 			setCoordinateReturn = _canvasGraph2.default.setCoordinate(schMinScoreList, startX, startY, widthMargin, 400, lowestPercent);
@@ -232,9 +240,9 @@ var _init = function () {
 
 		var schoolId = $(this).data("schoolid");
 		var param = {};
-		param.reqId = REQUESTPARAM.req_id || "";
+		param.reqId = REQUESTPARAM.reqId || "";
 		param.schId = schoolId || "";
-		param.provinceId = REQUESTPARAM.province_id || "";
+		param.provinceId = REQUESTPARAM.provinceId || "";
 		param.wenli = REQUESTPARAM.wenli || "";
 		param.batch = REQUESTPARAM.batch || "";
 
@@ -529,6 +537,10 @@ var swipeToAnalysisReportPage = function swipeToAnalysisReportPage(requestParam,
 			REQUESTPARAM.loc_provinc_name = data.loc_provinc_name = _loc2.default.getProvinceName(paramData.provinceId);
 			REQUESTPARAM.loc_wenli = data.loc_wenli = REQUESTPARAM.wenli == 2 ? "理科" : "文科";
 			console.log("data " + JSON.stringify(data, null, 4));
+
+			if (data.rank) {
+				REQUESTPARAM.rank = data.rank;
+			}
 			_renderAnalysisReportPage(data);
 			_init.initModule();
 			xinSwiper.slideNext();
@@ -3434,8 +3446,8 @@ $(function () {
 		};
 		///刷新显示相应页面
 		showPage("0", "#input");
-		history.go(+1);
-		console.log(window.location);
+		// history.go(+1);
+		console.log("window.location" + window.location);
 		if ('pushState' in history) {
 			history.pushState("01", "", window.location.pathname + window.location.search + "#input");
 		};
