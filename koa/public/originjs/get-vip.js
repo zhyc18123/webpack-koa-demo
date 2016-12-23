@@ -4,6 +4,7 @@ var init=function(xinSwiper){
 	// 监听获取vip体验卡按钮
 	$("#vip-btn").on("click",function(){
 		getVip(xinSwiper);
+		// xinSwiper.slideNext();
 		ga('send', 'event', '领取页面', '领取按钮', '点击领取按钮');
 	});
 	// 监听获取验证码按钮
@@ -22,14 +23,31 @@ var init=function(xinSwiper){
 	});
 	///监听下载按钮
 	$("#download-btn").on("click",function(){
+		downloadApp()
 		ga('send', 'event', '领取成功', '下载APP', '下载按钮');
 	});
-	// $(document).scroll(function(){
-	// 	if(xinSwiper.activeIndex===2){
-	// 		var bottomNum=$(".swiper-slide").eq(xinSwiper.activeIndex).height()-$(window).height()-$(document).scrollTop()-1;
-	// 		$("#get-vip-btn").css({"bottom":bottomNum+"px"});
-	// 	};
-	// });
+};
+var downloadApp=function(){
+	function isPC() {
+	    var userAgentInfo = navigator.userAgent;
+	    var Agents = ["Android", "iPhone",
+	                "SymbianOS", "Windows Phone",
+	                "iPad", "iPod"];
+	    var flag = true;
+	    for (var v = 0; v < Agents.length; v++) {
+	        if (userAgentInfo.indexOf(Agents[v]) > 0) {
+	            flag = false;
+	            break;
+	        }
+	    }
+	    return flag;
+	};
+
+	if(isPC()){
+		window.location.href="http://wmzy.com";
+	}else{
+		window.location.href="http://a.app.qq.com/o/simple.jsp?pkgname=com.gaokaozhiyuan";
+	};
 };
 ///检查输入的手机号码
 var checkMobile=function(mobile){
@@ -132,7 +150,10 @@ var getVip=function(xinSwiper){
 				alert("体验卡已经被领取完了");
 				break;
 				case 10005 :
-				alert("短信验证码已失效");
+				alert("短信验证码不合法");
+				break;
+				case 10006 :
+				alert("短信验证码已过期，请重新发送");
 				break;
 				default:
 				break;
