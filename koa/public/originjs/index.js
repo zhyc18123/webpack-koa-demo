@@ -79,6 +79,10 @@ $(function(){
 		};
 		///浏览器前进后退事件
 		window.onpopstate = function() {
+			alert("window.location.hash  " + window.location.hash );
+			if(window.location.hash == "#input"){
+				window.location.reload();
+			}
 			showPage();
 		};
 
