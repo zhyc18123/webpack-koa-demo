@@ -21,6 +21,7 @@ html{
 	.down-span{
 		padding:0 .2rem;
 		line-height: 1rem;
+		top: 0;
 		i{
 			font-size: $font-14;
 			cursor: pointer;
@@ -30,28 +31,35 @@ html{
 }
 .xin-input{
 	border:$border solid $bor-col;
-	padding:0 .3rem;
-	line-height:.6rem;
+	padding:0 .3rem 0 .2rem;
+	line-height:.4rem;
 	border-radius: .08rem;
-	display: flex;
+	display: -moz-box; 
+	display: -webkit-box; 
+	display: box; 
 	em{
 		color: $red-col;
 		width: .2rem;
-		padding:.1rem 0;
+		padding:.3rem 0;
+		top: .3rem;
+		position:relative;
 	}
 	span{
 		color: $font-heicol;
 		border-right: 1px solid $bor-col;
 		padding: 0 0.2rem 0 0.1rem;
-		height: .6rem;
+		height: .4rem;
 		position:relative;
-		top: .22rem;
+		top: .31rem;
 	}
 	input{
 		padding: 0 0.2rem;
 		width: 100%;
 		height: 1rem;
-		flex: 1;
+		display: block;
+		-moz-box-flex: 1; 
+		-webkit-box-flex: 1; 
+		box-flex: 1;
 		text-align: left;
 		font-size: $font-14;
 	}
@@ -68,10 +76,15 @@ i.down{
 	margin-top: 0.1rem !important;
 }
 .subject-type{
-	display: flex;
+	display: -moz-box; 
+	display: -webkit-box; 
+	display: box; 
 	padding:0 2px;
 	span{
-		flex: 1;
+		display: block;
+		-moz-box-flex: 1; 
+		-webkit-box-flex: 1; 
+		box-flex: 1;
 		border: 1px solid $bor-col;
 		padding: 0.3rem 0;
 		text-align:center;
@@ -81,6 +94,7 @@ i.down{
 			font-size: $font-14;
 			color: $red-col;
 			margin-right: .1rem;
+			width: .28rem;
 		}
 		&.active{
 			// i{
@@ -92,6 +106,7 @@ i.down{
 		}
 	}
 	em{
+		display: block;
 		width: .2rem;
 	}
 }

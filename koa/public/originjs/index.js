@@ -73,9 +73,7 @@ $(function(){
 		history.go(+1);
 		console.log(window.location);
 		if ('pushState' in history) {
-			if(window.location.hash!=="#input"){
 			history.pushState("01", "", window.location.pathname+window.location.search+"#input");
-			}
 		};
 		///浏览器前进后退事件
 		window.onpopstate = function() {

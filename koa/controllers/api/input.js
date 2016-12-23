@@ -4,6 +4,7 @@ function* guestSchool() {
     postdata.req_id = body.req_id||"";
     postdata.search_key = body.search_key||"";
     postdata.wenli = body.wenli||"";
+    postdata.province_id = body.province_id||"";
     //请求存储接口
     try{
     var data = yield robot.req(robot.url.guestSchool, postdata,this,"","application/json;charset=UTF-8");
