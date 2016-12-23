@@ -12,8 +12,8 @@ var _init = (function () {
 
 		jqueryMap = {},
 
-		setJqueryMap, _toggleModalShow, _toggleModaHide, _renderSchoolItemDetail, onClickSchoolListItem,
-		onClickCloseSchoolDetailBtn, initModule;
+		setJqueryMap, _toggleModalShow, _toggleModaHide, _renderSchoolItemDetail,
+		onClickSchoolListItem, onClickCloseSchoolDetailBtn, onClickSetScoreSch, initModule;
 
 	// UTILITY METHODS
 	_toggleModalShow = function() {
@@ -132,12 +132,14 @@ var _init = (function () {
 	};
 
 	// DOM METHODS
-	setJqueryMap = function () {
+	setJqueryMap = function (xinSwiper) {
 		jqueryMap = {
+			_xinSwiper: xinSwiper,
 			$blackMasking: $("#modal-black-masking"),
 			$schoolListItem: $(".school-list-item-btn"),
 			$schoolDetailModal: $("#school-detail-modal"),
-			$schoolDetailClose: $("#school-modal-close-btn")
+			$schoolDetailClose: $("#school-modal-close-btn"),
+			$gotoSetScoreSch: $(".goto-set-score-school")
 		};
 	};
 
@@ -163,7 +165,10 @@ var _init = (function () {
 				data.total_rank = schoolRankNum;
 				data.adm_ratio = schoolAdmratio;
 				_renderSchoolItemDetail(data);
-				
+
+				var scroolTopHeight = $("#school-list-wrap-top").offset().top;
+				$(window).scrollTop(scroolTopHeight);
+
 			},
 			error:function() {
 				alert("服务器错误！");
@@ -214,16 +219,25 @@ var _init = (function () {
 		$("#school-list-item-modal-wrap").html(schoolListItemModalHtml);
 		$("#line-chart-wmzy-link-modal-wrap").html(schoolListLineChartModalHtml);
 	};
+
+	onClickSetScoreSch = function() {
+		jqueryMap._xinSwiper.slidePrev();
+		chgUrl.changeUrl("0","","#input");
+		document.title = "联考成绩定位分析报告";
+	};
+
 	// PUBLIC METHODS
-	initModule = function () {
-		setJqueryMap();
+	initModule = function (xinSwiper) {
+		setJqueryMap(xinSwiper);
 		jqueryMap.$schoolListItem.click(onClickSchoolListItem);
-		jqueryMap.$schoolDetailClose.click(onClickCloseSchoolDetailBtn)
+		jqueryMap.$schoolDetailClose.click(onClickCloseSchoolDetailBtn);
+		jqueryMap.$gotoSetScoreSch.click(onClickSetScoreSch);
 	};
 
 	return {
 		initModule: initModule
 	};
+
 
 }());
 
@@ -477,8 +491,10 @@ var swipeToAnalysisReportPage = function ( requestParam, xinSwiper ) {
 	paramData.score = requestParam.score || "";
 	paramData.expSchId = requestParam.exp_sch_id || "";
 	paramData.batch = requestParam.batch || "";
+	paramData.source = requestParam.type;
 
 	REQUESTPARAM = paramData;
+	// REQUESTPARAM.xinSwiper = xinSwiper;
 
 	$.ajax({
 		type: "post",
@@ -495,7 +511,7 @@ var swipeToAnalysisReportPage = function ( requestParam, xinSwiper ) {
 				REQUESTPARAM.rank = data.rank;
 			}
 			_renderAnalysisReportPage(data);
-			_init.initModule();
+			_init.initModule(xinSwiper);
 			xinSwiper.slideNext();
 			chgUrl.changeUrl("02","","#analyse-result");
 			document.title="成绩定位分析报告";

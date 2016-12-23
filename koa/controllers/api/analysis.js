@@ -10,6 +10,7 @@ function* getAnalysisReport() {
     postdata["score"] = body.score || "";
     postdata["exp_sch_id"] = body.expSchId || "";
     postdata["batch"] = body.batch || "";
+    postdata["source"] = body.source || "";
 
     //请求存储接口
     try {
