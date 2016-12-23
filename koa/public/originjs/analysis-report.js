@@ -12,8 +12,8 @@ var _init = (function () {
 
 		jqueryMap = {},
 
-		setJqueryMap, _toggleModalShow, _toggleModaHide, _renderSchoolItemDetail,
-		onClickSchoolListItem, onClickCloseSchoolDetailBtn, onClickSetScoreSch, initModule;
+		setJqueryMap, _toggleModalShow, _toggleModaHide, _renderSchoolItemDetail, onClickSchoolListItem,
+		onClickCloseSchoolDetailBtn, onClickSetScoreSch, onClickWmzyLink, onClickBlackMasking, initModule;
 
 	// UTILITY METHODS
 	_toggleModalShow = function() {
@@ -135,11 +135,13 @@ var _init = (function () {
 	setJqueryMap = function (xinSwiper) {
 		jqueryMap = {
 			_xinSwiper: xinSwiper,
+			$analyseTpl: $(".analyse-html"),
 			$blackMasking: $("#modal-black-masking"),
 			$schoolListItem: $(".school-list-item-btn"),
 			$schoolDetailModal: $("#school-detail-modal"),
 			$schoolDetailClose: $("#school-modal-close-btn"),
-			$gotoSetScoreSch: $(".goto-set-score-school")
+			$gotoSetScoreSch: $(".goto-set-score-school"),
+			$gotoWmzyIntro: $(".goto-wmzy-pro-intro")
 		};
 	};
 
@@ -221,9 +223,19 @@ var _init = (function () {
 	};
 
 	onClickSetScoreSch = function() {
+		jqueryMap.$analyseTpl.html(REQUESTPARAM._analyseTpl);
 		jqueryMap._xinSwiper.slidePrev();
 		chgUrl.changeUrl("0","","#input");
 		document.title = "联考成绩定位分析报告";
+	};
+
+	onClickWmzyLink = function() {
+		jqueryMap._xinSwiper.slideNext();
+		chgUrl.changeUrl("03","","#introduce");
+		document.title="完美志愿，让你上更好的大学";
+	};
+	onClickBlackMasking = function() {
+
 	};
 
 	// PUBLIC METHODS
@@ -232,6 +244,7 @@ var _init = (function () {
 		jqueryMap.$schoolListItem.click(onClickSchoolListItem);
 		jqueryMap.$schoolDetailClose.click(onClickCloseSchoolDetailBtn);
 		jqueryMap.$gotoSetScoreSch.click(onClickSetScoreSch);
+		jqueryMap.$gotoWmzyIntro.click(onClickWmzyLink);
 	};
 
 	return {
@@ -466,24 +479,21 @@ var _renderAnalysisReportPage = function (reportData) {
 	}
 
 	// 其他 x 所推荐院校
-	if(reportData.recommend_sch_list.length>0){
-		renderEjsTplWithData("#recommend-school-link-tpl", "#recommend-school-link-wrap", reportData);
-	}else{
-		renderEjsTplWithData("#recommend-school-link-tpl-none", "#recommend-school-link-wrap", reportData);
-	}
+	renderEjsTplWithData("#recommend-school-link-tpl", "#recommend-school-link-wrap", reportData);
 
 	// 根据排名的数据来源
 	renderEjsTplWithData("#recommend-data-origin-tpl", "#recommend-data-origin-wrap", reportData);
 
 	// 录取人数最多的五个专业，如果有的话
 	renderEjsTplWithData("#top-five-enroll-major-tpl", "#top-five-enroll-major-wrap", reportData);
+	renderEjsTplWithData("#recommend-majors-link-tpl", "#recommend-majors-link-wrap", reportData);
 
 };
 
 var swipeToAnalysisReportPage = function ( requestParam, xinSwiper ) {
 
+	var _analyseTpl = $(".analyse-html").html();
 	var paramData  = {};
-
 	paramData.reqId = requestParam.req_id || "";
 	paramData.examNo = requestParam.exam_no || "";
 	paramData.provinceId = ""+requestParam.province_id;
@@ -494,6 +504,7 @@ var swipeToAnalysisReportPage = function ( requestParam, xinSwiper ) {
 	paramData.source = requestParam.type;
 
 	REQUESTPARAM = paramData;
+	REQUESTPARAM._analyseTpl = _analyseTpl;
 	// REQUESTPARAM.xinSwiper = xinSwiper;
 
 	$.ajax({
@@ -522,17 +533,7 @@ var swipeToAnalysisReportPage = function ( requestParam, xinSwiper ) {
 	});
 };
 
-var swipeToWmzyIntroPage = function (xinSwiper) {
-
-	$(".goto-wmzy-pro-intro").on("click", function () {
-		xinSwiper.slideNext();
-		chgUrl.changeUrl("03","","#introduce");
-		document.title="完美志愿，让你上更好的大学";
-	});
-
-};
 
 module.exports = {
-	swipeToAnalysisReportPage: swipeToAnalysisReportPage,
-	swipeToWmzyIntroPage: swipeToWmzyIntroPage
+	swipeToAnalysisReportPage: swipeToAnalysisReportPage
 };

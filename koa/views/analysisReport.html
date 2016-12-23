@@ -83,8 +83,8 @@
                 <&}else if(data.exp_sch && data.score_gap){&>
                     <p class="gap-sugest gap-sugest-center">因数据缺失，暂时无法预测录取概率</p>
                 <& }else{ &>
-                    <p class="gap-sugest gap-sugest-center">无法查看目标学校的录取概率分析</p>
-                    <p class="goto-set-score-school">去设立目标学校>></p>
+                    <p class="gap-sugest-none gap-sugest-center">无法查看目标学校的录取概率分析</p>
+                    <p class="goto-set-score-school">去设立目标学校 >></p>
                 <& } &>
             </script>
         </div>
@@ -189,20 +189,18 @@
         </div>
 
         <p class="wmzy-link goto-wmzy-pro-intro" id="recommend-school-link-wrap">
-            <&if(data.recommend_sch_list.length>0){&>
             <script id="recommend-school-link-tpl" type="text/template">
-                <&var otherRecommendSch = data.recommend_sch_num - data.recommend_sch_list.length;&>
-                <&if(otherRecommendSch > 0){&>
-                <span>其余 <&= otherRecommendSch&> 所推荐院校，尽在完美志愿 >></span>
+                <&if(data.recommend_sch_list.length>0){&>
+                    <&var otherRecommendSch = data.recommend_sch_num - data.recommend_sch_list.length;&>
+                    <&if(otherRecommendSch > 0){&>
+                    <span>其余 <&= otherRecommendSch&> 所推荐院校，尽在完美志愿 >></span>
+                    <&}else{&>
+                    <span>更多推荐院校，尽在完美志愿 >></span>
+                    <&}&>
                 <&}else{&>
-                <span>更多推荐院校，尽在完美志愿 >></span>
+                    <span>建议下载完美志愿，查看其它批次推荐院校 >></span>
                 <&}&>
             </script>
-            <&}else{&>
-            <script id="recommend-school-link-tpl-none" type="text/template">
-                <span>建议下载完美志愿，查看其它批次推荐院校 >></span>
-            </script>
-            <}>
         </p>
     </div>
 
@@ -211,11 +209,17 @@
             <span class="yellow-col">往年与你成绩相近的人去了哪里</span>
         </p>
 
+
         <div id="recommend-data-origin-wrap">
             <script id="recommend-data-origin-tpl" type="text/template">
-                <p class="data-origin <&= (''+data.rank).length>4?'text-align-left':''&>">
+                <&if( data.goto_majors_list.length>0 || data.goto_majors_list.length>0 ){&>
+                <p class="data-origin <&= (''+data.rank).length>3?'text-align-left':''&>">
                     数据来源：近三年省排名在第 <span><&= data.rank&></span> 名附近的考生录取去向
                 </p>
+                <&}else{&>
+                <div class="div-icon-search"></div>
+                <p class="school-list-none-tip">没有找到往年与你成绩相近的考生</p>
+                <&}&>
             </script>
         </div>
 
@@ -251,12 +255,18 @@
                     <&}&>
                 </script>
             </div>
-            <p class="wmzy-link goto-wmzy-pro-intro">
-            <span>
-                更多往年同分考生录取去向，尽在完美志愿 >>
-            </span>
+            <p class="wmzy-link goto-wmzy-pro-intro" id="recommend-majors-link-wrap">
+                <script id="recommend-majors-link-tpl" type="text/template">
+                    <&if(data.goto_majors_list.length>0 || data.goto_majors_list.length>0 ){&>
+                    <span>更多往年同分考生录取去向，尽在完美志愿 >></span>
+                    <&}else{&>
+                    <span>建议下载完美志愿，查看更详尽的录取信息 >></span>
+                    <&}&>
+                </script>
             </p>
         </div>
+
+
     </div>
 
     <div class="ipin-disclaim">
