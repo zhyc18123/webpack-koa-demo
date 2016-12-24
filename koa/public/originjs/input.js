@@ -221,6 +221,8 @@ var guestSchool=function(that){
 			}
 		},
 		error: function(request, error) {
+			console.log(request)
+			console.log(error)
 			// alert("服务器错误！")
 		}
 	})
