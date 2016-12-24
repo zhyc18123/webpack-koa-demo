@@ -9,6 +9,12 @@ $yellowCol: #f9be00;
   opacity: 0.6;
   z-index: 5;
 }
+.opacity-eighty{
+  opacity: 0.8;
+}
+.opacity-fifty{
+  opacity: 0.5;
+}
 .clear-margin-left{
   margin-left:0!important;
 }
@@ -83,7 +89,7 @@ $yellowCol: #f9be00;
   bottom: -18px;
   background: #f9be00;
   border-left: 3px dashed;
-  transform: rotate(30deg);
+  @include my-transform-rotate(30deg);
 }
 
 .loc-subject {
@@ -97,25 +103,26 @@ $yellowCol: #f9be00;
   width: 100%;
   display: block;
   margin-top: percentage(40/620);
-  margin-bottom: percentage(60/620);
   text-align: center;
   li {
     display: inline-block;
   }
 }
-
-.about-score {
-  width: 46%;
+.score-rank-disclaim{
+  @extend .loc-subject;
+  margin:percentage(46/620) percentage(20/712) percentage(20/620) percentage(20/712);
+}
+.about-score{
+  margin-right: 0.3rem;
+}
+.about-ranking{
+  margin-left: 0.3rem;
 }
 
-.about-ranking {
-  width: 50%;
-}
 
 .about-score, .about-ranking {
   span {
-    display: inline-block;
-    width: 100%;
+    display: block;
     @include font-size(2.4);
   }
 }
@@ -129,7 +136,6 @@ $yellowCol: #f9be00;
 .score-rank-divider {
   position: relative;
   bottom: 8px;
-  left: -8px;
   width: 1px;
   height: 0.5rem;
   border-left: 1px solid #333333;
@@ -148,16 +154,18 @@ $yellowCol: #f9be00;
   margin-top: percentage(70/620);
   color: $black;
   i {
-    position: relative;
+    position: absolute;
     vertical-align: top;
     @include font-size(4.2);
     //@include my-transform(0.8)
   }
-  span {
-    margin-left: percentage(16/620);
-    display: inline-block;
-    width: 87%;
+  p {
+    position: relative;
+    left: .6rem;
+    vertical-align: top;
     line-height: 0.4rem;
+    display: inline-block;
+    width: 88%;
   }
   @include font-size(2.8);
 }
@@ -258,6 +266,9 @@ $yellowCol: #f9be00;
   color: #999999;
   font-weight: normal;
   @include font-size(2.4);
+  em{
+    @include font-size(2.4);
+  }
 }
 
 .wmzy-link {
@@ -343,8 +354,8 @@ $yellowCol: #f9be00;
 .school-list-img {
   width: percentage(102/750); /*102/750*/
   height: auto;
-  max-width: 102px;
-  max-height: 102px;
+  max-width: 4.8rem;
+  max-height: 4.8rem;
   vertical-align: middle;
   margin: 0;
   padding: 0;
@@ -380,12 +391,12 @@ $yellowCol: #f9be00;
 .school-rank-probability .dot {
   position: relative;
   display: inline-block;
-  bottom: 1px;
-  width: 8px;
-  height: 8px;
-  margin-right: 8px;
+  bottom: 0.03rem;
+  width: 0.1rem;
+  height: 0.1rem;
+  margin-right: 0.1rem;
   border-radius: 50%;
-  background: #999999;
+  background: #dfdfdf;
   vertical-align: middle;
 }
 
@@ -413,7 +424,7 @@ $yellowCol: #f9be00;
 .data-origin {
   position: relative;
   text-align: center;
-  width: percentage(732/750);
+  width: percentage(718/750);
   margin: percentage(50/750) auto 0 auto;
   color: #999999;
   @include font-size(2.4)

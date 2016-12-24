@@ -117,6 +117,7 @@ function drawCoordinate(ctx, coord, yearColor, historyColor, currentColor, label
 	var y;
 	var lineHeight;
 	var linePercent;
+	var yearTextHeight, yearTextWidth;
 	var coordLen = coord.length;
 	var lineStartY = startY + offsetY;
 
@@ -129,7 +130,12 @@ function drawCoordinate(ctx, coord, yearColor, historyColor, currentColor, label
 
 		ctx.font = lineChartFontStyle;
 		ctx.fillStyle = yearColor.dotColor;
-		var yearTextWidth = ctx.measureText(year).width;
+		yearTextWidth = ctx.measureText(year).width;
+
+		if (!yearTextHeight) {
+			yearTextHeight = ctx.measureText("年").width * 1.2;
+		}
+
 		ctx.fillText(year, x + labelWidth/2 - yearTextWidth/2, startY);
 
 		ctx.setLineDash([8,4]);
@@ -139,8 +145,9 @@ function drawCoordinate(ctx, coord, yearColor, historyColor, currentColor, label
 			ctx.lineWidth = lineDotStyle.lineWidth;
 		}
 		ctx.strokeStyle = "#dadada";
-		ctx.moveTo(x + labelWidth/2, lineStartY);
-		ctx.lineTo(x + labelWidth/2, canvasHeight);
+		// ctx.moveTo(x + labelWidth/2, lineStartY);
+		ctx.moveTo(x + labelWidth/2, startY + yearTextHeight);
+		ctx.lineTo(x + labelWidth/2, canvasHeight - yearTextHeight);
 		ctx.stroke();
 		ctx.closePath();
 
@@ -166,8 +173,8 @@ function drawCoordinate(ctx, coord, yearColor, historyColor, currentColor, label
 	if(lineDotStyle) {
 		ctx.lineWidth = lineDotStyle.lineWidth;
 	}
-	ctx.moveTo(0, lineStartY+lineHeight*linePercent);
-	ctx.lineTo(canvasWidth, lineStartY+lineHeight*linePercent);
+	ctx.moveTo(canvasWidth/20, lineStartY+lineHeight*linePercent);
+	ctx.lineTo(canvasWidth - canvasWidth/20, lineStartY+lineHeight*linePercent);
 	ctx.stroke();
 	ctx.closePath();
 
@@ -309,7 +316,8 @@ function drawLabel(ctx, coord, labelHeight, radius, startY, canvasHeight, offset
 			ctx.font = lineChartFontStyle;
 			ctx.fillStyle = '#ffffff';
 			var textWidth = ctx.measureText(ranking+"名").width;
-			ctx.fillText(ranking+"名", x+width/2 - textWidth/2,  labelPointY - labelHeight/2 );
+			var textHeight = ctx.measureText("名").width*1.2;
+			ctx.fillText(ranking+"名", x+width/2 - textWidth/2,  labelPointY -1.414*triangleSide - labelHeight/2 + textHeight/2);
 		}
 
 		if (i == len-1) {

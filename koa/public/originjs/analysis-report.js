@@ -3,6 +3,7 @@ import drawCanvas from './canvasGraph';
 import prov from "./loc.js";
 import chgUrl from "./change-url";
 import staticTpl from "./ejsTpl";
+import scrollEvent from "./scollEvent";
 var Tpl = require('./utils/ejs');
 
 var REQUESTPARAM = {};
@@ -13,8 +14,8 @@ var _init = (function () {
 
 		jqueryMap = {},
 
-		setJqueryMap, _toggleModalShow, _toggleModaHide, _renderSchoolItemDetail, onClickSchoolListItem,
-		onClickCloseSchoolDetailBtn, onClickSetScoreSch, onClickWmzyLink, onClickBlackMasking, initModule;
+		setJqueryMap, _toggleModalShow, _toggleModalHide, _renderSchoolItemDetail,
+		onClickSchoolListItem, onClickCloseSchoolDetailBtn, onClickSetScoreSch, onClickWmzyLink, onClickBlackMasking, initModule;
 
 	// UTILITY METHODS
 	_toggleModalShow = function() {
@@ -22,9 +23,14 @@ var _init = (function () {
 		jqueryMap.$schoolDetailModal.removeClass("hide");
 	};
 
-	_toggleModaHide = function() {
+	_toggleModalHide = function() {
+		scrollEvent.enableScroll();
 		jqueryMap.$blackMasking.addClass("hide");
 		jqueryMap.$schoolDetailModal.addClass("hide");
+		var schoolListItemModalHtml = staticTpl.SCHOOL_LIST_ITEM_MODAL_HTML;
+		var schoolListLineChartModalHtml = staticTpl.SCHOOL_LIST_LINE_CHART_MODAL_HTML;
+		$("#school-list-item-modal-wrap").html(schoolListItemModalHtml);
+		$("#line-chart-wmzy-link-modal-wrap").html(schoolListLineChartModalHtml);
 	};
 
 	_renderSchoolItemDetail = function (data) {
@@ -119,6 +125,8 @@ var _init = (function () {
 				lineDotStyle.dotRadius = 5;
 				triangleSide = 5;
 				labelBorderRadius /= 2;
+			}else if(window.dpr ==2 ){
+				triangleSide = 10;
 			}
 
 			drawCanvas.drawCoordinate(context, coordData, yearColor,historyColor, currentColor, labelWidth,
@@ -175,14 +183,11 @@ var _init = (function () {
 			}
 		});
 		ga('send', 'event', '结果页面', '推荐学校列表', '推荐学校详情按钮');
+		scrollEvent.disableScroll();
 	};
 
 	onClickCloseSchoolDetailBtn = function() {
-		_toggleModaHide();
-		var schoolListItemModalHtml = staticTpl.SCHOOL_LIST_ITEM_MODAL_HTML;
-		var schoolListLineChartModalHtml = staticTpl.SCHOOL_LIST_LINE_CHART_MODAL_HTML;
-		$("#school-list-item-modal-wrap").html(schoolListItemModalHtml);
-		$("#line-chart-wmzy-link-modal-wrap").html(schoolListLineChartModalHtml);
+		_toggleModalHide();
 	};
 
 	onClickSetScoreSch = function() {
@@ -194,7 +199,7 @@ var _init = (function () {
 
 	onClickWmzyLink = function() {
 		var gaId = $(this).data("gaid");
-		console.log("gaId " + gaId);
+		_toggleModalHide();
 		jqueryMap._xinSwiper.slideNext();
 		chgUrl.changeUrl("03","","#introduce");
 		document.title="完美志愿，让你上更好的大学";
@@ -207,11 +212,7 @@ var _init = (function () {
 		}
 	};
 	onClickBlackMasking = function() {
-		_toggleModaHide();
-		var schoolListItemModalHtml = staticTpl.SCHOOL_LIST_ITEM_MODAL_HTML;
-		var schoolListLineChartModalHtml = staticTpl.SCHOOL_LIST_LINE_CHART_MODAL_HTML;
-		$("#school-list-item-modal-wrap").html(schoolListItemModalHtml);
-		$("#line-chart-wmzy-link-modal-wrap").html(schoolListLineChartModalHtml);
+		_toggleModalHide();
 	};
 
 	// PUBLIC METHODS
@@ -317,7 +318,7 @@ var _renderAnalysisReportPage = function (reportData) {
 	 *  height: 500px;
 	 **/
 
-	if (reportData.exp_sch && reportData.sch_min_score_list.length>1) {
+	if (reportData.exp_sch && reportData.sch_min_score_list.length>0) {
 
 		renderEjsTplWithData("#line-chart-wmzy-link-tpl", "#line-chart-wmzy-link-wrap", reportData);
 
@@ -390,6 +391,8 @@ var _renderAnalysisReportPage = function (reportData) {
 			lineDotStyle.dotRadius = 5;
 			triangleSide = 5;
 			labelBorderRadius /= 2;
+		}else if(window.dpr ==2 ){
+			triangleSide = 10;
 		}
 
 		drawCanvas.drawCoordinate(context, coordData, yearColor,historyColor, currentColor, labelWidth,
@@ -493,6 +496,7 @@ var swipeToAnalysisReportPage = function ( requestParam, xinSwiper ) {
 
 			REQUESTPARAM.loc_provinc_name = data.loc_provinc_name = prov.getProvinceName(paramData.provinceId);
 			REQUESTPARAM.loc_wenli = data.loc_wenli = REQUESTPARAM.wenli == 2 ? "理科" : "文科";
+			REQUESTPARAM.batch = data.batch;
 			console.log("data "+ JSON.stringify(data, null, 4));
 
 			if(data.rank){

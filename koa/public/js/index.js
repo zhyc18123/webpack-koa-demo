@@ -93,6 +93,10 @@ var _ejsTpl = __webpack_require__(8);
 
 var _ejsTpl2 = _interopRequireDefault(_ejsTpl);
 
+var _scollEvent = __webpack_require__(12);
+
+var _scollEvent2 = _interopRequireDefault(_scollEvent);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var Tpl = __webpack_require__(10);
@@ -104,7 +108,7 @@ var _init = function () {
 	var jqueryMap = {},
 	    setJqueryMap,
 	    _toggleModalShow,
-	    _toggleModaHide,
+	    _toggleModalHide,
 	    _renderSchoolItemDetail,
 	    onClickSchoolListItem,
 	    onClickCloseSchoolDetailBtn,
@@ -119,9 +123,14 @@ var _init = function () {
 		jqueryMap.$schoolDetailModal.removeClass("hide");
 	};
 
-	_toggleModaHide = function _toggleModaHide() {
+	_toggleModalHide = function _toggleModalHide() {
+		_scollEvent2.default.enableScroll();
 		jqueryMap.$blackMasking.addClass("hide");
 		jqueryMap.$schoolDetailModal.addClass("hide");
+		var schoolListItemModalHtml = _ejsTpl2.default.SCHOOL_LIST_ITEM_MODAL_HTML;
+		var schoolListLineChartModalHtml = _ejsTpl2.default.SCHOOL_LIST_LINE_CHART_MODAL_HTML;
+		$("#school-list-item-modal-wrap").html(schoolListItemModalHtml);
+		$("#line-chart-wmzy-link-modal-wrap").html(schoolListLineChartModalHtml);
 	};
 
 	_renderSchoolItemDetail = function _renderSchoolItemDetail(data) {
@@ -215,6 +224,8 @@ var _init = function () {
 				lineDotStyle.dotRadius = 5;
 				triangleSide = 5;
 				labelBorderRadius /= 2;
+			} else if (window.dpr == 2) {
+				triangleSide = 10;
 			}
 
 			_canvasGraph2.default.drawCoordinate(context, coordData, yearColor, historyColor, currentColor, labelWidth, lineChartCanvas.width, lineChartCanvas.height, startY, offsetY, lineChartFontStyle, lineDotStyle, window.dpr);
@@ -268,14 +279,11 @@ var _init = function () {
 			}
 		});
 		ga('send', 'event', '结果页面', '推荐学校列表', '推荐学校详情按钮');
+		_scollEvent2.default.disableScroll();
 	};
 
 	onClickCloseSchoolDetailBtn = function onClickCloseSchoolDetailBtn() {
-		_toggleModaHide();
-		var schoolListItemModalHtml = _ejsTpl2.default.SCHOOL_LIST_ITEM_MODAL_HTML;
-		var schoolListLineChartModalHtml = _ejsTpl2.default.SCHOOL_LIST_LINE_CHART_MODAL_HTML;
-		$("#school-list-item-modal-wrap").html(schoolListItemModalHtml);
-		$("#line-chart-wmzy-link-modal-wrap").html(schoolListLineChartModalHtml);
+		_toggleModalHide();
 	};
 
 	onClickSetScoreSch = function onClickSetScoreSch() {
@@ -287,7 +295,7 @@ var _init = function () {
 
 	onClickWmzyLink = function onClickWmzyLink() {
 		var gaId = $(this).data("gaid");
-		console.log("gaId " + gaId);
+		_toggleModalHide();
 		jqueryMap._xinSwiper.slideNext();
 		_changeUrl2.default.changeUrl("03", "", "#introduce");
 		document.title = "完美志愿，让你上更好的大学";
@@ -300,11 +308,7 @@ var _init = function () {
 		}
 	};
 	onClickBlackMasking = function onClickBlackMasking() {
-		_toggleModaHide();
-		var schoolListItemModalHtml = _ejsTpl2.default.SCHOOL_LIST_ITEM_MODAL_HTML;
-		var schoolListLineChartModalHtml = _ejsTpl2.default.SCHOOL_LIST_LINE_CHART_MODAL_HTML;
-		$("#school-list-item-modal-wrap").html(schoolListItemModalHtml);
-		$("#line-chart-wmzy-link-modal-wrap").html(schoolListLineChartModalHtml);
+		_toggleModalHide();
 	};
 
 	// PUBLIC METHODS
@@ -408,7 +412,7 @@ var _renderAnalysisReportPage = function _renderAnalysisReportPage(reportData) {
   *  height: 500px;
   **/
 
-	if (reportData.exp_sch && reportData.sch_min_score_list.length > 1) {
+	if (reportData.exp_sch && reportData.sch_min_score_list.length > 0) {
 
 		renderEjsTplWithData("#line-chart-wmzy-link-tpl", "#line-chart-wmzy-link-wrap", reportData);
 
@@ -480,6 +484,8 @@ var _renderAnalysisReportPage = function _renderAnalysisReportPage(reportData) {
 			lineDotStyle.dotRadius = 5;
 			triangleSide = 5;
 			labelBorderRadius /= 2;
+		} else if (window.dpr == 2) {
+			triangleSide = 10;
 		}
 
 		_canvasGraph2.default.drawCoordinate(context, coordData, yearColor, historyColor, currentColor, labelWidth, lineChartCanvas.width, lineChartCanvas.height, startY, offsetY, lineChartFontStyle, lineDotStyle, window.dpr);
@@ -577,6 +583,7 @@ var swipeToAnalysisReportPage = function swipeToAnalysisReportPage(requestParam,
 
 			REQUESTPARAM.loc_provinc_name = data.loc_provinc_name = _loc2.default.getProvinceName(paramData.provinceId);
 			REQUESTPARAM.loc_wenli = data.loc_wenli = REQUESTPARAM.wenli == 2 ? "理科" : "文科";
+			REQUESTPARAM.batch = data.batch;
 			console.log("data " + JSON.stringify(data, null, 4));
 
 			if (data.rank) {
@@ -2828,6 +2835,7 @@ function drawCoordinate(ctx, coord, yearColor, historyColor, currentColor, label
 	var y;
 	var lineHeight;
 	var linePercent;
+	var yearTextHeight, yearTextWidth;
 	var coordLen = coord.length;
 	var lineStartY = startY + offsetY;
 
@@ -2840,7 +2848,12 @@ function drawCoordinate(ctx, coord, yearColor, historyColor, currentColor, label
 
 		ctx.font = lineChartFontStyle;
 		ctx.fillStyle = yearColor.dotColor;
-		var yearTextWidth = ctx.measureText(year).width;
+		yearTextWidth = ctx.measureText(year).width;
+
+		if (!yearTextHeight) {
+			yearTextHeight = ctx.measureText("年").width * 1.2;
+		}
+
 		ctx.fillText(year, x + labelWidth / 2 - yearTextWidth / 2, startY);
 
 		ctx.setLineDash([8, 4]);
@@ -2850,8 +2863,9 @@ function drawCoordinate(ctx, coord, yearColor, historyColor, currentColor, label
 			ctx.lineWidth = lineDotStyle.lineWidth;
 		}
 		ctx.strokeStyle = "#dadada";
-		ctx.moveTo(x + labelWidth / 2, lineStartY);
-		ctx.lineTo(x + labelWidth / 2, canvasHeight);
+		// ctx.moveTo(x + labelWidth/2, lineStartY);
+		ctx.moveTo(x + labelWidth / 2, startY + yearTextHeight);
+		ctx.lineTo(x + labelWidth / 2, canvasHeight - yearTextHeight);
 		ctx.stroke();
 		ctx.closePath();
 
@@ -2877,8 +2891,8 @@ function drawCoordinate(ctx, coord, yearColor, historyColor, currentColor, label
 	if (lineDotStyle) {
 		ctx.lineWidth = lineDotStyle.lineWidth;
 	}
-	ctx.moveTo(0, lineStartY + lineHeight * linePercent);
-	ctx.lineTo(canvasWidth, lineStartY + lineHeight * linePercent);
+	ctx.moveTo(canvasWidth / 20, lineStartY + lineHeight * linePercent);
+	ctx.lineTo(canvasWidth - canvasWidth / 20, lineStartY + lineHeight * linePercent);
 	ctx.stroke();
 	ctx.closePath();
 
@@ -3013,7 +3027,8 @@ function drawLabel(ctx, coord, labelHeight, radius, startY, canvasHeight, offset
 			ctx.font = lineChartFontStyle;
 			ctx.fillStyle = '#ffffff';
 			var textWidth = ctx.measureText(ranking + "名").width;
-			ctx.fillText(ranking + "名", x + width / 2 - textWidth / 2, labelPointY - labelHeight / 2);
+			var textHeight = ctx.measureText("名").width * 1.2;
+			ctx.fillText(ranking + "名", x + width / 2 - textWidth / 2, labelPointY - 1.414 * triangleSide - labelHeight / 2 + textHeight / 2);
 		}
 
 		if (i == len - 1) {
@@ -3164,7 +3179,7 @@ module.exports = {
 
 module.exports = {
     SCHOOL_LIST_ITEM_MODAL_HTML: '<script id="school-list-item-modal-tpl" type="text/template">' + '<img src="<&= data.icon_url&>" alt="学校logo" class="school-list-img">' + '<ul class="school-info">' + '<li class="school-name-loc" title="">' + '<span class="school-name"><&= data.sch_name&></span>' + '<span class="school-loc"><&= data.city&></span>' + '</li>' + '<li class="school-rank-probability">' + '<&if(data.total_rank){&>' + '<span class="school-rank"><em class="dot"></em>综合排名<em class="rank-num"><&= data.total_rank&></em></span>' + '<&}&>' + '<&if(data.adm_ratio){&>' + '<span class="enroll-probability"><em class="dot"></em>录取概率<em class="probability-num"><&= data.adm_ratio&>%</em></span>' + '<&}&>' + '</li>' + '<li class="school-label">' + '<&if(data.sch_flag.length >= 1){&>' + '<span class="school-label-1"><&= data.sch_flag[0]&></span>' + '<&if(data.sch_flag[1]){&>' + '<span class="school-label-2"><&= data.sch_flag[1]&></span>' + '<&}&>' + '<&}&>' + '<&if(data.sch_type.length > 0){&>' + '<span class="school-label-3"><&= data.sch_type[0]&></span>' + '<&}&>' + '</li>' + '</ul>' + '</script>',
-    SCHOOL_LIST_LINE_CHART_MODAL_HTML: '<script id="line-chart-wmzy-link-modal-tpl" type="text/template">' + '<& if(data.sch_min_score_list){ &>' + '<div class="line-chart-wrap">' + '<h3 class="line-chart-tiltle">往年该校录取最低省排名&nbsp;<&= data.loc_provinc_name&> — <&= data.loc_wenli&></h3>' + '<canvas id="line-chart-modal-canvas"></canvas>' + '</div>' + '<&}&>' + '</script>'
+    SCHOOL_LIST_LINE_CHART_MODAL_HTML: '<script id="line-chart-wmzy-link-modal-tpl" type="text/template">' + '<& if(data.sch_min_score_list){ &>' + '<div class="line-chart-wrap">' + '<h3 class="line-chart-tiltle">往年该校录取最低省排名 ( <&= data.loc_provinc_name&>—<&= data.loc_wenli&> )</h3>' + '<canvas id="line-chart-modal-canvas"></canvas>' + '</div>' + '<&}&>' + '</script>'
 };
 
 /***/ },
@@ -3546,6 +3561,52 @@ $(function () {
 	};
 	init();
 });
+
+/***/ },
+/* 12 */
+/***/ function(module, exports) {
+
+"use strict";
+'use strict';
+
+// left: 37, up: 38, right: 39, down: 40,
+// spacebar: 32, pageup: 33, pagedown: 34, end: 35, home: 36
+var keys = { 37: 1, 38: 1, 39: 1, 40: 1 };
+
+function preventDefault(e) {
+	e = e || window.event;
+	if (e.preventDefault) e.preventDefault();
+	e.returnValue = false;
+}
+
+function preventDefaultForScrollKeys(e) {
+	if (keys[e.keyCode]) {
+		preventDefault(e);
+		return false;
+	}
+}
+
+function disableScroll() {
+	if (window.addEventListener) // older FF
+		window.addEventListener('DOMMouseScroll', preventDefault, false);
+	window.onwheel = preventDefault; // modern standard
+	window.onmousewheel = document.onmousewheel = preventDefault; // older browsers, IE
+	window.ontouchmove = preventDefault; // mobile
+	document.onkeydown = preventDefaultForScrollKeys;
+}
+
+function enableScroll() {
+	if (window.removeEventListener) window.removeEventListener('DOMMouseScroll', preventDefault, false);
+	window.onmousewheel = document.onmousewheel = null;
+	window.onwheel = null;
+	window.ontouchmove = null;
+	document.onkeydown = null;
+}
+
+module.exports = {
+	disableScroll: disableScroll,
+	enableScroll: enableScroll
+};
 
 /***/ }
 /******/ ]);
