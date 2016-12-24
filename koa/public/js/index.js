@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 10);
+/******/ 	return __webpack_require__(__webpack_require__.s = 11);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -89,9 +89,13 @@ var _changeUrl = __webpack_require__(1);
 
 var _changeUrl2 = _interopRequireDefault(_changeUrl);
 
+var _ejsTpl = __webpack_require__(8);
+
+var _ejsTpl2 = _interopRequireDefault(_ejsTpl);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var Tpl = __webpack_require__(9);
+var Tpl = __webpack_require__(10);
 
 var REQUESTPARAM = {};
 
@@ -236,7 +240,6 @@ var _init = function () {
 	};
 
 	onClickSchoolListItem = function onClickSchoolListItem() {
-
 		var schoolId = $(this).data("schoolid");
 		var schoolRankNum = $(this).data("ranknum");
 		var schoolAdmratio = $(this).data("admratio");
@@ -257,7 +260,6 @@ var _init = function () {
 				data.total_rank = schoolRankNum;
 				data.adm_ratio = schoolAdmratio;
 				_renderSchoolItemDetail(data);
-
 				var scroolTopHeight = $("#school-list-wrap-top").offset().top;
 				$(window).scrollTop(scroolTopHeight);
 			},
@@ -265,12 +267,13 @@ var _init = function () {
 				alert("服务器错误！");
 			}
 		});
+		ga('send', 'event', '结果页面', '推荐学校列表', '推荐学校详情按钮');
 	};
 
 	onClickCloseSchoolDetailBtn = function onClickCloseSchoolDetailBtn() {
 		_toggleModaHide();
-		var schoolListItemModalHtml = '<script id="school-list-item-modal-tpl" type="text/template">' + '<img src="<&= data.icon_url&>" alt="学校logo" class="school-list-img">' + '<ul class="school-info">' + '<li class="school-name-loc" title="">' + '<span class="school-name"><&= data.sch_name&></span>' + '<span class="school-loc"><&= data.city&></span>' + '</li>' + '<li class="school-rank-probability">' + '<&if(data.total_rank){&>' + '<span class="school-rank"><em class="dot"></em>综合排名<em class="rank-num"><&= data.total_rank&></em></span>' + '<&}&>' + '<&if(data.adm_ratio){&>' + '<span class="enroll-probability"><em class="dot"></em>录取概率<em class="probability-num"><&= data.adm_ratio&>%</em></span>' + '<&}&>' + '</li>' + '<li class="school-label">' + '<&if(data.sch_flag.length >= 1){&>' + '<span class="school-label-1"><&= data.sch_flag[0]&></span>' + '<&if(data.sch_flag[1]){&>' + '<span class="school-label-2"><&= data.sch_flag[1]&></span>' + '<&}&>' + '<&}&>' + '<&if(data.sch_type.length > 0){&>' + '<span class="school-label-3"><&= data.sch_type[0]&></span>' + '<&}&>' + '</li>' + '</ul>' + '</script>';
-		var schoolListLineChartModalHtml = '<script id="line-chart-wmzy-link-modal-tpl" type="text/template">' + '<& if(data.sch_min_score_list){ &>' + '<div class="line-chart-wrap">' + '<h3 class="line-chart-tiltle">往年该校录取最低省排名&nbsp;<&= data.loc_provinc_name&> — <&= data.loc_wenli&></h3>' + '<canvas id="line-chart-modal-canvas"></canvas>' + '</div>' + '<&}&>' + '</script>';
+		var schoolListItemModalHtml = _ejsTpl2.default.SCHOOL_LIST_ITEM_MODAL_HTML;
+		var schoolListLineChartModalHtml = _ejsTpl2.default.SCHOOL_LIST_LINE_CHART_MODAL_HTML;
 		$("#school-list-item-modal-wrap").html(schoolListItemModalHtml);
 		$("#line-chart-wmzy-link-modal-wrap").html(schoolListLineChartModalHtml);
 	};
@@ -283,11 +286,26 @@ var _init = function () {
 	};
 
 	onClickWmzyLink = function onClickWmzyLink() {
+		var gaId = $(this).data("gaid");
+		console.log("gaId " + gaId);
 		jqueryMap._xinSwiper.slideNext();
 		_changeUrl2.default.changeUrl("03", "", "#introduce");
 		document.title = "完美志愿，让你上更好的大学";
+		if (gaId == "ga-more-detail") {
+			ga('send', 'event', '结果页面', '更详尽院校录取数据，尽在完美志愿', '目标学校引导按钮');
+		} else if (gaId == "ga-other-reco-sch") {
+			ga('send', 'event', '结果页面', '其余推荐学校，尽在完美志愿', '推荐学校引导按钮');
+		} else if (gaId == "ga-other-reco-major") {
+			ga('send', 'event', '结果页面', '更多往年同分考生录取去向，尽在完美志愿', '同分考生去向引导按钮');
+		}
 	};
-	onClickBlackMasking = function onClickBlackMasking() {};
+	onClickBlackMasking = function onClickBlackMasking() {
+		_toggleModaHide();
+		var schoolListItemModalHtml = _ejsTpl2.default.SCHOOL_LIST_ITEM_MODAL_HTML;
+		var schoolListLineChartModalHtml = _ejsTpl2.default.SCHOOL_LIST_LINE_CHART_MODAL_HTML;
+		$("#school-list-item-modal-wrap").html(schoolListItemModalHtml);
+		$("#line-chart-wmzy-link-modal-wrap").html(schoolListLineChartModalHtml);
+	};
 
 	// PUBLIC METHODS
 	initModule = function initModule(xinSwiper) {
@@ -296,6 +314,7 @@ var _init = function () {
 		jqueryMap.$schoolDetailClose.click(onClickCloseSchoolDetailBtn);
 		jqueryMap.$gotoSetScoreSch.click(onClickSetScoreSch);
 		jqueryMap.$gotoWmzyIntro.click(onClickWmzyLink);
+		jqueryMap.$blackMasking.click(onClickBlackMasking);
 	};
 
 	return {
@@ -1663,7 +1682,7 @@ var _loc = __webpack_require__(3);
 
 var _loc2 = _interopRequireDefault(_loc);
 
-var _queryString = __webpack_require__(8);
+var _queryString = __webpack_require__(9);
 
 var _queryString2 = _interopRequireDefault(_queryString);
 
@@ -3033,6 +3052,9 @@ function drawTrapezoid(canvas, ctx, initWidth, initHeight, schoolList, trapezoid
 	var trapezoidWidthDown;
 	var schoolListItem;
 	var offsetY = 0;
+	var studentNumberStr;
+	var titleTextWidth, stuTextWidth, perStrHeight, perNumHeight;
+
 	if (!trapezoidGap) {
 		trapezoidGap = 10;
 	}
@@ -3041,8 +3063,14 @@ function drawTrapezoid(canvas, ctx, initWidth, initHeight, schoolList, trapezoid
 	if (title) {
 		ctx.font = contextFontStyle;
 		ctx.fillStyle = '#bebebe';
-		ctx.fillText(title, canvas.width * 0.12 + titleOffsetX, canvas.height * 0.12);
-		offsetY = canvas.height * 0.15;
+		titleTextWidth = ctx.measureText(title).width;
+
+		if (!perStrHeight) {
+			perStrHeight = ctx.measureText("数").width;
+		}
+
+		ctx.fillText(title, initWidth / 2 - titleTextWidth / 2, perStrHeight /*canvas.height*0.12*/);
+		offsetY = perStrHeight * 1.5;
 	}
 
 	for (var i = 0, len = schoolList.length; i < len; i++) {
@@ -3065,7 +3093,6 @@ function drawTrapezoid(canvas, ctx, initWidth, initHeight, schoolList, trapezoid
 
 		// add linear gradient
 		var grd = ctx.createLinearGradient(0, 0, initWidth, initHeight);
-
 		if (trapezoidStyle[i]) {
 			grd.addColorStop(0, trapezoidStyle[i]); // light
 			grd.addColorStop(1, trapezoidStyle[i]); // dark
@@ -3104,33 +3131,11 @@ function drawTrapezoid(canvas, ctx, initWidth, initHeight, schoolList, trapezoid
 		} else {
 			ctx.fillStyle = '#ffffff';
 		}
-		// 根据数量长度设置 x 方向的偏移量
-		var numOffset = 0;
-		var studentNumberStr = schoolListItem["stu_count"] + "";
-		switch (studentNumberStr.length) {
-			case 1:
-				numOffset = startX + trapezoidWidthDown / 2 - 6;
-				break;
-			case 2:
-				numOffset = startX + trapezoidWidthDown / 2 - 10;
-				break;
-			case 3:
-				numOffset = startX + trapezoidWidthDown / 2 - 16;
-				break;
-			case 4:
-				numOffset = startX + trapezoidWidthDown / 2 - 20;
-				break;
-			case 5:
-				numOffset = startX + trapezoidWidthDown / 2 - 24;
-				break;
-			case 6:
-				numOffset = startX + trapezoidWidthDown / 2 - 28;
-				break;
-			default:
-				numOffset = startX + trapezoidWidthDown / 2 - 22;
-				break;
-		}
-		ctx.fillText(schoolListItem["stu_count"], numOffset, startY + initHeight / 2 + 6);
+		studentNumberStr = schoolListItem["stu_count"] + "";
+
+		stuTextWidth = ctx.measureText(studentNumberStr).width;
+		perNumHeight = ctx.measureText("8").width;
+		ctx.fillText(schoolListItem["stu_count"], initWidth / 2 - stuTextWidth / 2, startY + initHeight / 2 + perNumHeight / 2);
 
 		// 学校名称
 		ctx.font = contextFontStyle;
@@ -3139,7 +3144,7 @@ function drawTrapezoid(canvas, ctx, initWidth, initHeight, schoolList, trapezoid
 		} else {
 			ctx.fillStyle = '#000000';
 		}
-		ctx.fillText(schoolListItem["sch_name"], lineFinal + 8, startY + initHeight / 2 + 6);
+		ctx.fillText(schoolListItem["sch_name"], lineFinal + 8, startY + initHeight / 2 + perNumHeight / 2);
 	}
 }
 
@@ -3154,6 +3159,18 @@ module.exports = {
 
 /***/ },
 /* 8 */
+/***/ function(module, exports) {
+
+"use strict";
+'use strict';
+
+module.exports = {
+    SCHOOL_LIST_ITEM_MODAL_HTML: '<script id="school-list-item-modal-tpl" type="text/template">' + '<img src="<&= data.icon_url&>" alt="学校logo" class="school-list-img">' + '<ul class="school-info">' + '<li class="school-name-loc" title="">' + '<span class="school-name"><&= data.sch_name&></span>' + '<span class="school-loc"><&= data.city&></span>' + '</li>' + '<li class="school-rank-probability">' + '<&if(data.total_rank){&>' + '<span class="school-rank"><em class="dot"></em>综合排名<em class="rank-num"><&= data.total_rank&></em></span>' + '<&}&>' + '<&if(data.adm_ratio){&>' + '<span class="enroll-probability"><em class="dot"></em>录取概率<em class="probability-num"><&= data.adm_ratio&>%</em></span>' + '<&}&>' + '</li>' + '<li class="school-label">' + '<&if(data.sch_flag.length >= 1){&>' + '<span class="school-label-1"><&= data.sch_flag[0]&></span>' + '<&if(data.sch_flag[1]){&>' + '<span class="school-label-2"><&= data.sch_flag[1]&></span>' + '<&}&>' + '<&}&>' + '<&if(data.sch_type.length > 0){&>' + '<span class="school-label-3"><&= data.sch_type[0]&></span>' + '<&}&>' + '</li>' + '</ul>' + '</script>',
+    SCHOOL_LIST_LINE_CHART_MODAL_HTML: '<script id="line-chart-wmzy-link-modal-tpl" type="text/template">' + '<& if(data.sch_min_score_list){ &>' + '<div class="line-chart-wrap">' + '<h3 class="line-chart-tiltle">往年该校录取最低省排名&nbsp;<&= data.loc_provinc_name&> — <&= data.loc_wenli&></h3>' + '<canvas id="line-chart-modal-canvas"></canvas>' + '</div>' + '<&}&>' + '</script>'
+};
+
+/***/ },
+/* 9 */
 /***/ function(module, exports) {
 
 "use strict";
@@ -3185,7 +3202,7 @@ module.exports = {
 };
 
 /***/ },
-/* 9 */
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3427,7 +3444,7 @@ var __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
 }.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
 /***/ },
-/* 10 */
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
