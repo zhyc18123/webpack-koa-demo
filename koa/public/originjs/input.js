@@ -126,7 +126,6 @@ var createReport=function(xinSwiper){
 			wenli:$(".subject-type .active").data("val"),
 			type:"spt"
 		};
-		console.log(data)
 		analysisReport.swipeToAnalysisReportPage(data,xinSwiper);
 };
 var setProvByName=function(provName){
@@ -227,8 +226,6 @@ var guestSchool=function(that){
 			}
 		},
 		error: function(request, error) {
-			console.log(request)
-			console.log(error)
 			// alert("服务器错误！")
 		}
 	})

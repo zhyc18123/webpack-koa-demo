@@ -9,7 +9,6 @@ var init=function(xinSwiper){
 	});
 	// 监听获取验证码按钮
 	$(document).on("click",".get-auto-code",function(){
-		console.log("xdd")
 		getAutoCode(xinSwiper);
 		ga('send', 'event', '领取页面', '发送验证码', '发送按钮');
 
@@ -135,7 +134,6 @@ var getVip=function(xinSwiper){
 		url: url.vipUrl,
 		data:$(".vip-form").serialize(),
 		success: function(data) {
-			console.log(data)
 			switch (data.code){
 				case 0:
 				$(".result-text .text").text("领取成功！");

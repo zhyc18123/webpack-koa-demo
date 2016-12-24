@@ -142,7 +142,7 @@ define(function(){
                     }
                     codes.push( code );
                 }else{
-                    console.log("发生错误了");
+                    // console.log("发生错误了");
                 }
                 break;
             }

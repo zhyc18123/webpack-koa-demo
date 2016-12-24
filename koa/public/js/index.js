@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 10);
+/******/ 	return __webpack_require__(__webpack_require__.s = 12);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -89,17 +89,17 @@ var _changeUrl = __webpack_require__(1);
 
 var _changeUrl2 = _interopRequireDefault(_changeUrl);
 
-var _ejsTpl = __webpack_require__(11);
+var _ejsTpl = __webpack_require__(8);
 
 var _ejsTpl2 = _interopRequireDefault(_ejsTpl);
 
-var _scollEvent = __webpack_require__(12);
+var _scollEvent = __webpack_require__(10);
 
 var _scollEvent2 = _interopRequireDefault(_scollEvent);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var Tpl = __webpack_require__(9);
+var Tpl = __webpack_require__(11);
 
 var REQUESTPARAM = {};
 
@@ -124,7 +124,7 @@ var _init = function () {
 	};
 
 	_toggleModalHide = function _toggleModalHide() {
-		_scollEvent2.default.enableScroll();
+		// scrollEvent.enableScroll();
 		jqueryMap.$blackMasking.addClass("hide");
 		jqueryMap.$schoolDetailModal.addClass("hide");
 		var schoolListItemModalHtml = _ejsTpl2.default.SCHOOL_LIST_ITEM_MODAL_HTML;
@@ -148,7 +148,6 @@ var _init = function () {
 
 		ejsTpl = $("#school-list-item-modal-tpl").html();
 		ejsHtml = Tpl.ejs(ejsTpl, schoolData, ejsOptions);
-		console.log("ejsHtml >> " + ejsHtml);
 		$("#school-list-item-modal-wrap").html(ejsHtml);
 
 		if (schoolData.sch_min_score_list.length > 1) {
@@ -279,7 +278,7 @@ var _init = function () {
 			}
 		});
 		ga('send', 'event', '结果页面', '推荐学校列表', '推荐学校详情按钮');
-		_scollEvent2.default.disableScroll();
+		// scrollEvent.disableScroll();
 	};
 
 	onClickCloseSchoolDetailBtn = function onClickCloseSchoolDetailBtn() {
@@ -584,8 +583,6 @@ var swipeToAnalysisReportPage = function swipeToAnalysisReportPage(requestParam,
 			REQUESTPARAM.loc_provinc_name = data.loc_provinc_name = _loc2.default.getProvinceName(paramData.provinceId);
 			REQUESTPARAM.loc_wenli = data.loc_wenli = REQUESTPARAM.wenli == 2 ? "理科" : "文科";
 			REQUESTPARAM.batch = data.batch;
-			console.log("data " + JSON.stringify(data, null, 4));
-
 			if (data.rank) {
 				REQUESTPARAM.rank = data.rank;
 			}
@@ -1518,7 +1515,6 @@ var init = function init(xinSwiper) {
 	});
 	// 监听获取验证码按钮
 	$(document).on("click", ".get-auto-code", function () {
-		console.log("xdd");
 		getAutoCode(xinSwiper);
 		ga('send', 'event', '领取页面', '发送验证码', '发送按钮');
 	});
@@ -1641,7 +1637,6 @@ var getVip = function getVip(xinSwiper) {
 		url: _url2.default.vipUrl,
 		data: $(".vip-form").serialize(),
 		success: function success(data) {
-			console.log(data);
 			switch (data.code) {
 				case 0:
 					$(".result-text .text").text("领取成功！");
@@ -1689,7 +1684,7 @@ var _loc = __webpack_require__(3);
 
 var _loc2 = _interopRequireDefault(_loc);
 
-var _queryString = __webpack_require__(8);
+var _queryString = __webpack_require__(9);
 
 var _queryString2 = _interopRequireDefault(_queryString);
 
@@ -1818,7 +1813,6 @@ var createReport = function createReport(xinSwiper) {
 		wenli: $(".subject-type .active").data("val"),
 		type: "spt"
 	};
-	console.log(data);
 	analysisReport.swipeToAnalysisReportPage(data, xinSwiper);
 };
 var setProvByName = function setProvByName(provName) {
@@ -1917,8 +1911,6 @@ var guestSchool = function guestSchool(that) {
 			}
 		},
 		error: function error(request, _error) {
-			console.log(request);
-			console.log(_error);
 			// alert("服务器错误！")
 		}
 	});
@@ -3185,6 +3177,18 @@ module.exports = {
 /***/ function(module, exports) {
 
 "use strict";
+'use strict';
+
+module.exports = {
+    SCHOOL_LIST_ITEM_MODAL_HTML: '<script id="school-list-item-modal-tpl" type="text/template">' + '<img src="<&= data.icon_url&>" alt="学校logo" class="school-list-img">' + '<ul class="school-info">' + '<li class="school-name-loc" title="">' + '<span class="school-name"><&= data.sch_name&></span>' + '<span class="school-loc"><&= data.city&></span>' + '</li>' + '<li class="school-rank-probability">' + '<&if(data.total_rank){&>' + '<span class="school-rank"><em class="dot"></em>综合排名<em class="rank-num"><&= data.total_rank&></em></span>' + '<&}&>' + '<&if(data.adm_ratio){&>' + '<span class="enroll-probability"><em class="dot"></em>录取概率<em class="probability-num"><&= data.adm_ratio&>%</em></span>' + '<&}&>' + '</li>' + '<li class="school-label">' + '<&if(data.sch_flag.length >= 1){&>' + '<span class="school-label-1"><&= data.sch_flag[0]&></span>' + '<&if(data.sch_flag[1]){&>' + '<span class="school-label-2"><&= data.sch_flag[1]&></span>' + '<&}&>' + '<&}&>' + '<&if(data.sch_type.length > 0){&>' + '<span class="school-label-3"><&= data.sch_type[0]&></span>' + '<&}&>' + '</li>' + '</ul>' + '</script>',
+    SCHOOL_LIST_LINE_CHART_MODAL_HTML: '<script id="line-chart-wmzy-link-modal-tpl" type="text/template">' + '<& if(data.sch_min_score_list){ &>' + '<div class="line-chart-wrap">' + '<h3 class="line-chart-tiltle">往年该校录取最低省排名 ( <&= data.loc_provinc_name&>—<&= data.loc_wenli&> )</h3>' + '<canvas id="line-chart-modal-canvas"></canvas>' + '</div>' + '<&}&>' + '</script>'
+};
+
+/***/ },
+/* 9 */
+/***/ function(module, exports) {
+
+"use strict";
 "use strict";
 
 ///获取url中的参数
@@ -3213,7 +3217,53 @@ module.exports = {
 };
 
 /***/ },
-/* 9 */
+/* 10 */
+/***/ function(module, exports) {
+
+"use strict";
+'use strict';
+
+// left: 37, up: 38, right: 39, down: 40,
+// spacebar: 32, pageup: 33, pagedown: 34, end: 35, home: 36
+var keys = { 37: 1, 38: 1, 39: 1, 40: 1 };
+
+function preventDefault(e) {
+	e = e || window.event;
+	if (e.preventDefault) e.preventDefault();
+	e.returnValue = false;
+}
+
+function preventDefaultForScrollKeys(e) {
+	if (keys[e.keyCode]) {
+		preventDefault(e);
+		return false;
+	}
+}
+
+function disableScroll() {
+	if (window.addEventListener) // older FF
+		window.addEventListener('DOMMouseScroll', preventDefault, false);
+	window.onwheel = preventDefault; // modern standard
+	window.onmousewheel = document.onmousewheel = preventDefault; // older browsers, IE
+	window.ontouchmove = preventDefault; // mobile
+	document.onkeydown = preventDefaultForScrollKeys;
+}
+
+function enableScroll() {
+	if (window.removeEventListener) window.removeEventListener('DOMMouseScroll', preventDefault, false);
+	window.onmousewheel = document.onmousewheel = null;
+	window.onwheel = null;
+	window.ontouchmove = null;
+	document.onkeydown = null;
+}
+
+module.exports = {
+	disableScroll: disableScroll,
+	enableScroll: enableScroll
+};
+
+/***/ },
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3368,7 +3418,7 @@ var __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
                     }
                     codes.push(code);
                 } else {
-                    console.log("发生错误了");
+                    // console.log("发生错误了");
                 }
                 break;
             }
@@ -3455,7 +3505,7 @@ var __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
 }.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
 /***/ },
-/* 10 */
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3488,10 +3538,7 @@ $(function () {
 				window.scrollTo(0, 0);
 			},
 			onInit: function onInit(swiper) {
-				console.log($(".swiper-slide").eq(0).height());
-				console.log($(window).height());
 				if ($(".swiper-slide").eq(0).height() < $(window).height()) {
-					console.log("xdd");
 					$(".swiper-slide").eq(0).css('height', $(window).height() + 'px');
 					$(".swiper-wrapper").css('height', $(window).height() + 'px');
 				};
@@ -3559,64 +3606,6 @@ $(function () {
 	};
 	init();
 });
-
-/***/ },
-/* 11 */
-/***/ function(module, exports) {
-
-"use strict";
-'use strict';
-
-module.exports = {
-    SCHOOL_LIST_ITEM_MODAL_HTML: '<script id="school-list-item-modal-tpl" type="text/template">' + '<img src="<&= data.icon_url&>" alt="学校logo" class="school-list-img">' + '<ul class="school-info">' + '<li class="school-name-loc" title="">' + '<span class="school-name"><&= data.sch_name&></span>' + '<span class="school-loc"><&= data.city&></span>' + '</li>' + '<li class="school-rank-probability">' + '<&if(data.total_rank){&>' + '<span class="school-rank"><em class="dot"></em>综合排名<em class="rank-num"><&= data.total_rank&></em></span>' + '<&}&>' + '<&if(data.adm_ratio){&>' + '<span class="enroll-probability"><em class="dot"></em>录取概率<em class="probability-num"><&= data.adm_ratio&>%</em></span>' + '<&}&>' + '</li>' + '<li class="school-label">' + '<&if(data.sch_flag.length >= 1){&>' + '<span class="school-label-1"><&= data.sch_flag[0]&></span>' + '<&if(data.sch_flag[1]){&>' + '<span class="school-label-2"><&= data.sch_flag[1]&></span>' + '<&}&>' + '<&}&>' + '<&if(data.sch_type.length > 0){&>' + '<span class="school-label-3"><&= data.sch_type[0]&></span>' + '<&}&>' + '</li>' + '</ul>' + '</script>',
-    SCHOOL_LIST_LINE_CHART_MODAL_HTML: '<script id="line-chart-wmzy-link-modal-tpl" type="text/template">' + '<& if(data.sch_min_score_list){ &>' + '<div class="line-chart-wrap">' + '<h3 class="line-chart-tiltle">往年该校录取最低省排名 ( <&= data.loc_provinc_name&>—<&= data.loc_wenli&> )</h3>' + '<canvas id="line-chart-modal-canvas"></canvas>' + '</div>' + '<&}&>' + '</script>'
-};
-
-/***/ },
-/* 12 */
-/***/ function(module, exports) {
-
-"use strict";
-'use strict';
-
-// left: 37, up: 38, right: 39, down: 40,
-// spacebar: 32, pageup: 33, pagedown: 34, end: 35, home: 36
-var keys = { 37: 1, 38: 1, 39: 1, 40: 1 };
-
-function preventDefault(e) {
-	e = e || window.event;
-	if (e.preventDefault) e.preventDefault();
-	e.returnValue = false;
-}
-
-function preventDefaultForScrollKeys(e) {
-	if (keys[e.keyCode]) {
-		preventDefault(e);
-		return false;
-	}
-}
-
-function disableScroll() {
-	if (window.addEventListener) // older FF
-		window.addEventListener('DOMMouseScroll', preventDefault, false);
-	window.onwheel = preventDefault; // modern standard
-	window.onmousewheel = document.onmousewheel = preventDefault; // older browsers, IE
-	window.ontouchmove = preventDefault; // mobile
-	document.onkeydown = preventDefaultForScrollKeys;
-}
-
-function enableScroll() {
-	if (window.removeEventListener) window.removeEventListener('DOMMouseScroll', preventDefault, false);
-	window.onmousewheel = document.onmousewheel = null;
-	window.onwheel = null;
-	window.ontouchmove = null;
-	document.onkeydown = null;
-}
-
-module.exports = {
-	disableScroll: disableScroll,
-	enableScroll: enableScroll
-};
 
 /***/ }
 /******/ ]);

@@ -24,7 +24,7 @@ var _init = (function () {
 	};
 
 	_toggleModalHide = function() {
-		scrollEvent.enableScroll();
+		// scrollEvent.enableScroll();
 		jqueryMap.$blackMasking.addClass("hide");
 		jqueryMap.$schoolDetailModal.addClass("hide");
 		var schoolListItemModalHtml = staticTpl.SCHOOL_LIST_ITEM_MODAL_HTML;
@@ -48,7 +48,6 @@ var _init = (function () {
 
 		ejsTpl = $("#school-list-item-modal-tpl").html();
 		ejsHtml = Tpl.ejs(ejsTpl, schoolData, ejsOptions);
-		console.log("ejsHtml >> " + ejsHtml);
 		$("#school-list-item-modal-wrap").html(ejsHtml);
 
 		if (schoolData.sch_min_score_list.length>1) {
@@ -183,7 +182,7 @@ var _init = (function () {
 			}
 		});
 		ga('send', 'event', '结果页面', '推荐学校列表', '推荐学校详情按钮');
-		scrollEvent.disableScroll();
+		// scrollEvent.disableScroll();
 	};
 
 	onClickCloseSchoolDetailBtn = function() {
@@ -497,8 +496,6 @@ var swipeToAnalysisReportPage = function ( requestParam, xinSwiper ) {
 			REQUESTPARAM.loc_provinc_name = data.loc_provinc_name = prov.getProvinceName(paramData.provinceId);
 			REQUESTPARAM.loc_wenli = data.loc_wenli = REQUESTPARAM.wenli == 2 ? "理科" : "文科";
 			REQUESTPARAM.batch = data.batch;
-			console.log("data "+ JSON.stringify(data, null, 4));
-
 			if(data.rank){
 				REQUESTPARAM.rank = data.rank;
 			}

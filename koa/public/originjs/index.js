@@ -21,10 +21,7 @@ $(function(){
 				window.scrollTo(0,0);
 			},
 			onInit: function(swiper){
-				console.log($(".swiper-slide").eq(0).height())
-				console.log($(window).height())
 				if($(".swiper-slide").eq(0).height()<$(window).height()){
-					console.log("xdd")
 					$(".swiper-slide").eq(0).css('height', $(window).height() + 'px');
 					$(".swiper-wrapper").css('height', $(window).height() + 'px');
 				};
