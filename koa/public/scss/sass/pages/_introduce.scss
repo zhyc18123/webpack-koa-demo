@@ -1,11 +1,11 @@
-.introduce{
-	background:$bg-col;
-}
-.you-can{
-	img{
-		width: 100%
-	}
-}
+// .introduce{
+// 	background:$bg-col;
+// }
+// .you-can{
+// 	img{
+// 		width: 100%
+// 	}
+// }
 .other-funciton{
 	background: $whi-col;
 	padding: 0 .2rem;
@@ -28,15 +28,6 @@
 				color: $yellow-col;
 				font-size: $font-16;
 			}
-			// .test-i{
-			// 	@include cvlist-sprite(test-i);
-			// }
-			// .intel-i{
-			// 	@include cvlist-sprite(intel-i);
-			// }
-			// .big-i{
-			// 	@include cvlist-sprite(big-i);
-			// }
 		}
 	}
 
@@ -45,14 +36,6 @@
 	margin-bottom:.2rem;
 	background: $whi-col;
 	padding-top:.4rem;
-	// .reason-title{
-	// 	font-size: 17px;
-	// 	color: $yellow-col;
-	// 	text-align: center;
-	// 	i{
-	// 		@include cvlist-sprite(reason-title);
-	// 	}
-	// }
 }
 .get-intro{
 	background:#3e3a39;
@@ -87,6 +70,7 @@
 	height:1rem;
 }
 .introduce-body{
+	background:#f4f4f4;
 	position:absolute;
 	width:100%;
 	top:0;

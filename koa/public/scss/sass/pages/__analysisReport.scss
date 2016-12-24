@@ -68,7 +68,7 @@ $yellowCol: #f9be00;
   margin: percentage(40/712) auto 0 auto;
   width: percentage(620/712);
   //height: 204px;
-  border: 3px dashed;
+  border: 2px dashed;
 }
 
 .beveled-boder:before, .beveled-boder:after {
@@ -77,12 +77,12 @@ $yellowCol: #f9be00;
 
 .beveled-boder:after {
   position: absolute;
-  width: 50px;
-  height: 50px;
-  right: -34px;
-  bottom: -18px;
+width: .5rem;
+height: .5rem;
+right: -.32rem;
+bottom: -.18rem;
   background: #f9be00;
-  border-left: 3px dashed;
+  border-left: 2px dashed;
   transform: rotate(30deg);
 }
 

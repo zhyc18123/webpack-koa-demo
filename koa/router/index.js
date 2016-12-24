@@ -5,6 +5,7 @@ var api = requireDir("../controllers/api");
 var view = requireDir("../controllers/view");
 
 // view
+router.get("/", view.wmzy);
 router.get("/score/analyse", view.index);
 
 //api

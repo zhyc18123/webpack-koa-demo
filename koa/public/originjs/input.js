@@ -35,6 +35,17 @@ var init=function(xinSwiper){
 	$("#school-input").on("input porpertychange",function(){
 		guestSchool(this);
 	});
+	// 监听学校联想失去光标
+	$("#school-input").on("focusout",function(){
+		setTimeout(function(){
+			if(!$("#school-input").data("val")){
+				if($(".school-list li").length){
+					$($(".school-list li")[0]).click();
+				};
+			};
+			$(".school-list").hide();
+		},200)
+	});
 	// 监听分数输入
 	$("#score").on("input porpertychange",function(){
 		var score=$(this).val();
@@ -42,12 +53,6 @@ var init=function(xinSwiper){
 		if (!patrn.exec(score)){
 			$(this).val("");
 		};
-	});
-	// 监听学校联想失去光标
-	$("#school-input").on("focusout",function(){
-		setTimeout(function(){
-			$(".school-list").hide();
-		},200)
 	});
 	//监听选择学校
 	$(document).on("click",".school-list li",function(){
@@ -188,6 +193,7 @@ var createSchoolList=function(list){
 	};
 };
 var guestSchool=function(that){
+	$(that).data("val","");
 	var schString=$(that).val();
 	var provId=$("#prov-name").data("val");
 	if(!schString){

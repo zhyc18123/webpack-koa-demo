@@ -21,26 +21,33 @@
 	.vip-div{
 		background:$whi-col;
 		border-radius:$radius;
-		display:flex;
 		margin-bottom:.3rem;
 		line-height: 1rem;
+		text-align: left;
 		input{
-			flex: 1;
+			@extend %inline-block;
 			font-size:$font-13;
 			height: 1rem;
 			padding:0 20px;
+			width: 7rem;
 		}
 		a{
-			width: 2.6rem;
-			padding:0 .1rem 0 .3rem;
+			@extend %inline-block;
+			width: 2.5rem;
+			padding:0 20px 0 0px;
 			color: $red-col;
+			text-align: right;
+		}
+		.auto-vip{
+			width: 4rem;
+			padding-right: 40px;
 		}
 	}
 	.vip-form{
-		padding:0 .2rem;
+		padding:0 20px;
 		margin:.6rem 0;
 	}
 	.vip-btn{
-		padding:0 .2rem;
+		padding:0 20px;
 	}
 }

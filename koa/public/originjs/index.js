@@ -75,7 +75,6 @@ $(function(){
 		};
 		///刷新显示相应页面
 		showPage("0","#input");
-		// history.go(+1);
 		console.log("window.location"+ window.location);
 		const analyseTpl=$(".analyse-html").html();
 		if ('pushState' in history) {
@@ -86,6 +85,7 @@ $(function(){
 		window.onpopstate = function() {
 			if(window.location.hash == "#input"){
 				$(".analyse-html").html(analyseTpl);
+				history.go(0);
 			}
 			showPage();
 		};

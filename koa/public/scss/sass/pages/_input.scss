@@ -34,9 +34,6 @@ html{
 	padding:0 .3rem 0 .2rem;
 	line-height:.4rem;
 	border-radius: .08rem;
-	// display: -moz-box; 
-	// display: -webkit-box; 
-	// display: box; 
 	em{
 		@extend %inline-block;
 		color: $red-col;
@@ -50,19 +47,17 @@ html{
 		border-right: 1px solid $bor-col;
 		padding: 0 0.2rem 0 0;
 		height: .4rem;
-		// position:relative;
-		// top: .31rem;
 	}
 	input{
 		@extend %inline-block;
-		padding: 0 0.2rem;
+		padding: 0 0 0 0.1rem;
 		width: 4.2rem;
 		height: 1rem;
-		// -moz-box-flex: 1; 
-		// -webkit-box-flex: 1; 
-		// box-flex: 1;
 		text-align: left;
 		font-size: $font-14;
+	}
+	.no-input{
+		width: 4.88rem;
 	}
 }
 i{
@@ -77,22 +72,15 @@ i.down{
 	margin-top: 0.1rem !important;
 }
 .subject-type{
-	// display: -moz-box; 
-	// display: -webkit-box; 
-	// display: box; 
 	padding:0 2px;
 	span{
-		// display: block;
-		// -moz-box-flex: 1; 
-		// -webkit-box-flex: 1; 
-		// box-flex: 1;
 		@extend %inline-block;
 		border: 1px solid $bor-col;
 		padding: 0.3rem 0;
 		text-align:center;
 		border-radius: .08rem;
 		cursor: pointer;
-		width: 49.4%;
+		width: 48%;
 		i{
 			font-size: $font-14;
 			color: $red-col;
@@ -100,18 +88,13 @@ i.down{
 			width: .28rem;
 		}
 		&.active{
-			// i{
-			// 	@include cvlist-sprite(red-gou);
-			// 	margin-right: .2rem;
-			// }
 			border-color: $red-col;
 			color: $red-col;
 		}
 	}
 	em{
-		// display: block;
 		@extend %inline-block;
-		width: .2rem;
+		width: .1rem;
 	}
 }
 .get-report{
@@ -141,9 +124,6 @@ i.down{
 		margin-top: .3rem;
 		color: $font-midcol;
 		i{
-			// @include cvlist-sprite(lingxin);
-			// text-align:center;
-			// margin-right: .2rem;
 			font-size: .48rem;
 			color: $yellow-col;
 			position:relative;
@@ -193,7 +173,6 @@ i.down{
 	}
 }
 .school-list{
-	// height:auto;
 	font-size:.28rem;
 }
 .input-div-title{

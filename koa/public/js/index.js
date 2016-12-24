@@ -1506,7 +1506,7 @@ var init = function init(xinSwiper) {
 	// 监听获取vip体验卡按钮
 	$("#vip-btn").on("click", function () {
 		getVip(xinSwiper);
-		// xinSwiper.slideNext();
+		xinSwiper.slideNext();
 		ga('send', 'event', '领取页面', '领取按钮', '点击领取按钮');
 	});
 	// 监听获取验证码按钮
@@ -1721,6 +1721,17 @@ var init = function init(xinSwiper) {
 	$("#school-input").on("input porpertychange", function () {
 		guestSchool(this);
 	});
+	// 监听学校联想失去光标
+	$("#school-input").on("focusout", function () {
+		setTimeout(function () {
+			if (!$("#school-input").data("val")) {
+				if ($(".school-list li").length) {
+					$($(".school-list li")[0]).click();
+				};
+			};
+			$(".school-list").hide();
+		}, 200);
+	});
 	// 监听分数输入
 	$("#score").on("input porpertychange", function () {
 		var score = $(this).val();
@@ -1728,12 +1739,6 @@ var init = function init(xinSwiper) {
 		if (!patrn.exec(score)) {
 			$(this).val("");
 		};
-	});
-	// 监听学校联想失去光标
-	$("#school-input").on("focusout", function () {
-		setTimeout(function () {
-			$(".school-list").hide();
-		}, 200);
 	});
 	//监听选择学校
 	$(document).on("click", ".school-list li", function () {
@@ -1871,6 +1876,7 @@ var createSchoolList = function createSchoolList(list) {
 	};
 };
 var guestSchool = function guestSchool(that) {
+	$(that).data("val", "");
 	var schString = $(that).val();
 	var provId = $("#prov-name").data("val");
 	if (!schString) {
@@ -3521,7 +3527,6 @@ $(function () {
 		};
 		///刷新显示相应页面
 		showPage("0", "#input");
-		// history.go(+1);
 		console.log("window.location" + window.location);
 		var analyseTpl = $(".analyse-html").html();
 		if ('pushState' in history) {
@@ -3532,6 +3537,7 @@ $(function () {
 		window.onpopstate = function () {
 			if (window.location.hash == "#input") {
 				$(".analyse-html").html(analyseTpl);
+				history.go(0);
 			}
 			showPage();
 		};

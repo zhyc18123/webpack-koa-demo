@@ -8,6 +8,7 @@
 	width:100%;
 	position: relative;
 	text-align:center;
+	margin-top:.52rem;
 	.text{
 		@extend %inline-block;
 		@extend %h-center;
@@ -34,8 +35,8 @@
 }
 .how-use{
 	background:$yellow-col;
-	padding: .8rem .8rem;
-	margin:1rem .2rem 0 .2rem;
+	padding: .6rem .8rem .2rem .8rem;
+	margin:.9rem .2rem 0 .2rem;
 	.how-title{
 		span{
 			@extend %inline-block;
@@ -48,11 +49,11 @@
 		}
 	}
 	.how-div{
-		display: flex;
-		margin: .8rem 0 .84rem 0;
+		margin: .37rem 0 .84rem 0;
 		.how-num{
-			width: 1rem;
+			width: .5rem;
 			position: relative;
+			@extend %inline-block;
 			div{
 				@extend %inline-block;
 				background:url("/scss/img/how-num.png") no-repeat;
@@ -62,25 +63,35 @@
 			}
 		}
 		.how-text{
-			flex: 1;
+			width: 4.7rem;
 			font-size: $font-12;
 			text-align: left;
+			@extend %inline-block;
+			position: relative;
+			top: -0.15rem;
 			div{
-				padding-top: .14rem;
+				padding-top: .16rem;
 			}
 			.where-down{
-				height: .9rem;
+				height: 1rem;
 				border-bottom: $border solid #ab8614;
+				position:relative;
+				top: .15rem;
 			}
 			.how-down{
-				height: 2.2rem;
+				height: 2.1rem;
 				border-bottom:$border solid #ab8614;
+				position: relative;
+				top: .25rem;
 				.phone-p{
-					margin-top: .2rem;
+					margin-top: .4rem;
 				}
 				span{
 					color: $red-col;
 				}
+			}
+			.how-active{
+				margin-top:.3rem;
 			}
 		}
 	}
