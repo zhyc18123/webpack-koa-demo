@@ -66,9 +66,9 @@ function setCoordinate(originData, startX, startY, widthMargin, canvasHeight, lo
 	rankMaxStr = ""+rankMax;
 
 	if(rankMaxStr.length <= 4){
-		rankMax += 8 * Math.pow(10, rankMaxStr.length-2);
-	}else if(rankMaxStr.length <= 5){
 		rankMax += 4 * Math.pow(10, rankMaxStr.length-1);
+	}else if(rankMaxStr.length <= 5){
+		rankMax += 3 * Math.pow(10, rankMaxStr.length-1);
 	}else{
 		rankMax += 2 * Math.pow(10, rankMaxStr.length-1);
 	}

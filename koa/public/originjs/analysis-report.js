@@ -378,8 +378,15 @@ var _renderAnalysisReportPage = function (reportData) {
 		coordData = setCoordinateReturn[0];
 		lowestPercent = setCoordinateReturn[1];
 
+
 		offsetY = lowestPercent < 0.01 ? 140 :
 			lowestPercent < 0.1 ? 130 : 100;
+
+		if (lowestPercent>0.6) {
+			for (var i = 0, len = coordData.length; i < len; i++) {
+				coordData[i].heightPercent = coordData[i].heightPercent*0.5;
+			}
+		}
 
 		if(window.dpr == 1) {
 			labelWidth = labelWidth/2;
@@ -493,6 +500,7 @@ var swipeToAnalysisReportPage = function ( requestParam, xinSwiper ) {
 		data: paramData,
 		success: function(data) {
 
+			console.log("data >> " + JSON.stringify(data, null, 4));
 			REQUESTPARAM.loc_provinc_name = data.loc_provinc_name = prov.getProvinceName(paramData.provinceId);
 			REQUESTPARAM.loc_wenli = data.loc_wenli = REQUESTPARAM.wenli == 2 ? "理科" : "文科";
 			REQUESTPARAM.batch = data.batch;
