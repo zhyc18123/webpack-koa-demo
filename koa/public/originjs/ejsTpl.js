@@ -8,7 +8,7 @@ module.exports = {
         '<span class="school-loc"><&= data.city&></span>'+
         '</li>'+
         '<li class="school-rank-probability">'+
-        '<&if(data.total_rank){&>'+
+        '<&if(data.total_rank <　999999999){&>'+
         '<span class="school-rank"><em class="dot"></em>综合排名<em class="rank-num"><&= data.total_rank&></em></span>'+
         '<&}&>'+
         '<&if(data.adm_ratio){&>'+

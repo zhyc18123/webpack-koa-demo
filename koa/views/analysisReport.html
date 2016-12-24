@@ -120,7 +120,7 @@
                             <span class="school-loc"><&= data.city&></span>
                         </li>
                         <li class="school-rank-probability">
-                            <&if(data.total_rank){&>
+                            <&if(data.total_rank < 999999999){&>
                             <span class="school-rank"><em class="dot"></em>综合排名<em class="rank-num"><&= data.total_rank&></em></span>
                             <&}&>
                             <&if(data.adm_ratio){&>
@@ -175,7 +175,7 @@
                                 <&}&>
                             </li>
                             <li class="school-rank-probability">
-                                <&if(recommendSchoolItem.totalRank){&>
+                                <&if(recommendSchoolItem.totalRank < 999999999){&>
                                 <span class="school-rank"><em class="dot"></em>综合排名<em class="rank-num"><&= recommendSchoolItem.totalRank&></em></span>
                                 <&}&>
                                 <&if(recommendSchoolItem.adm_ratio){&>
@@ -216,7 +216,7 @@
 
         <div id="recommend-data-origin-wrap">
             <script id="recommend-data-origin-tpl" type="text/template">
-                <&if( data.goto_majors_list.length>0 || data.goto_majors_list.length>0 ){&>
+                <&if( (data.goto_majors_list.length>0 || data.goto_majors_list.length>0) && data.rank>0 ){&>
                 <p class="data-origin <&= (''+data.rank).length>3?'text-align-left':''&>">
                     数据来源：近三年省排名在第 <span><&= data.rank&></span> 名附近的考生录取去向
                 </p>
