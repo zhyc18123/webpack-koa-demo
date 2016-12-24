@@ -28,7 +28,14 @@ module.exports = {
         '</li>'+
         '</ul>'+
         '</script>',
-    schoolListLineChartModalHtml:
-    ''
+    SCHOOL_LIST_LINE_CHART_MODAL_HTML:
+        '<script id="line-chart-wmzy-link-modal-tpl" type="text/template">'+
+        '<& if(data.sch_min_score_list){ &>'+
+        '<div class="line-chart-wrap">'+
+        '<h3 class="line-chart-tiltle">往年该校录取最低省排名&nbsp;<&= data.loc_provinc_name&> — <&= data.loc_wenli&></h3>'+
+        '<canvas id="line-chart-modal-canvas"></canvas>'+
+        '</div>'+
+        '<&}&>'+
+        '</script>'
 };
 

@@ -348,6 +348,9 @@ function drawTrapezoid(canvas, ctx, initWidth, initHeight, schoolList, trapezoid
 	var trapezoidWidthDown;
 	var schoolListItem;
 	var offsetY = 0;
+	var studentNumberStr;
+	var titleTextWidth, stuTextWidth, perStrHeight, perNumHeight;
+
 	if(!trapezoidGap){
 		trapezoidGap = 10;
 	}
@@ -356,8 +359,14 @@ function drawTrapezoid(canvas, ctx, initWidth, initHeight, schoolList, trapezoid
 	if (title) {
 		ctx.font = contextFontStyle;
 		ctx.fillStyle = '#bebebe';
-		ctx.fillText(title, canvas.width*0.12+titleOffsetX, canvas.height*0.12);
-		offsetY = canvas.height*0.15;
+		titleTextWidth = ctx.measureText(title).width;
+
+		if(!perStrHeight){
+			perStrHeight = ctx.measureText("数").width
+		}
+
+		ctx.fillText(title, initWidth/2 - titleTextWidth/2, perStrHeight/*canvas.height*0.12*/);
+		offsetY = perStrHeight*1.5;
 	}
 
 	for (var i = 0, len = schoolList.length; i < len; i++) {
@@ -380,7 +389,6 @@ function drawTrapezoid(canvas, ctx, initWidth, initHeight, schoolList, trapezoid
 
 		// add linear gradient
 		var grd = ctx.createLinearGradient(0, 0, initWidth, initHeight);
-
 		if (trapezoidStyle[i]) {
 			grd.addColorStop(0, trapezoidStyle[i]);  // light
 			grd.addColorStop(1, trapezoidStyle[i]); // dark
@@ -419,33 +427,13 @@ function drawTrapezoid(canvas, ctx, initWidth, initHeight, schoolList, trapezoid
 		} else {
 			ctx.fillStyle = '#ffffff';
 		}
-		// 根据数量长度设置 x 方向的偏移量
-		var numOffset = 0;
-		var studentNumberStr = schoolListItem["stu_count"] + "";
-		switch (studentNumberStr.length) {
-			case 1:
-				numOffset = startX + trapezoidWidthDown / 2 - 6;
-				break;
-			case 2:
-				numOffset = startX + trapezoidWidthDown / 2 - 10;
-				break;
-			case 3:
-				numOffset = startX + trapezoidWidthDown / 2 - 16;
-				break;
-			case 4:
-				numOffset = startX + trapezoidWidthDown / 2 - 20;
-				break;
-			case 5:
-				numOffset = startX + trapezoidWidthDown / 2 - 24;
-				break;
-			case 6:
-				numOffset = startX + trapezoidWidthDown / 2 - 28;
-				break;
-			default:
-				numOffset = startX + trapezoidWidthDown / 2 - 22;
-				break;
-		}
-		ctx.fillText(schoolListItem["stu_count"], numOffset, startY + initHeight / 2 + 6);
+		studentNumberStr = schoolListItem["stu_count"] + "";
+
+		stuTextWidth = ctx.measureText(studentNumberStr).width;
+		perNumHeight = ctx.measureText("8").width;
+		ctx.fillText(schoolListItem["stu_count"],
+					initWidth/2 - stuTextWidth/2,
+					startY + initHeight/2 + perNumHeight/2);
 
 		// 学校名称
 		ctx.font = contextFontStyle;
@@ -454,7 +442,9 @@ function drawTrapezoid(canvas, ctx, initWidth, initHeight, schoolList, trapezoid
 		} else {
 			ctx.fillStyle = '#000000';
 		}
-		ctx.fillText(schoolListItem["sch_name"], lineFinal + 8, startY + initHeight / 2 + 6);
+		ctx.fillText(schoolListItem["sch_name"],
+					lineFinal + 8,
+					startY + initHeight/2 + perNumHeight/2);
 	}
 }
 

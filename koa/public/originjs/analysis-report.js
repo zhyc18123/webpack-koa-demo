@@ -2,6 +2,7 @@ import url from"./url";
 import drawCanvas from './canvasGraph';
 import prov from "./loc.js";
 import chgUrl from "./change-url";
+import staticTpl from "./ejsTpl";
 var Tpl = require('./utils/ejs');
 
 var REQUESTPARAM = {};
@@ -146,7 +147,6 @@ var _init = (function () {
 	};
 
 	onClickSchoolListItem = function() {
-
 		var schoolId = $(this).data("schoolid");
 		var schoolRankNum = $(this).data("ranknum");
 		var schoolAdmratio = $(this).data("admratio");
@@ -167,57 +167,20 @@ var _init = (function () {
 				data.total_rank = schoolRankNum;
 				data.adm_ratio = schoolAdmratio;
 				_renderSchoolItemDetail(data);
-
 				var scroolTopHeight = $("#school-list-wrap-top").offset().top;
 				$(window).scrollTop(scroolTopHeight);
-
 			},
 			error:function() {
 				alert("服务器错误！");
 			}
 		});
+		ga('send', 'event', '结果页面', '推荐学校列表', '推荐学校详情按钮');
 	};
 
 	onClickCloseSchoolDetailBtn = function() {
 		_toggleModaHide();
-		var schoolListItemModalHtml =
-			'<script id="school-list-item-modal-tpl" type="text/template">'+
-			'<img src="<&= data.icon_url&>" alt="学校logo" class="school-list-img">'+
-			'<ul class="school-info">'+
-			'<li class="school-name-loc" title="">'+
-			'<span class="school-name"><&= data.sch_name&></span>'+
-			'<span class="school-loc"><&= data.city&></span>'+
-			'</li>'+
-			'<li class="school-rank-probability">'+
-			'<&if(data.total_rank){&>'+
-			'<span class="school-rank"><em class="dot"></em>综合排名<em class="rank-num"><&= data.total_rank&></em></span>'+
-			'<&}&>'+
-			'<&if(data.adm_ratio){&>'+
-			'<span class="enroll-probability"><em class="dot"></em>录取概率<em class="probability-num"><&= data.adm_ratio&>%</em></span>'+
-			'<&}&>'+
-			'</li>'+
-			'<li class="school-label">'+
-			'<&if(data.sch_flag.length >= 1){&>'+
-			'<span class="school-label-1"><&= data.sch_flag[0]&></span>'+
-			'<&if(data.sch_flag[1]){&>'+
-			'<span class="school-label-2"><&= data.sch_flag[1]&></span>'+
-			'<&}&>'+
-			'<&}&>'+
-			'<&if(data.sch_type.length > 0){&>'+
-			'<span class="school-label-3"><&= data.sch_type[0]&></span>'+
-			'<&}&>'+
-			'</li>'+
-			'</ul>'+
-			'</script>';
-		var schoolListLineChartModalHtml =
-				'<script id="line-chart-wmzy-link-modal-tpl" type="text/template">'+
-				'<& if(data.sch_min_score_list){ &>'+
-				'<div class="line-chart-wrap">'+
-				'<h3 class="line-chart-tiltle">往年该校录取最低省排名&nbsp;<&= data.loc_provinc_name&> — <&= data.loc_wenli&></h3>'+
-				'<canvas id="line-chart-modal-canvas"></canvas>'+
-				'</div>'+
-				'<&}&>'+
-				'</script>';
+		var schoolListItemModalHtml = staticTpl.SCHOOL_LIST_ITEM_MODAL_HTML;
+		var schoolListLineChartModalHtml = staticTpl.SCHOOL_LIST_LINE_CHART_MODAL_HTML;
 		$("#school-list-item-modal-wrap").html(schoolListItemModalHtml);
 		$("#line-chart-wmzy-link-modal-wrap").html(schoolListLineChartModalHtml);
 	};
@@ -230,12 +193,25 @@ var _init = (function () {
 	};
 
 	onClickWmzyLink = function() {
+		var gaId = $(this).data("gaid");
+		console.log("gaId " + gaId);
 		jqueryMap._xinSwiper.slideNext();
 		chgUrl.changeUrl("03","","#introduce");
 		document.title="完美志愿，让你上更好的大学";
+		if (gaId == "ga-more-detail") {
+			ga('send', 'event', '结果页面', '更详尽院校录取数据，尽在完美志愿', '目标学校引导按钮');
+		} else if (gaId == "ga-other-reco-sch") {
+			ga('send', 'event', '结果页面', '其余推荐学校，尽在完美志愿', '推荐学校引导按钮');
+		} else if (gaId == "ga-other-reco-major") {
+			ga('send', 'event', '结果页面', '更多往年同分考生录取去向，尽在完美志愿', '同分考生去向引导按钮');
+		}
 	};
 	onClickBlackMasking = function() {
-
+		_toggleModaHide();
+		var schoolListItemModalHtml = staticTpl.SCHOOL_LIST_ITEM_MODAL_HTML;
+		var schoolListLineChartModalHtml = staticTpl.SCHOOL_LIST_LINE_CHART_MODAL_HTML;
+		$("#school-list-item-modal-wrap").html(schoolListItemModalHtml);
+		$("#line-chart-wmzy-link-modal-wrap").html(schoolListLineChartModalHtml);
 	};
 
 	// PUBLIC METHODS
@@ -245,6 +221,7 @@ var _init = (function () {
 		jqueryMap.$schoolDetailClose.click(onClickCloseSchoolDetailBtn);
 		jqueryMap.$gotoSetScoreSch.click(onClickSetScoreSch);
 		jqueryMap.$gotoWmzyIntro.click(onClickWmzyLink);
+		jqueryMap.$blackMasking.click(onClickBlackMasking);
 	};
 
 	return {
