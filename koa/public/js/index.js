@@ -1506,6 +1506,7 @@ var init = function init(xinSwiper) {
 	// 监听获取vip体验卡按钮
 	$("#vip-btn").on("click", function () {
 		getVip(xinSwiper);
+		// xinSwiper.slideNext();
 		ga('send', 'event', '领取页面', '领取按钮', '点击领取按钮');
 	});
 	// 监听获取验证码按钮
@@ -1523,14 +1524,29 @@ var init = function init(xinSwiper) {
 	});
 	///监听下载按钮
 	$("#download-btn").on("click", function () {
+		downloadApp();
 		ga('send', 'event', '领取成功', '下载APP', '下载按钮');
 	});
-	// $(document).scroll(function(){
-	// 	if(xinSwiper.activeIndex===2){
-	// 		var bottomNum=$(".swiper-slide").eq(xinSwiper.activeIndex).height()-$(window).height()-$(document).scrollTop()-1;
-	// 		$("#get-vip-btn").css({"bottom":bottomNum+"px"});
-	// 	};
-	// });
+};
+var downloadApp = function downloadApp() {
+	function isPC() {
+		var userAgentInfo = navigator.userAgent;
+		var Agents = ["Android", "iPhone", "SymbianOS", "Windows Phone", "iPad", "iPod"];
+		var flag = true;
+		for (var v = 0; v < Agents.length; v++) {
+			if (userAgentInfo.indexOf(Agents[v]) > 0) {
+				flag = false;
+				break;
+			}
+		}
+		return flag;
+	};
+
+	if (isPC()) {
+		window.location.href = "http://wmzy.com";
+	} else {
+		window.location.href = "http://a.app.qq.com/o/simple.jsp?pkgname=com.gaokaozhiyuan";
+	};
 };
 ///检查输入的手机号码
 var checkMobile = function checkMobile(mobile) {
@@ -1633,7 +1649,10 @@ var getVip = function getVip(xinSwiper) {
 					alert("体验卡已经被领取完了");
 					break;
 				case 10005:
-					alert("短信验证码已失效");
+					alert("短信验证码不合法");
+					break;
+				case 10006:
+					alert("短信验证码已过期，请重新发送");
 					break;
 				default:
 					break;
@@ -1722,65 +1741,73 @@ var init = function init(xinSwiper) {
 	});
 	// 监听生成报告
 	$("#get-report").on("click", function () {
-		var provId = $("#prov-name").data("val"),
-		    score = $("#score").val(),
-		    prevName = $("#prov-name").val(),
-		    schoolName = $("#school-input").val(),
-		    schoolId = $("#school-input").data("val");
-		if (!provId) {
-			alert("请选择省份！");
+		createReport(xinSwiper);
+		ga('send', 'event', '输入界面', '生成定位分析报告', '生成报告');
+	});
+};
+var createReport = function createReport(xinSwiper) {
+	var provId = $("#prov-name").data("val"),
+	    score = $("#score").val(),
+	    prevName = $("#prov-name").val(),
+	    schoolName = $("#school-input").val(),
+	    schoolId = $("#school-input").data("val");
+	if (!provId) {
+		alert("请选择省份！");
+		return;
+	};
+	if (!$.trim(score)) {
+		alert("请输入你的联考成绩！");
+		return;
+	} else {
+		var res = /^(\d+\.\d{1,1}|\d+)$/;
+		if (!res.test(score)) {
+			alert("分数最多输入一位小数点");
 			return;
 		};
-		if (!$.trim(score)) {
-			alert("请输入你的联考成绩！");
-			return;
-		} else {
-			var res = /^(\d+\.\d{1,1}|\d+)$/;
-			if (!res.test(score)) {
-				alert("分数最多输入一位小数点");
-				return;
-			};
-		};
-		if (prevName === "江苏") {
-			if (score <= 0 || score > 480) {
-				alert("您输入的成绩已超过满分，请重新输入");
-				return;
-			};
-		} else if (prevName === "海南") {
-			if (score <= 0 || score > 900) {
-				alert("您输入的成绩已超过满分，请重新输入");
-				return;
-			};
-		} else {
-			if (score <= 0 || score > 750) {
-				alert("您输入的成绩已超过满分，请重新输入");
-				return;
-			};
-		};
-		if (schoolName.length > 40) {
-			alert("学校名长度不允许大于40字！");
+	};
+	if (prevName === "江苏") {
+		if (score <= 0 || score > 480) {
+			alert("您输入的成绩已超过满分，请重新输入");
 			return;
 		};
-		if ($.trim(schoolName).length) {
-			if (!schoolId) {
+	} else if (prevName === "海南") {
+		if (score <= 0 || score > 900) {
+			alert("您输入的成绩已超过满分，请重新输入");
+			return;
+		};
+	} else {
+		if (score <= 0 || score > 750) {
+			alert("您输入的成绩已超过满分，请重新输入");
+			return;
+		};
+	};
+	if (schoolName.length > 40) {
+		alert("学校名长度不允许大于40字！");
+		return;
+	};
+	if ($.trim(schoolName).length) {
+		if (!schoolId) {
+			if ($(".school-list li").length) {
+				schoolName = $($(".school-list li")[0]).val();
+			} else {
 				alert("学校名无效！请清空或重新输入并选择下拉列表学校！");
 				return;
 			};
 		};
-		var examNum = $("#exam-no").val();
-		var data = {
-			req_id: examNum + Date.parse(new Date()),
-			exam_no: examNum,
-			province_id: provId,
-			score: score,
-			exp_sch_id: $("#school-input").data("val") || "",
-			batch: $("#school-input").data("batch") || "",
-			wenli: $(".subject-type .active").data("val"),
-			type: "spt"
-		};
-		analysisReport.swipeToAnalysisReportPage(data, xinSwiper);
-		ga('send', 'event', '输入界面', '生成定位分析报告', '生成报告');
-	});
+	};
+	var examNum = $("#exam-no").val();
+	var data = {
+		req_id: examNum + Date.parse(new Date()),
+		exam_no: examNum,
+		province_id: provId,
+		score: score,
+		exp_sch_id: $("#school-input").data("val") || $($(".school-list li")[0]).data("val") || "",
+		batch: $("#school-input").data("batch") || $($(".school-list li")[0]).data("batch") || "",
+		wenli: $(".subject-type .active").data("val"),
+		type: "spt"
+	};
+	console.log(data);
+	analysisReport.swipeToAnalysisReportPage(data, xinSwiper);
 };
 var setProvByName = function setProvByName(provName) {
 	var provObj = _loc2.default.getProvInfoByName(provName);

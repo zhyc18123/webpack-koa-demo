@@ -55,6 +55,11 @@ var init=function(xinSwiper){
 	});
 	// 监听生成报告
 	$("#get-report").on("click",function(){
+		createReport(xinSwiper);
+		ga('send', 'event', '输入界面', '生成定位分析报告', '生成报告');
+	});
+};
+var createReport=function(xinSwiper){
 		var provId=$("#prov-name").data("val"),
 		       score=$("#score").val(),
 		       prevName=$("#prov-name").val(),
@@ -96,8 +101,13 @@ var init=function(xinSwiper){
 		};
 		if($.trim(schoolName).length){
 			if(!schoolId){
-				alert("学校名无效！请清空或重新输入并选择下拉列表学校！");
-				return;
+				if($(".school-list li").length){
+					schoolName=$($(".school-list li")[0]).val();
+					
+				}else{
+					alert("学校名无效！请清空或重新输入并选择下拉列表学校！");
+					return;
+				};
 			};
 		};
 		var examNum=$("#exam-no").val();
@@ -106,14 +116,13 @@ var init=function(xinSwiper){
 			exam_no:examNum,
 			province_id:provId,
 			score:score,
-			exp_sch_id:$("#school-input").data("val")||"",
-			batch:$("#school-input").data("batch")||"",
+			exp_sch_id:$("#school-input").data("val")||$($(".school-list li")[0]).data("val")||"",
+			batch:$("#school-input").data("batch")||$($(".school-list li")[0]).data("batch")||"",
 			wenli:$(".subject-type .active").data("val"),
 			type:"spt"
 		};
+		console.log(data)
 		analysisReport.swipeToAnalysisReportPage(data,xinSwiper);
-		ga('send', 'event', '输入界面', '生成定位分析报告', '生成报告');
-	});
 };
 var setProvByName=function(provName){
 	var provObj=prov.getProvInfoByName(provName);
