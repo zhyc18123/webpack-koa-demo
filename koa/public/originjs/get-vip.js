@@ -3,7 +3,6 @@ import chgUrl from "./change-url";
 var init=function(xinSwiper){
 	// 监听获取vip体验卡按钮
 	$("#vip-btn").on("click",function(){
-		// getVip(xinSwiper);
 		xinSwiper.slideNext();
 		ga('send', 'event', '领取页面', '领取按钮', '点击领取按钮');
 	});
