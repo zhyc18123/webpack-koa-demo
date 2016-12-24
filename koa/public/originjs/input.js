@@ -232,7 +232,9 @@ var selectSubject=function(that){
 var createProv=function(){
 	var provHtml="";
 	$.each(prov.province,function(i,item){
-		provHtml+='<li data-val='+item.loc_id+'>'+item.name+'</li>'
+		if(item.loc_id){
+			provHtml+='<li data-val='+item.loc_id+'>'+item.name+'</li>';
+		};
 	});
 	$(".prov-list").html(provHtml);
 };

@@ -34,32 +34,33 @@ html{
 	padding:0 .3rem 0 .2rem;
 	line-height:.4rem;
 	border-radius: .08rem;
-	display: -moz-box; 
-	display: -webkit-box; 
-	display: box; 
+	// display: -moz-box; 
+	// display: -webkit-box; 
+	// display: box; 
 	em{
-		display: block;
+		@extend %inline-block;
 		color: $red-col;
 		width: .2rem;
 		padding:.3rem 0;
 		position:relative;
 	}
 	span{
+		@extend %inline-block;
 		color: $font-heicol;
 		border-right: 1px solid $bor-col;
 		padding: 0 0.2rem 0 0;
 		height: .4rem;
-		position:relative;
-		top: .31rem;
+		// position:relative;
+		// top: .31rem;
 	}
 	input{
+		@extend %inline-block;
 		padding: 0 0.2rem;
-		width: 100%;
+		width: 4.2rem;
 		height: 1rem;
-		display: block;
-		-moz-box-flex: 1; 
-		-webkit-box-flex: 1; 
-		box-flex: 1;
+		// -moz-box-flex: 1; 
+		// -webkit-box-flex: 1; 
+		// box-flex: 1;
 		text-align: left;
 		font-size: $font-14;
 	}
@@ -76,20 +77,22 @@ i.down{
 	margin-top: 0.1rem !important;
 }
 .subject-type{
-	display: -moz-box; 
-	display: -webkit-box; 
-	display: box; 
+	// display: -moz-box; 
+	// display: -webkit-box; 
+	// display: box; 
 	padding:0 2px;
 	span{
-		display: block;
-		-moz-box-flex: 1; 
-		-webkit-box-flex: 1; 
-		box-flex: 1;
+		// display: block;
+		// -moz-box-flex: 1; 
+		// -webkit-box-flex: 1; 
+		// box-flex: 1;
+		@extend %inline-block;
 		border: 1px solid $bor-col;
 		padding: 0.3rem 0;
 		text-align:center;
 		border-radius: .08rem;
 		cursor: pointer;
+		width: 49.4%;
 		i{
 			font-size: $font-14;
 			color: $red-col;
@@ -106,7 +109,8 @@ i.down{
 		}
 	}
 	em{
-		display: block;
+		// display: block;
+		@extend %inline-block;
 		width: .2rem;
 	}
 }
