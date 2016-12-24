@@ -29,6 +29,7 @@ $yellowCol: #f9be00;
   width: 100%;
   overflow: hidden;
   background: #f1f1f1;
+  top: -1px;;
 }
 .yellow-col {
   color: $yellowCol !important;
@@ -208,14 +209,21 @@ bottom: -.17rem;
   width: 100%;
   margin: percentage(20/750) auto 0 auto;
 }
+.gap-suggest-wrap{
+  position: relative;
+  width: 100%;
+  text-align: left;
+  display: block;
+}
 
 .gap-sugest {
   position: relative;
   width: 100%;
   text-align: left;
-  padding: 0 percentage(40/750);
-  margin-bottom: percentage(30/750);
+  padding: 0 5.33333%;
+  margin-bottom: 4%;
   color: #666666;
+  display: inline-block;
   @include font-size(3.0)
 }
 .gap-sugest-none {
@@ -254,7 +262,7 @@ bottom: -.17rem;
 .line-chart-wrap:after {
   top: -0.2rem;
   left: 50%;
-  margin-left: -0.2rem;
+  margin-left: -0.4rem;
   border-bottom-color: #f3f3f3;
   border-width: 0.4rem;
 }
@@ -296,7 +304,7 @@ bottom: -.17rem;
   background: $whi-col;
   margin: percentage(18/750) auto 0 auto;
   text-align: left;
-  overflow: hidden;
+  //overflow: hidden;
 }
 #school-list-item-wrap{
   margin-top: percentage(45/750);
@@ -377,6 +385,7 @@ bottom: -.17rem;
 }
 
 .school-info .school-loc {
+  display: inline-block;
   margin-left: 3.34%;
   color: #999999;
   @include font-size(2.4);
@@ -503,11 +512,13 @@ bottom: -.17rem;
 .major-name-header, .major-name-detail {
   display: inline-block;
   width: percentage(360/718); /* 360/718*/
+  @include overOneLineHidden;
 }
 
 .major-category-header, .major-category-detail, .major-examinee-header, .major-examinee-detail {
   display: inline-block;
   width: 23%; /* 718-360/2/718*/
+  @include overOneLineHidden;
 }
 
 .major-category-header, .major-category-detail {
@@ -607,5 +618,6 @@ bottom: -.17rem;
   width: 100%;
   margin-bottom: percentage(90/750);
   color: #eb614c;
+  text-align: center;
   @include font-size(3);
 }

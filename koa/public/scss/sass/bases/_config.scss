@@ -88,6 +88,12 @@ $staff-col:#5baf3f;
   -webkit-transform:rotate($rotate); /* Safari 和 Chrome */
   -o-transform:rotate($rotate); 	    /* Opera */
 }
+@mixin overOneLineHidden {
+  overflow: hidden;
+  white-space: nowrap;
+  -o-text-overflow: ellipsis; /* Opera */
+  text-overflow: ellipsis; /* IE, Safari (WebKit) */
+}
 
 $red-col:#de614c;
 $yellow-col:#f9be00;

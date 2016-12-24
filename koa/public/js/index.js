@@ -474,6 +474,12 @@ var _renderAnalysisReportPage = function _renderAnalysisReportPage(reportData) {
 
 		offsetY = lowestPercent < 0.01 ? 140 : lowestPercent < 0.1 ? 130 : 100;
 
+		if (lowestPercent > 0.6) {
+			for (var i = 0, len = coordData.length; i < len; i++) {
+				coordData[i].heightPercent = coordData[i].heightPercent * 0.5;
+			}
+		}
+
 		if (window.dpr == 1) {
 			labelWidth = labelWidth / 2;
 			lineChartCanvas.height = lineChartCanvas.height / 2;
@@ -580,6 +586,7 @@ var swipeToAnalysisReportPage = function swipeToAnalysisReportPage(requestParam,
 		data: paramData,
 		success: function success(data) {
 
+			console.log("data >> " + JSON.stringify(data, null, 4));
 			REQUESTPARAM.loc_provinc_name = data.loc_provinc_name = _loc2.default.getProvinceName(paramData.provinceId);
 			REQUESTPARAM.loc_wenli = data.loc_wenli = REQUESTPARAM.wenli == 2 ? "理科" : "文科";
 			REQUESTPARAM.batch = data.batch;
@@ -2793,9 +2800,9 @@ function setCoordinate(originData, startX, startY, widthMargin, canvasHeight, lo
 	rankMaxStr = "" + rankMax;
 
 	if (rankMaxStr.length <= 4) {
-		rankMax += 8 * Math.pow(10, rankMaxStr.length - 2);
-	} else if (rankMaxStr.length <= 5) {
 		rankMax += 4 * Math.pow(10, rankMaxStr.length - 1);
+	} else if (rankMaxStr.length <= 5) {
+		rankMax += 3 * Math.pow(10, rankMaxStr.length - 1);
 	} else {
 		rankMax += 2 * Math.pow(10, rankMaxStr.length - 1);
 	}
