@@ -1517,7 +1517,6 @@ var init = function init(xinSwiper) {
 	// 监听获取vip体验卡按钮
 	$("#vip-btn").on("click", function () {
 		getVip(xinSwiper);
-		xinSwiper.slideNext();
 		ga('send', 'event', '领取页面', '领取按钮', '点击领取按钮');
 	});
 	// 监听获取验证码按钮
@@ -1733,12 +1732,16 @@ var init = function init(xinSwiper) {
 	// 监听学校联想失去光标
 	$("#school-input").on("focusout", function () {
 		setTimeout(function () {
-			if (!$("#school-input").data("val")) {
-				if ($(".school-list li").length) {
-					$($(".school-list li")[0]).click();
+			if ($("#school-input").val()) {
+				if (!$("#school-input").data("val")) {
+					if ($(".school-list li").length) {
+						$($(".school-list li")[0]).click();
+					};
 				};
+				$(".school-list").hide();
+			} else {
+				$(".school-list").hide();
 			};
-			$(".school-list").hide();
 		}, 200);
 	});
 	// 监听分数输入
@@ -1780,17 +1783,17 @@ var createReport = function createReport(xinSwiper) {
 		};
 	};
 	if (prevName === "江苏") {
-		if (score <= 0 || score > 480) {
+		if (score > 480) {
 			alert("您输入的成绩已超过满分，请重新输入");
 			return;
 		};
 	} else if (prevName === "海南") {
-		if (score <= 0 || score > 900) {
+		if (score > 950) {
 			alert("您输入的成绩已超过满分，请重新输入");
 			return;
 		};
 	} else {
-		if (score <= 0 || score > 750) {
+		if (score > 750) {
 			alert("您输入的成绩已超过满分，请重新输入");
 			return;
 		};
@@ -1887,7 +1890,8 @@ var guestSchool = function guestSchool(that) {
 	$(that).data("val", "");
 	var schString = $(that).val();
 	var provId = $("#prov-name").data("val");
-	if (!schString) {
+	if (!$.trim(schString)) {
+		$(".school-list").hide();
 		return;
 	};
 	if (!provId) {
