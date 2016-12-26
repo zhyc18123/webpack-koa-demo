@@ -73,7 +73,7 @@
             <script id="gap-suggest-tpl" type="text/template">
                 <& if(data.exp_sch && data.score_gap!=null && data.adm_ratio!=null){ &>
                     <&if(data.score_gap<=-5){&>
-                    <p class="gap-sugest">你的成绩比 <em class="black-strong"><&= data.exp_sch&></em> 的最低分还高出约 <em class="black-strong"><&= Math.abs(data.score_gap)&></em> 分</p>
+                    <p class="gap-sugest">你的成绩比 <em class="black-strong"><&= data.exp_sch&></em> 的最低分高出约 <em class="black-strong"><&= Math.abs(data.score_gap)&></em> 分</p>
                     <&}else if(data.score_gap<=5){&>
                     <p class="gap-sugest">以你目前的成绩，勉强可以考上 <em class="black-strong"><&= data.exp_sch&></em></p>
                     <&}else{&>
