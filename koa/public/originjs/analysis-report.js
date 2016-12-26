@@ -190,11 +190,12 @@ var _init = (function () {
 
 	onClickSetScoreSch = function() {
 		jqueryMap.$analyseTpl.html(REQUESTPARAM._analyseTpl);
-		jqueryMap._xinSwiper.slidePrev();
+		// jqueryMap._xinSwiper.slidePrev();
 		// history.go(0);
-		history.back();
-		chgUrl.changeUrl("01","","#input");
-		changeTitle("联考成绩定位分析报告");
+		// history.back();
+		document.location.href = '/score/analyse?prov_name='+REQUESTPARAM.loc_provinc_name+'&score='+REQUESTPARAM.score+'&wenli='+REQUESTPARAM.wenli+"#input";
+		// chgUrl.changeUrl("01","","#input");
+		// changeTitle("联考成绩定位分析报告");
 	};
 
 	onClickWmzyLink = function() {
