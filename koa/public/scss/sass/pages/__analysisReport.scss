@@ -424,6 +424,14 @@ bottom: -.17rem;
   width: 1rem;
   @include font-size(3.0);
 }
+.rank-num-none{
+  display: inline-block;
+  width: 1rem;
+  margin-left: 0.2rem;
+  font-style: normal;
+  color: #999999;
+  @include font-size(2.4);
+}
 
 .probability-num {
   color: $yellowCol;
@@ -547,7 +555,7 @@ bottom: -.17rem;
   .invalid-bg {
     position: absolute;
     background: white;
-    right: 0;
+    right: -1px;
     height: 0.4rem;
     vertical-align: bottom;
   }

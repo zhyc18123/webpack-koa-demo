@@ -5,6 +5,7 @@ require('./analysis-report');
 var getVip=require("./get-vip");
 var input=require("./input");
 var analysisReport = require('./analysis-report');
+import changeTitle from "./change-title";
 $(function(){
 	var init=function(){
 		// var swiperHeight=[];
@@ -45,27 +46,27 @@ $(function(){
 			switch (page) {
 				case "#input":
 					xinSwiper.slideTo(0, speed);
-					document.title="联考成绩定位分析报告";
+					changeTitle("联考成绩定位分析报告");
 					break;
 				case "#analyse-result":
 					xinSwiper.slideTo(1, speed);
-					document.title="成绩定位分析报告";
+					changeTitle("成绩定位分析报告");
 					break;
 				case "#introduce":
 					xinSwiper.slideTo(2, speed);
-					document.title="完美志愿，让你上更好的大学";
+					changeTitle("完美志愿，让你上更好的大学");
 					break;
 				case "#get-vip":
 					xinSwiper.slideTo(3, speed);
-					document.title="领取体验卡";
+					changeTitle("领取体验卡");
 					break;
 				case "#vip-result":
 					xinSwiper.slideTo(4, speed);
-					document.title="领取体验卡";
+					changeTitle("领取体验卡");
 					break;
 				default :
 					xinSwiper.slideTo(0, speed);
-					document.title="联考成绩定位分析报告";
+					changeTitle("联考成绩定位分析报告");
 					break;
 
 			};

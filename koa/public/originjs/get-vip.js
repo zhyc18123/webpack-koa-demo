@@ -1,5 +1,6 @@
 import url from"./url";
 import chgUrl from "./change-url";
+import changeTitle from "./change-title";
 var init=function(xinSwiper){
 	// 监听获取vip体验卡按钮
 	$("#vip-btn").on("click",function(){
@@ -16,7 +17,7 @@ var init=function(xinSwiper){
 	$("#get-vip-btn").on("click",function(){
 		xinSwiper.slideNext();
 		chgUrl.changeUrl("04","","#get-vip");
-		document.title="领取体验卡";
+		changeTitle("领取体验卡");
 		ga('send', 'event', '产品介绍页', '领取体验卡按钮', '领取按钮');
 	});
 	///监听下载按钮
@@ -138,7 +139,7 @@ var getVip=function(xinSwiper){
 				$(".result-text .text").text("领取成功！");
 				xinSwiper.slideNext();
 				chgUrl.changeUrl("05","","#vip-result");
-				document.title="领取体验卡";
+				changeTitle("领取体验卡");
 				break;
 				case 11301:
 				alert("您已领取过体验卡");
