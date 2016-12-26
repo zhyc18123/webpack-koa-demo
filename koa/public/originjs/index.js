@@ -73,11 +73,10 @@ $(function(){
 		};
 		///刷新显示相应页面
 		showPage("0","#input");
-		console.log("window.location"+ window.location);
 		const analyseTpl=$(".analyse-html").html();
 		if ('pushState' in history) {
 			history.pushState("01", "", window.location.pathname+window.location.search+"#input");
-			document.title="联考成绩定位分析报告";
+			changeTitle("联考成绩定位分析报告");
 		};
 		///浏览器前进后退事件
 		window.onpopstate = function() {
