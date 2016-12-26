@@ -5,7 +5,6 @@ require('./analysis-report');
 var getVip=require("./get-vip");
 var input=require("./input");
 var analysisReport = require('./analysis-report');
-import changeTitle from "./change-title";
 $(function(){
 	var init=function(){
 		// var swiperHeight=[];
@@ -46,27 +45,27 @@ $(function(){
 			switch (page) {
 				case "#input":
 					xinSwiper.slideTo(0, speed);
-					changeTitle("联考成绩定位分析报告");
+					document.title="联考成绩定位分析报告";
 					break;
 				case "#analyse-result":
 					xinSwiper.slideTo(1, speed);
-					changeTitle("成绩定位分析报告");
+					document.title="成绩定位分析报告";
 					break;
 				case "#introduce":
 					xinSwiper.slideTo(2, speed);
-					changeTitle("完美志愿，让你上更好的大学");
+					document.title="完美志愿，让你上更好的大学";
 					break;
 				case "#get-vip":
 					xinSwiper.slideTo(3, speed);
-					changeTitle("领取体验卡");
+					document.title="领取体验卡";
 					break;
 				case "#vip-result":
 					xinSwiper.slideTo(4, speed);
-					changeTitle("领取体验卡");
+					document.title="领取体验卡";
 					break;
 				default :
 					xinSwiper.slideTo(0, speed);
-					changeTitle("联考成绩定位分析报告");
+					document.title="升学预测-成绩定位分析";
 					break;
 
 			};
@@ -76,14 +75,14 @@ $(function(){
 		const analyseTpl=$(".analyse-html").html();
 		if ('pushState' in history) {
 			history.pushState("01", "", window.location.pathname+window.location.search+"#input");
-			changeTitle("联考成绩定位分析报告");
+			document.title="升学预测-成绩定位分析";
 		};
 		///浏览器前进后退事件
 		window.onpopstate = function() {
 			if(window.location.hash == "#input"){
 				$(".analyse-html").html(analyseTpl);
 				history.go(0);
-			}
+			};
 			showPage();
 		};
 

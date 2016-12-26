@@ -4,7 +4,6 @@ import prov from "./loc.js";
 import chgUrl from "./change-url";
 import staticTpl from "./ejsTpl";
 import scrollEvent from "./scollEvent";
-import changeTitle from "./change-title";
 var Tpl = require('./utils/ejs');
 
 var REQUESTPARAM = {};
@@ -49,7 +48,7 @@ var _init = (function () {
 		ejsHtml = Tpl.ejs(ejsTpl, schoolData, ejsOptions);
 		$("#school-list-item-modal-wrap").html(ejsHtml);
 
-		if (schoolData.sch_min_score_list.length>1) {
+		if (schoolData.sch_min_score_list.length > 0) {
 			var schMinScoreList = [];
 
 			renderEjsTplWithData("#line-chart-wmzy-link-modal-tpl", "#line-chart-wmzy-link-modal-wrap", schoolData);
@@ -194,7 +193,7 @@ var _init = (function () {
 		// history.go(0);
 		history.back();
 		chgUrl.changeUrl("01","","#input");
-		changeTitle("联考成绩定位分析报告");
+		document.title="联考成绩定位分析报告";
 	};
 
 	onClickWmzyLink = function() {
@@ -202,7 +201,7 @@ var _init = (function () {
 		_toggleModalHide();
 		jqueryMap._xinSwiper.slideNext();
 		chgUrl.changeUrl("03","","#introduce");
-		changeTitle("完美志愿，让你上更好的大学");
+		document.title=="完美志愿，让你上更好的大学";
 		if (gaId == "ga-more-detail") {
 			ga('send', 'event', '结果页面', '更详尽院校录取数据，尽在完美志愿', '目标学校引导按钮');
 		} else if (gaId == "ga-other-reco-sch") {
@@ -523,7 +522,7 @@ var swipeToAnalysisReportPage = function ( requestParam, xinSwiper ) {
 			_init.initModule(xinSwiper);
 			xinSwiper.slideNext();
 			chgUrl.changeUrl("02","成绩定位分析报告","#analyse-result");
-			changeTitle("成绩定位分析报告");
+			document.title="成绩定位分析报告";
 		},
 		error:function() {
 			alert("服务器错误！");

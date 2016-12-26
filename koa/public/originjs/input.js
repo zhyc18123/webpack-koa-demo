@@ -141,6 +141,7 @@ var initPage=function(){
 	var provName=queryString.getQueryString("prov_name")||"",
 		score=Math.round(queryString.getQueryString("score")),
 		salesmanId=queryString.getQueryString("salesman_id"),
+		wenli=queryString.getQueryString("wenli"),
 		examNo=queryString.getQueryString("exam_no");
 	// 设置省份
 	if(provName){
@@ -162,6 +163,15 @@ var initPage=function(){
 				};      
 			});
                           };
+            };
+            if(wenli){
+            	var subjectSpan=$("#subject-type span");
+            	subjectSpan.removeClass("active");
+            	if(wenli==="1"){
+            		subjectSpan.eq(1).addClass("active");
+            	}else{
+            		subjectSpan.eq(0).addClass("active");
+            	};
             };
             // 设置分数
             if(score){
