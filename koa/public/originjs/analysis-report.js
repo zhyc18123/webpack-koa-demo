@@ -58,7 +58,7 @@ var _init = (function () {
 				context = lineChartCanvas.getContext('2d');
 
 			lineChartCanvas.width = lineChartCanvas.parentNode.clientWidth;
-			lineChartCanvas.height = lineChartCanvas.parentNode.clientHeight*1.5;
+			lineChartCanvas.height = lineChartCanvas.parentNode.clientHeight*1.2;
 			var startX = 0;
 			var startY = 40;
 			var widthMargin = lineChartCanvas.width/4;
