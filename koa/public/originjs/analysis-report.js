@@ -4,7 +4,6 @@ import prov from "./loc.js";
 import chgUrl from "./change-url";
 import staticTpl from "./ejsTpl";
 import scrollEvent from "./scollEvent";
-import changeTitle from "./change-title";
 var Tpl = require('./utils/ejs');
 
 var REQUESTPARAM = {};
@@ -191,6 +190,7 @@ var _init = (function () {
 	onClickSetScoreSch = function() {
 		jqueryMap.$analyseTpl.html(REQUESTPARAM._analyseTpl);
 		document.location.href = '/score/analyse?prov_name='+REQUESTPARAM.loc_provinc_name+'&score='+REQUESTPARAM.score+'&wenli='+REQUESTPARAM.wenli+"#input";
+
 	};
 
 	onClickWmzyLink = function() {
@@ -198,7 +198,7 @@ var _init = (function () {
 		_toggleModalHide();
 		jqueryMap._xinSwiper.slideNext();
 		chgUrl.changeUrl("03","","#introduce");
-		changeTitle("完美志愿，让你上更好的大学");
+		document.title=="完美志愿，让你上更好的大学";
 		if (gaId == "ga-more-detail") {
 			ga('send', 'event', '结果页面', '更详尽院校录取数据，尽在完美志愿', '目标学校引导按钮');
 		} else if (gaId == "ga-other-reco-sch") {
@@ -519,7 +519,7 @@ var swipeToAnalysisReportPage = function ( requestParam, xinSwiper ) {
 			_init.initModule(xinSwiper);
 			xinSwiper.slideNext();
 			chgUrl.changeUrl("02","成绩定位分析报告","#analyse-result");
-			changeTitle("成绩定位分析报告");
+			document.title="成绩定位分析报告";
 		},
 		error:function() {
 			alert("服务器错误！");

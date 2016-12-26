@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 12);
+/******/ 	return __webpack_require__(__webpack_require__.s = 13);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -89,21 +89,17 @@ var _changeUrl = __webpack_require__(1);
 
 var _changeUrl2 = _interopRequireDefault(_changeUrl);
 
-var _ejsTpl = __webpack_require__(8);
+var _ejsTpl = __webpack_require__(9);
 
 var _ejsTpl2 = _interopRequireDefault(_ejsTpl);
 
-var _scollEvent = __webpack_require__(10);
+var _scollEvent = __webpack_require__(11);
 
 var _scollEvent2 = _interopRequireDefault(_scollEvent);
 
-var _changeTitle = __webpack_require__(13);
-
-var _changeTitle2 = _interopRequireDefault(_changeTitle);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var Tpl = __webpack_require__(11);
+var Tpl = __webpack_require__(12);
 
 var REQUESTPARAM = {};
 
@@ -299,7 +295,7 @@ var _init = function () {
 		_toggleModalHide();
 		jqueryMap._xinSwiper.slideNext();
 		_changeUrl2.default.changeUrl("03", "", "#introduce");
-		(0, _changeTitle2.default)("完美志愿，让你上更好的大学");
+		document.title == "完美志愿，让你上更好的大学";
 		if (gaId == "ga-more-detail") {
 			ga('send', 'event', '结果页面', '更详尽院校录取数据，尽在完美志愿', '目标学校引导按钮');
 		} else if (gaId == "ga-other-reco-sch") {
@@ -612,7 +608,7 @@ var swipeToAnalysisReportPage = function swipeToAnalysisReportPage(requestParam,
 			_init.initModule(xinSwiper);
 			xinSwiper.slideNext();
 			_changeUrl2.default.changeUrl("02", "成绩定位分析报告", "#analyse-result");
-			(0, _changeTitle2.default)("成绩定位分析报告");
+			document.title = "成绩定位分析报告";
 		},
 		error: function error() {
 			alert("服务器错误！");
@@ -1526,7 +1522,7 @@ var _changeUrl = __webpack_require__(1);
 
 var _changeUrl2 = _interopRequireDefault(_changeUrl);
 
-var _changeTitle = __webpack_require__(13);
+var _changeTitle = __webpack_require__(8);
 
 var _changeTitle2 = _interopRequireDefault(_changeTitle);
 
@@ -1547,7 +1543,7 @@ var init = function init(xinSwiper) {
 	$("#get-vip-btn").on("click", function () {
 		xinSwiper.slideNext();
 		_changeUrl2.default.changeUrl("04", "", "#get-vip");
-		(0, _changeTitle2.default)("领取体验卡");
+		document.title = "领取体验卡";
 		ga('send', 'event', '产品介绍页', '领取体验卡按钮', '领取按钮');
 	});
 	///监听下载按钮
@@ -1667,7 +1663,7 @@ var getVip = function getVip(xinSwiper) {
 					$(".result-text .text").text("领取成功！");
 					xinSwiper.slideNext();
 					_changeUrl2.default.changeUrl("05", "", "#vip-result");
-					(0, _changeTitle2.default)("领取体验卡");
+					document.title = "领取体验卡";
 					break;
 				case 11301:
 					alert("您已领取过体验卡");
@@ -1682,6 +1678,7 @@ var getVip = function getVip(xinSwiper) {
 					alert("短信验证码已过期，请重新发送");
 					break;
 				default:
+					alert("服务器错误！");
 					break;
 			}
 		},
@@ -1709,7 +1706,7 @@ var _loc = __webpack_require__(3);
 
 var _loc2 = _interopRequireDefault(_loc);
 
-var _queryString = __webpack_require__(9);
+var _queryString = __webpack_require__(10);
 
 var _queryString2 = _interopRequireDefault(_queryString);
 
@@ -1852,6 +1849,7 @@ var initPage = function initPage() {
 	var provName = _queryString2.default.getQueryString("prov_name") || "",
 	    score = Math.round(_queryString2.default.getQueryString("score")),
 	    salesmanId = _queryString2.default.getQueryString("salesman_id"),
+	    wenli = _queryString2.default.getQueryString("wenli"),
 	    examNo = _queryString2.default.getQueryString("exam_no");
 	// 设置省份
 	if (provName) {
@@ -1873,6 +1871,16 @@ var initPage = function initPage() {
 					});
 				};
 			});
+		};
+	};
+	if (wenli) {
+		var subjectSpan = $(".subject-type span");
+		subjectSpan.removeClass("active");
+		subjectSpan.find('i').removeClass("icon-gou");
+		if (wenli == 1) {
+			subjectSpan.eq(1).addClass("active").find('i').addClass('icon-gou');
+		} else {
+			subjectSpan.eq(0).addClass("active").find('i').addClass('icon-gou');
 		};
 	};
 	// 设置分数
@@ -3207,6 +3215,15 @@ module.exports = {
 /***/ function(module, exports) {
 
 "use strict";
+"use strict";
+
+module.exports = function (title) {};
+
+/***/ },
+/* 9 */
+/***/ function(module, exports) {
+
+"use strict";
 'use strict';
 
 module.exports = {
@@ -3215,7 +3232,7 @@ module.exports = {
 };
 
 /***/ },
-/* 9 */
+/* 10 */
 /***/ function(module, exports) {
 
 "use strict";
@@ -3247,7 +3264,7 @@ module.exports = {
 };
 
 /***/ },
-/* 10 */
+/* 11 */
 /***/ function(module, exports) {
 
 "use strict";
@@ -3293,7 +3310,7 @@ module.exports = {
 };
 
 /***/ },
-/* 11 */
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3535,7 +3552,7 @@ var __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
 }.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
 /***/ },
-/* 12 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3545,10 +3562,6 @@ var _changeUrl = __webpack_require__(1);
 
 var _changeUrl2 = _interopRequireDefault(_changeUrl);
 
-var _changeTitle = __webpack_require__(13);
-
-var _changeTitle2 = _interopRequireDefault(_changeTitle);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 __webpack_require__(6);
@@ -3556,7 +3569,6 @@ __webpack_require__(0);
 var getVip = __webpack_require__(4);
 var input = __webpack_require__(5);
 var analysisReport = __webpack_require__(0);
-
 $(function () {
 	var init = function init() {
 		// var swiperHeight=[];
@@ -3597,68 +3609,49 @@ $(function () {
 			switch (page) {
 				case "#input":
 					xinSwiper.slideTo(0, speed);
-					(0, _changeTitle2.default)("联考成绩定位分析报告");
+					document.title = "联考成绩定位分析报告";
 					break;
 				case "#analyse-result":
 					xinSwiper.slideTo(1, speed);
-					(0, _changeTitle2.default)("成绩定位分析报告");
+					document.title = "成绩定位分析报告";
 					break;
 				case "#introduce":
 					xinSwiper.slideTo(2, speed);
-					(0, _changeTitle2.default)("完美志愿，让你上更好的大学");
+					document.title = "完美志愿，让你上更好的大学";
 					break;
 				case "#get-vip":
 					xinSwiper.slideTo(3, speed);
-					(0, _changeTitle2.default)("领取体验卡");
+					document.title = "领取体验卡";
 					break;
 				case "#vip-result":
 					xinSwiper.slideTo(4, speed);
-					(0, _changeTitle2.default)("领取体验卡");
+					document.title = "领取体验卡";
 					break;
 				default:
 					xinSwiper.slideTo(0, speed);
-					(0, _changeTitle2.default)("联考成绩定位分析报告");
+					document.title = "升学预测-成绩定位分析";
 					break;
 
 			};
 		};
 		///刷新显示相应页面
 		showPage("0", "#input");
-		console.log("window.location" + window.location);
 		var analyseTpl = $(".analyse-html").html();
 		if ('pushState' in history) {
 			history.pushState("01", "", window.location.pathname + window.location.search + "#input");
-			document.title = "联考成绩定位分析报告";
+			document.title = "升学预测-成绩定位分析";
 		};
 		///浏览器前进后退事件
 		window.onpopstate = function () {
 			if (window.location.hash == "#input") {
 				$(".analyse-html").html(analyseTpl);
 				history.go(0);
-			}
+			};
 			showPage();
 		};
 	};
 	init();
 });
-
-/***/ },
-/* 13 */
-/***/ function(module, exports) {
-
-"use strict";
-'use strict';
-
-module.exports = function (title) {
-	var $body = $('body');
-	document.title = title;
-	var $iframe = $('<iframe src="/favicon.ico"></iframe>');
-	$iframe.on('load', function () {
-		setTimeout(function () {
-			$iframe.off('load').remove();
-		}, 0);
-	}).appendTo($body);
-};
 
 /***/ }
 /******/ ]);

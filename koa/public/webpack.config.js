@@ -34,11 +34,12 @@ module.exports = {
         // }
     // }　　
 
-    plugins: !config.debug ? [
-        new webpack.optimize.UglifyJsPlugin({
-            compress: { warnings: true, evaluate: false, drop_console: true, properties: false},
-            output: {comments: false, quote_keys: true, keep_quoted_props: true},
-            sourceMap: false,
-            mangle: false
-        })] : []
+    plugins: [
+        // new webpack.optimize.UglifyJsPlugin({
+        //     compress: { warnings: true, evaluate: false, drop_console: true, properties: false},
+        //     output: {comments: false, quote_keys: true, keep_quoted_props: true},
+        //     sourceMap: false,
+        //     mangle: false
+        // })
+        ] 
 };
