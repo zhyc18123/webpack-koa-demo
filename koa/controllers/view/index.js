@@ -1,5 +1,4 @@
 module.exports = function*() {
-	var user = this.session.user || null;
 	var data={
 		scripts:["/js/index.js"]
 	};

@@ -17,8 +17,8 @@ global.log = require('log4js').getLogger('account.js');
 module.exports = {
 
   init: function() {
-
-    var app = koa();
+try{
+var app = koa();
 
     // init
     this.initApp(app);
@@ -27,7 +27,7 @@ module.exports = {
     this.loadUserAgent(app);
 
     // 加载过滤器
-    this.loadError(app);
+    // this.loadError(app);
     this.loadLog(app);
 
     //this.loadRedisCache(app);
@@ -40,9 +40,9 @@ module.exports = {
 
     // 会话
     // app.use(session(app));
-    this.loadSession(app);
+    // this.loadSession(app);
 
-    this.checkLogin(app);
+    // this.checkLogin(app);
 
     // gzip, static cache, logo icon
     this.loadGzipAndCache(app);
@@ -50,6 +50,10 @@ module.exports = {
     // 路由
     this.loadRoute(app);
 
+}catch(err){
+  console.log(err)
+}
+    
     app.listen(config.port);
 
     console.log('app.js 服务启动: %s:%s'.green, config.hosts, config.port);
