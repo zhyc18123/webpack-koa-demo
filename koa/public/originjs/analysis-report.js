@@ -49,7 +49,7 @@ var _init = (function () {
 		ejsHtml = Tpl.ejs(ejsTpl, schoolData, ejsOptions);
 		$("#school-list-item-modal-wrap").html(ejsHtml);
 
-		if (schoolData.sch_min_score_list.length>1) {
+		if (schoolData.sch_min_score_list.length > 0) {
 			var schMinScoreList = [];
 
 			renderEjsTplWithData("#line-chart-wmzy-link-modal-tpl", "#line-chart-wmzy-link-modal-wrap", schoolData);
