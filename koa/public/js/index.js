@@ -596,7 +596,7 @@ var swipeToAnalysisReportPage = function swipeToAnalysisReportPage(requestParam,
 			_renderAnalysisReportPage(data);
 			_init.initModule(xinSwiper);
 			xinSwiper.slideNext();
-			_changeUrl2.default.changeUrl("02", "", "#analyse-result");
+			_changeUrl2.default.changeUrl("02", "成绩定位分析报告", "#analyse-result");
 			document.title = "成绩定位分析报告";
 		},
 		error: function error() {
@@ -1747,7 +1747,7 @@ var init = function init(xinSwiper) {
 	// 监听分数输入
 	$("#score").on("input porpertychange", function () {
 		var score = $(this).val();
-		var patrn = /^([1-9]\d*|0)(\.\d*[1-9])?$/;
+		var patrn = /^0\.([1-9]|\d[1-9])$|^[1-9]\d{0,8}\.\d{0,1}$|^[1-9]\d{0,8}$/;
 		if (!patrn.exec(score)) {
 			$(this).val("");
 		};

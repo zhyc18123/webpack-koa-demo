@@ -53,7 +53,7 @@ var init=function(xinSwiper){
 	// 监听分数输入
 	$("#score").on("input porpertychange",function(){
 		var score=$(this).val();
-		var patrn=/^([1-9]\d*|0)(\.\d*[1-9])?$/; 
+		var patrn= /^0\.([1-9]|\d[1-9])$|^[1-9]\d{0,8}\.\d{0,1}$|^[1-9]\d{0,8}$/; 
 		if (!patrn.exec(score)){
 			$(this).val("");
 		};

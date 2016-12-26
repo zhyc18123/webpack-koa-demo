@@ -510,7 +510,7 @@ var swipeToAnalysisReportPage = function ( requestParam, xinSwiper ) {
 			_renderAnalysisReportPage(data);
 			_init.initModule(xinSwiper);
 			xinSwiper.slideNext();
-			chgUrl.changeUrl("02","","#analyse-result");
+			chgUrl.changeUrl("02","成绩定位分析报告","#analyse-result");
 			document.title="成绩定位分析报告";
 		},
 		error:function() {
