@@ -291,12 +291,7 @@ var _init = function () {
 
 	onClickSetScoreSch = function onClickSetScoreSch() {
 		jqueryMap.$analyseTpl.html(REQUESTPARAM._analyseTpl);
-		// jqueryMap._xinSwiper.slidePrev();
-		// history.go(0);
-		// history.back();
 		document.location.href = '/score/analyse?prov_name=' + REQUESTPARAM.loc_provinc_name + '&score=' + REQUESTPARAM.score + '&wenli=' + REQUESTPARAM.wenli + "#input";
-		// chgUrl.changeUrl("01","","#input");
-		// changeTitle("联考成绩定位分析报告");
 	};
 
 	onClickWmzyLink = function onClickWmzyLink() {
@@ -405,11 +400,11 @@ var _renderAnalysisReportPage = function _renderAnalysisReportPage(reportData) {
 		_canvasGraph2.default.drawCircleText(context, enrollCanvasFontDpr2, '#f9be00', '%', ("" + reportData.adm_ratio).length > 1 ? enrollCanvas.width * 0.62 : enrollCanvas.width * 0.58, enrollCanvas.height * 0.5);
 		_canvasGraph2.default.drawCircleText(context, enrollCanvasFontDpr3, '#b6b6b6', '录取概率', centerX, enrollCanvas.height * 0.65);
 	} else if (reportData.exp_sch == null) {
-		_canvasGraph2.default.drawCircleText(context, enrollCanvasFontDpr3, '#b6b6b6', "未设立", centerX, enrollCanvas.height * 0.48);
-		_canvasGraph2.default.drawCircleText(context, enrollCanvasFontDpr3, '#b6b6b6', '目标学校', centerX, enrollCanvas.height * 0.6);
+		_canvasGraph2.default.drawCircleText(context, enrollCanvasFontDpr3, '#b6b6b6', "未设立", centerX, enrollCanvas.height * 0.46);
+		_canvasGraph2.default.drawCircleText(context, enrollCanvasFontDpr3, '#b6b6b6', '目标学校', centerX, enrollCanvas.height * 0.58);
 	} else {
-		_canvasGraph2.default.drawCircleText(context, enrollCanvasFontDpr3, '#b6b6b6', "暂无", centerX, enrollCanvas.height * 0.48);
-		_canvasGraph2.default.drawCircleText(context, enrollCanvasFontDpr3, '#b6b6b6', '录取概率', centerX, enrollCanvas.height * 0.6);
+		_canvasGraph2.default.drawCircleText(context, enrollCanvasFontDpr3, '#b6b6b6', "暂无", centerX, enrollCanvas.height * 0.46);
+		_canvasGraph2.default.drawCircleText(context, enrollCanvasFontDpr3, '#b6b6b6', '录取概率', centerX, enrollCanvas.height * 0.58);
 	}
 
 	// 与目标学校的距离 —— 建议
