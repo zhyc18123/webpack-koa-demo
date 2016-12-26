@@ -154,6 +154,7 @@ var getVip=function(xinSwiper){
 				alert("短信验证码已过期，请重新发送");
 				break;
 				default:
+				alert("服务器错误！")
 				break;
 			}
 		},

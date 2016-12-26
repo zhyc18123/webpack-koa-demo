@@ -165,12 +165,13 @@ var initPage=function(){
                           };
             };
             if(wenli){
-            	var subjectSpan=$("#subject-type span");
+            	var subjectSpan=$(".subject-type span");
             	subjectSpan.removeClass("active");
-            	if(wenli==="1"){
-            		subjectSpan.eq(1).addClass("active");
+            	subjectSpan.find('i').removeClass("icon-gou");
+            	if(wenli==1){
+            		subjectSpan.eq(1).addClass("active").find('i').addClass('icon-gou');
             	}else{
-            		subjectSpan.eq(0).addClass("active");
+            		subjectSpan.eq(0).addClass("active").find('i').addClass('icon-gou');
             	};
             };
             // 设置分数
