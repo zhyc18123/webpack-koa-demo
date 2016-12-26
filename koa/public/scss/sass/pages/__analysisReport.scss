@@ -34,7 +34,21 @@ $yellowCol: #f9be00;
 .yellow-col {
   color: $yellowCol !important;
 }
-
+.yellow-link-col{
+  color: $yellowCol !important;
+  border-bottom: 2px solid;
+  &{
+    cursor: pointer;
+  }
+}
+.red_linc_col{
+  color: #eb614c;
+  border-bottom: 2px solid;
+  @include font-size(2.6);
+  &{
+    cursor: pointer;
+  }
+}
 .black-strong {
   font-weight: bold;
 }
@@ -197,6 +211,10 @@ bottom: -.17rem;
   span {
     @include font-size(3.6);
   }
+}
+
+#recommend-data-origin-wrap{
+  margin-top: 6%;
 }
 
 .rectangular-title-l-w {
@@ -628,4 +646,7 @@ bottom: -.17rem;
   color: #eb614c;
   text-align: center;
   @include font-size(3);
+  &{
+    cursor: pointer;
+  }
 }

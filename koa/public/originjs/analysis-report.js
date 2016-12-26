@@ -188,15 +188,9 @@ var _init = (function () {
 	};
 
 	onClickSetScoreSch = function() {
-		// jqueryMap.$analyseTpl.html(REQUESTPARAM._analyseTpl);
-		// jqueryMap._xinSwiper.slidePrev();
-		// history.go(0);
-		// history.back();
-		// chgUrl.changeUrl("01","","#input");
-		// document.title="联考成绩定位分析报告";
-		// history.back();
+		jqueryMap.$analyseTpl.html(REQUESTPARAM._analyseTpl);
 		document.location.href = '/score/analyse?prov_name='+REQUESTPARAM.loc_provinc_name+'&score='+REQUESTPARAM.score+'&wenli='+REQUESTPARAM.wenli+"#input";
-		
+
 	};
 
 	onClickWmzyLink = function() {
@@ -307,11 +301,11 @@ var _renderAnalysisReportPage = function (reportData) {
 		drawCanvas.drawCircleText(context, enrollCanvasFontDpr2, '#f9be00', '%', (""+reportData.adm_ratio).length>1?enrollCanvas.width*0.62:enrollCanvas.width*0.58, enrollCanvas.height*0.5);
 		drawCanvas.drawCircleText(context, enrollCanvasFontDpr3, '#b6b6b6', '录取概率', centerX, enrollCanvas.height*0.65);
 	} else if(reportData.exp_sch == null){
-		drawCanvas.drawCircleText(context, enrollCanvasFontDpr3, '#b6b6b6', "未设立", centerX, enrollCanvas.height*0.48);
-		drawCanvas.drawCircleText(context, enrollCanvasFontDpr3, '#b6b6b6', '目标学校', centerX, enrollCanvas.height*0.6);
+		drawCanvas.drawCircleText(context, enrollCanvasFontDpr3, '#b6b6b6', "未设立", centerX, enrollCanvas.height*0.46);
+		drawCanvas.drawCircleText(context, enrollCanvasFontDpr3, '#b6b6b6', '目标学校', centerX, enrollCanvas.height*0.58);
 	}else{
-		drawCanvas.drawCircleText(context, enrollCanvasFontDpr3, '#b6b6b6', "暂无", centerX, enrollCanvas.height*0.48);
-		drawCanvas.drawCircleText(context, enrollCanvasFontDpr3, '#b6b6b6', '录取概率', centerX, enrollCanvas.height*0.6);
+		drawCanvas.drawCircleText(context, enrollCanvasFontDpr3, '#b6b6b6', "暂无", centerX, enrollCanvas.height*0.46);
+		drawCanvas.drawCircleText(context, enrollCanvasFontDpr3, '#b6b6b6', '录取概率', centerX, enrollCanvas.height*0.58);
 	}
 
 	// 与目标学校的距离 —— 建议
