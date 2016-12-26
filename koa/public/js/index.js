@@ -292,6 +292,8 @@ var _init = function () {
 	onClickSetScoreSch = function onClickSetScoreSch() {
 		jqueryMap.$analyseTpl.html(REQUESTPARAM._analyseTpl);
 		jqueryMap._xinSwiper.slidePrev();
+		// history.go(0);
+		history.back();
 		_changeUrl2.default.changeUrl("01", "", "#input");
 		(0, _changeTitle2.default)("联考成绩定位分析报告");
 	};
