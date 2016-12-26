@@ -21,7 +21,11 @@
                         </li>
                         <&}&>
                     </ul>
+                    <&if(data.is_score_available){&>
+                    <p class="score-rank-disclaim opacity-fifty">省排名是由参加本次联考的所有考生成绩推算出来的</p>
+                    <&}else{&>
                     <p class="score-rank-disclaim opacity-fifty">*省排名由2016年高考情况推算出来，结果仅供参考</p>
+                    <&}&>
                 </script>
             </div>
             <ul class="summary-items" id="summary-items-wrap">

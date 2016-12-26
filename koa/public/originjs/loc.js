@@ -460,7 +460,7 @@ module.exports = {
         });
         return regionKey
     }
-}
+};
 
 var REGION = {
     "region_huabei": {
@@ -516,10 +516,10 @@ var prov_py = {
     42: "H", 43: "H", 44: "G", 45: "G", 46: "H",
     50: "C", 51: "S", 52: "G", 53: "Y", 54: "X",
     61: "S", 62: "G", 63: "Q", 64: "N", 65: "X"
-}
-var province = []
-var provinceMap = {}
-var cityName2ProvinceIdMap = {}
+};
+var province = [];
+var provinceMap = {};
+var cityName2ProvinceIdMap = {};
 
 provid.forEach(function (i) {
     var cityId = module.exports.getCityLongId(i + "00");
@@ -530,7 +530,7 @@ provid.forEach(function (i) {
 });
 province.sort(function (a, b) {
     return a.py.charCodeAt() > b.py.charCodeAt() ? 1 : -1;
-})
+});
 
 function getProvInfoByName(provName) {
     var strMap = [provName, provName.slice(0, -1), provName + "省", provName + "市"];
@@ -543,7 +543,7 @@ function getProvInfoByName(provName) {
 }
 var getCityInfoMap = function () {
     var locData = module.exports._data;
-    var locInfoFromNameMap = {}
+    var locInfoFromNameMap = {};
     for (var key in locData) {
         locInfoFromNameMap[locData[key].loc_namecn] = locData[key]
     }
@@ -551,7 +551,7 @@ var getCityInfoMap = function () {
         return locInfoFromNameMap;
     };
     return locInfoFromNameMap
-}
+};
 
 function getCityInfoByName(cityName) {
     var strMap = [cityName, cityName.slice(0, -1), cityName + "市"];
@@ -564,6 +564,7 @@ function getCityInfoByName(cityName) {
     }
     return null
 }
+
 var getTopCity = function () {
     var getCityInfoList = function (cityList) {
         var cityInfos = [];
@@ -571,17 +572,17 @@ var getTopCity = function () {
             cityInfos.push(getCityInfoByName(city));
         }
         return cityInfos
-    }
+    };
     var rv = {
         hot_cities: getCityInfoList(hot_cities_names),
         air_fresh_cities: getCityInfoList(air_fresh_cities_names),
         happy_cities: getCityInfoList(happy_cities_names)
-    }
+    };
     getTopCity = function () {
         return rv
-    }
+    };
     return rv;
-}
+};
 
 var contains = function (arr, e) {
 
@@ -592,13 +593,12 @@ var contains = function (arr, e) {
         }
     }
     return false;
-}
+};
 
 var filterProvinceId = function (list) {
     if (!list) {
         return [];
     }
-    ;
 
     var allPro = "";
 
@@ -622,13 +622,10 @@ var filterProvinceId = function (list) {
             }
 
         }
-        ;
     }
 
-
     return allPro;
-
-}
+};
 
 
 var filterCityId = function (list) {
@@ -636,7 +633,6 @@ var filterCityId = function (list) {
     if (!list) {
         return [];
     }
-    ;
 
     var allCity = "";
 
@@ -658,32 +654,29 @@ var filterCityId = function (list) {
             }
 
         }
-        ;
     }
 
     return allCity;
 
-}
+};
 
 var getProvIdFromCityName = function (cityName) {
     var pid;
     if (!cityName) {
         return pid;
     }
-    ;
 
     var cityInfo = getCityInfoByName(cityName);
 
     if (!cityInfo) {
         return pid;
     }
-    ;
 
     pid = cityInfo.loc_id.slice(0, 2);
 
     return pid;
 
-}
+};
 
 var getRegionIdsFromCityName = function (cityName) {
     var region = [];
@@ -702,7 +695,6 @@ var getRegionIdsFromCityName = function (cityName) {
 
         });
     }
-    ;
 
     var pids = [];
     for (var i in region) {
@@ -711,7 +703,7 @@ var getRegionIdsFromCityName = function (cityName) {
         pids.push(pid + "0000000000");
     }
     return pids;
-}
+};
 
 var isSupportProvince = function (provid) {
 
@@ -719,12 +711,11 @@ var isSupportProvince = function (provid) {
         if (provid == no_data_provinces[i]) {
             return false;
         }
-        ;
 
     }
     return true;
 
-}
+};
 
 var isNoData2014 = function (provid) {
     for (var i in no_data_provinces_2014) {
@@ -732,7 +723,7 @@ var isNoData2014 = function (provid) {
             return true;
         }
     }
-}
+};
 
 
 var isNoData2015 = function (provid) {
@@ -741,7 +732,7 @@ var isNoData2015 = function (provid) {
             return true;
         }
     }
-}
+};
 
 var isDataDealing = function (loc_name) {
     for (var item of data_is_dealing_provs) {
@@ -750,7 +741,7 @@ var isDataDealing = function (loc_name) {
         }
     }
     return false;
-}
+};
 
 
 module.exports.prov_py = prov_py;

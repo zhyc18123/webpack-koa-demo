@@ -4,6 +4,7 @@ import prov from "./loc.js";
 import chgUrl from "./change-url";
 import staticTpl from "./ejsTpl";
 import scrollEvent from "./scollEvent";
+import scoreAvailableProvince from "./provinceList";
 var Tpl = require('./utils/ejs');
 
 var REQUESTPARAM = {};
@@ -57,7 +58,7 @@ var _init = (function () {
 				context = lineChartCanvas.getContext('2d');
 
 			lineChartCanvas.width = lineChartCanvas.parentNode.clientWidth;
-			lineChartCanvas.height = lineChartCanvas.parentNode.clientHeight*1.5;
+			lineChartCanvas.height = lineChartCanvas.parentNode.clientHeight*1.2;
 			var startX = 0;
 			var startY = 40;
 			var widthMargin = lineChartCanvas.width/4;
@@ -512,6 +513,8 @@ var swipeToAnalysisReportPage = function ( requestParam, xinSwiper ) {
 			REQUESTPARAM.loc_provinc_name = data.loc_provinc_name = prov.getProvinceName(paramData.provinceId);
 			REQUESTPARAM.loc_wenli = data.loc_wenli = REQUESTPARAM.wenli == 2 ? "理科" : "文科";
 			REQUESTPARAM.batch = data.batch;
+			data.is_score_available = scoreAvailableProvince.SCORE_AVAILABLE_PROVINCE[paramData.provinceId].available_val;
+
 			if(data.rank){
 				REQUESTPARAM.rank = data.rank;
 			}
