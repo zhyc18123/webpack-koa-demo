@@ -10,9 +10,13 @@ module.exports = {
         '<li class="school-rank-probability">'+
         '<&if(data.total_rank <　999999999){&>'+
         '<span class="school-rank"><em class="dot"></em>综合排名<em class="rank-num"><&= data.total_rank&></em></span>'+
+        '<&}else if(data.total_rank ==　999999999){&>'+
+        '<span class="school-rank"><em class="dot"></em>综合排名<em class="rank-num-none">暂无</em></span>'+
         '<&}&>'+
-        '<&if(data.adm_ratio){&>'+
+        '<&if(data.adm_ratio && (data.total_rank<999999999) ){&>'+
         '<span class="enroll-probability"><em class="dot"></em>录取概率<em class="probability-num"><&= data.adm_ratio&>%</em></span>'+
+        '<&}else if(data.adm_ratio ){&>'+
+        '<span><em class="dot"></em>录取概率<em class="probability-num"><&= data.adm_ratio&>%</em></span>'+
         '<&}&>'+
         '</li>'+
         '<li class="school-label">'+

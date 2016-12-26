@@ -2,7 +2,7 @@
 <div class="analyse-report-wrap">
     <div class="report-header">
         <img src="/scss/images/score-analysis-banner.png" alt="" class="header-bg">
-        <p class="data-origin-header">本报告由 <span class="yellow-col goto-wmzy-pro-intro">完美志愿</span> 提供</p>
+        <p class="data-origin-header">本报告由 <span class="yellow-col goto-wmzy-pro-intro" data-gaid="ga-wmzy-link-report">完美志愿</span> 提供</p>
         <div class="report-summary">
             <div class="beveled-boder" id="score-rank-wrap">
 
@@ -27,16 +27,16 @@
             <ul class="summary-items" id="summary-items-wrap">
                 <script id="summary-items-tpl" type="text/template">
                     <& if(data.exp_sch && data.score_gap!=null && data.adm_ratio!=null){ &>
-                    <li class="item-detail">
-                        <i class="iconfont icon-sch-gap id-first"></i>
-                        <&if(data.score_gap!=null &&　data.score_gap<=-5){&>
-                        <p>你的成绩比 <em class="black-strong"><&= data.exp_sch&></em> 的最低分高出约<em class="black-strong helvetica-font"> <&=Math.abs(data.score_gap)&> </em>分</p>
-                        <&}else if(data.score_gap>-5 && data.score_gap<=5){&>
-                        <p>以你目前的成绩，勉强可以考上 <em class="black-strong"><&= data.exp_sch&></em></p>
-                        <&}else if(data.score_gap>5){&>
-                        <p>目标学校 <em class="black-strong"> <&= data.exp_sch&> </em> 的录取概率为<em class="black-strong helvetica-font"> <&= data.adm_ratio&>% </em>，距离 <em class="black-strong"><&= data.exp_sch&></em> 还有<em class="black-strong helvetica-font"> <&= data.score_gap-5&>~<&= data.score_gap+5&> </em>分的差距</p>
-                        <&}&>
-                    </li>
+                        <li class="item-detail">
+                            <i class="iconfont icon-sch-gap id-first"></i>
+                            <&if(data.score_gap<=-5){&>
+                            <p>你的成绩比 <em class="black-strong"><&= data.exp_sch&></em> 的最低分高出约<em class="black-strong helvetica-font"> <&=Math.abs(data.score_gap)&> </em>分</p>
+                            <&}else if(data.score_gap<=5){&>
+                            <p>以你目前的成绩，勉强可以考上 <em class="black-strong"><&= data.exp_sch&></em></p>
+                            <&}else{&>
+                            <p>目标学校 <em class="black-strong"> <&= data.exp_sch&> </em> 的录取概率为<em class="black-strong helvetica-font"> <&= data.adm_ratio&>% </em>，距离 <em class="black-strong"><&= data.exp_sch&></em> 还有<em class="black-strong helvetica-font"> <&= data.score_gap-5&>~<&= data.score_gap+5&> </em>分的差距</p>
+                            <&}&>
+                        </li>
                         <&if(data.recommend_sch){&>
                         <li class="item-detail">
                             <i class="iconfont icon-roc-sch id-second"></i>
@@ -72,21 +72,23 @@
         <div class="gap-suggest-wrap" id="gap-suggest-wrap">
             <script id="gap-suggest-tpl" type="text/template">
                 <& if(data.exp_sch && data.score_gap!=null && data.adm_ratio!=null){ &>
-                    <&if(data.score_gap!=null &&　data.score_gap<=-5){&>
+                    <&if(data.score_gap<=-5){&>
                     <p class="gap-sugest">你的成绩比 <em class="black-strong"><&= data.exp_sch&></em> 的最低分还高出约 <em class="black-strong"><&= Math.abs(data.score_gap)&></em> 分</p>
-                    <&}else if(data.score_gap>-5 && data.score_gap<=5){&>
+                    <&}else if(data.score_gap<=5){&>
                     <p class="gap-sugest">以你目前的成绩，勉强可以考上 <em class="black-strong"><&= data.exp_sch&></em></p>
-                    <&}else if(data.score_gap>5){&>
-                    <p class="gap-sugest">如果你想稳妥考上 <em class="black-strong"><&= data.exp_sch&></em> 分数还需要提高 <em class="black-strong"><&= data.score_gap-5&>~<&= data.score_gap+5&></em> 分，省排名提高约 <em class="black-strong"><&= data.rank_gap&></em> 名。</p>
+                    <&}else{&>
+                    <p class="gap-sugest">如果你想稳妥考上 <em class="black-strong"><&= data.exp_sch&></em> ,分数还需要提高 <em class="black-strong"><&= data.score_gap-5&>~<&= data.score_gap+5&></em> 分，省排名提高约 <em class="black-strong"><&= data.rank_gap&></em> 名。</p>
                     <&}&>
                 <&} else if(data.adm_ratio==0){&>
-                    <p class="gap-sugest">如果你想稳妥考上 <em class="black-strong"><&= data.exp_sch&></em> 分数还需要提高 <em class="black-strong"><&= data.score_gap-5&>~<&= data.score_gap+5&></em> 分，省排名提高约 <em class="black-strong"><&= data.rank_gap&></em> 名。</p>
+                    <p class="gap-sugest">如果你想稳妥考上 <em class="black-strong"><&= data.exp_sch&></em> ,分数还需要提高 <em class="black-strong"><&= data.score_gap-5&>~<&= data.score_gap+5&></em> 分，省排名提高约 <em class="black-strong"><&= data.rank_gap&></em> 名。</p>
                 <&}else if(data.exp_sch && data.adm_ratio==null && data.score_gap == null){&>
                     <p class="gap-sugest gap-sugest-center">因数据缺失，暂时无法预测录取概率</p>
                 <& }else if(data.exp_sch == null && data.adm_ratio!=null){ &>
                     <p class="gap-sugest-none gap-sugest-center">无法查看目标学校的录取概率分析</p>
                     <p class="goto-set-score-school">去设立目标学校 >></p>
-                <& } else if(data.exp_sch ==null ){&>
+                <& } else if(data.exp_sch != null && data.adm_ratio!=null && data.score_gap == null){&>
+                    <p class="gap-sugest-none gap-sugest-center"></p>
+                <&}else if(data.exp_sch == null && data.adm_ratio==null){&>
                     <p class="goto-set-score-school">去设立目标学校 >></p>
                 <&}&>
             </script>
@@ -123,9 +125,11 @@
                         <li class="school-rank-probability">
                             <&if(data.total_rank < 999999999){&>
                             <span class="school-rank"><em class="dot"></em>综合排名<em class="rank-num"><&= data.total_rank&></em></span>
+                            <&}else if(data.total_rank == 999999999){&>
+                            <span class="school-rank"><em class="dot"></em>综合排名<em class="rank-num-none">暂无</em></span>
                             <&}&>
                             <&if(data.adm_ratio){&>
-                            <span class="enroll-probability"><em class="dot"></em>录取概率<em class="probability-num"><&= data.adm_ratio&>%</em></span>
+                            <span class="<&= data.total_rank < 999999999 ? 'enroll-probability':''&>"><em class="dot"></em>录取概率<em class="probability-num"><&= data.adm_ratio&>%</em></span>
                             <&}&>
                         </li>
                         <li class="school-label">
@@ -178,6 +182,8 @@
                             <li class="school-rank-probability">
                                 <&if(recommendSchoolItem.totalRank < 999999999){&>
                                 <span class="school-rank"><em class="dot"></em>综合排名<em class="rank-num"><&= recommendSchoolItem.totalRank&></em></span>
+                                <&}else if(recommendSchoolItem.totalRank == 999999999){&>
+                                <span class="school-rank"><em class="dot"></em>综合排名<em class="rank-num-none">暂无</em></span>
                                 <&}&>
                                 <&if(recommendSchoolItem.adm_ratio){&>
                                 <span class="enroll-probability <&= recommendSchoolItem.totalRank?'':'clear-margin-left'&>"><em class="dot"></em>录取概率<em class="probability-num"><&= recommendSchoolItem.adm_ratio&>%</em></span>
@@ -276,6 +282,6 @@
 
     <div class="ipin-disclaim">
         <p class="disclaim-header">声明：</p>
-        <p class="disclaim-detail">本报告所有的数据分析是由<span class="yellow-col goto-wmzy-pro-intro"> 完美志愿 </span>的数位中美科学家，通过往年历史录取数据，运用科学算法计算得出的。但不排除有特殊情况，结果仅供参考。</p>
+        <p class="disclaim-detail">本报告所有的数据分析是由<span class="yellow-col goto-wmzy-pro-intro" data-gaid="ga-wmzy-link-disclaim"> 完美志愿 </span>的数位中美科学家，通过往年历史录取数据，运用科学算法计算得出的。但不排除有特殊情况，结果仅供参考。</p>
     </div>
 </div>

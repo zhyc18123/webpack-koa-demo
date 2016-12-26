@@ -11,9 +11,7 @@ var REQUESTPARAM = {};
 var _init = (function () {
 	// module scope variables
 	var
-
 		jqueryMap = {},
-
 		setJqueryMap, _toggleModalShow, _toggleModalHide, _renderSchoolItemDetail,
 		onClickSchoolListItem, onClickCloseSchoolDetailBtn, onClickSetScoreSch, onClickWmzyLink, onClickBlackMasking, initModule;
 
@@ -208,6 +206,10 @@ var _init = (function () {
 			ga('send', 'event', '结果页面', '其余推荐学校，尽在完美志愿', '推荐学校引导按钮');
 		} else if (gaId == "ga-other-reco-major") {
 			ga('send', 'event', '结果页面', '更多往年同分考生录取去向，尽在完美志愿', '同分考生去向引导按钮');
+		} else if (gaId == "ga-wmzy-link-report") {
+			ga('send', 'event', '结果页面', '本报告由完美志愿提供', '顶部完美志愿链接按钮');
+		} else if (gaId == "ga-wmzy-link-disclaim") {
+			ga('send', 'event', '结果页面', '完美志愿报告底部声明', '底部完美志愿链接按钮');
 		}
 	};
 	onClickBlackMasking = function() {
@@ -352,9 +354,9 @@ var _renderAnalysisReportPage = function (reportData) {
 		};
 		var lineChartFontStyle = getFont(lineChartCanvas,0.04);
 		var lineDotStyle = {
-			lineWidth: 2,
-			dotRadius: 8
-		};
+				lineWidth: 2,
+				dotRadius: 8
+			};
 
 		if (window.dpr==1) {
 			startX = 20;
@@ -368,9 +370,10 @@ var _renderAnalysisReportPage = function (reportData) {
 		var schoolDataListLen = reportData.sch_min_score_list.length;
 		if(schoolDataListLen > 0){
 			schMinScoreList = reportData.sch_min_score_list;
-			schMinScoreList.push({
-				"year":"你的排名",//用户的排名
-				"min_rank":REQUESTPARAM.rank//用户排名
+
+			schMinScoreList.push({  //用户的排名
+				"year": "你的排名",
+				"min_rank": REQUESTPARAM.rank
 			});
 		}
 
@@ -378,9 +381,8 @@ var _renderAnalysisReportPage = function (reportData) {
 		coordData = setCoordinateReturn[0];
 		lowestPercent = setCoordinateReturn[1];
 
-
 		offsetY = lowestPercent < 0.01 ? 140 :
-			lowestPercent < 0.1 ? 130 : 100;
+				  lowestPercent < 0.1  ? 130 : 100;
 
 		if (lowestPercent>0.6) {
 			for (var i = 0, len = coordData.length; i < len; i++) {
@@ -417,10 +419,19 @@ var _renderAnalysisReportPage = function (reportData) {
 	// 推荐学校列表
 	renderEjsTplWithData("#school-list-item-tpl", "#school-list-item-wrap", reportData);
 
-
 	// 录取人数最多的五个院校
-	if(reportData.goto_schs_list.length > 0){
+	if (reportData.goto_schs_list.length > 0) {
+
+		for (var i = 0, len = reportData.goto_schs_list.length; i < len; i++) {
+			var gotoSchListItem = reportData.goto_schs_list[i];
+
+			if (gotoSchListItem.sch_name.length > 12) {
+				reportData.goto_schs_list[i].sch_name = reportData.goto_schs_list[i].sch_name.substring(0,10)+"...";
+			}
+		}
+
 		renderEjsTplWithData("#top-five-enroll-school-tpl", "#top-five-enroll-school-wrap", reportData);
+
 		var canvas = document.getElementById('trapezoid-canvas');
 		var trapezoidParentNodeWidth = canvas.parentNode.clientWidth;
 		var trapezoidCount = reportData.goto_schs_list.length;
@@ -491,7 +502,6 @@ var swipeToAnalysisReportPage = function ( requestParam, xinSwiper ) {
 
 	REQUESTPARAM = paramData;
 	REQUESTPARAM._analyseTpl = _analyseTpl;
-	// REQUESTPARAM.xinSwiper = xinSwiper;
 
 	$.ajax({
 		type: "post",
@@ -499,7 +509,6 @@ var swipeToAnalysisReportPage = function ( requestParam, xinSwiper ) {
 		url: url.getAnalysisReportUrl,
 		data: paramData,
 		success: function(data) {
-
 			console.log("data >> " + JSON.stringify(data, null, 4));
 			REQUESTPARAM.loc_provinc_name = data.loc_provinc_name = prov.getProvinceName(paramData.provinceId);
 			REQUESTPARAM.loc_wenli = data.loc_wenli = REQUESTPARAM.wenli == 2 ? "理科" : "文科";
@@ -518,7 +527,6 @@ var swipeToAnalysisReportPage = function ( requestParam, xinSwiper ) {
 		}
 	});
 };
-
 
 module.exports = {
 	swipeToAnalysisReportPage: swipeToAnalysisReportPage
