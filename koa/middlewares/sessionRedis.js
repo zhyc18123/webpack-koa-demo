@@ -42,11 +42,13 @@ module.exports = function (opts) {
   }
 
   //redis client for session
-  console.log("redisOption",redisOption)
+  console.log("redisOptionddddddddddd",redisOption)
   client = redis.createClient(
-    redisOption
+    redisOption.port,
+    redisOption.host
   );
 
+  client.auth(redisOption.password);
   // client.select(redisOption.db, function () {
   //   debug('redis changed to db %d', redisOption.db);
   // });

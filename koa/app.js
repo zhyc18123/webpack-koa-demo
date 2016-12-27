@@ -39,8 +39,7 @@ var app = koa();
     this.loadValidate(app);
 
     // 会话
-    // app.use(session(app));
-    // this.loadSession(app);
+    this.loadSession(app);
 
     // this.checkLogin(app);
 

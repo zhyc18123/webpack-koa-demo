@@ -1,7 +1,7 @@
 var env = process.argv.slice(2);
 if(env[0] === "release") {
     var debug = false;
-    var redisHost = "192.168.1.33";
+    var redisHost = "192.168.1.42";
     var redisPort = 6379;
 }else{
     var debug = true;
@@ -34,7 +34,7 @@ var getHostIpAddress = function() {
 var config = {
     "name": "新东方",
     hosts: getHostIpAddress() || "0.0.0.0",
-    port: 4300, // 端口
+    port: 3005, // 端口
     numCPUs: numCPUs,
     debug: debug,
     "cookieKey": "sf8dsfasd8sd7fsda8a123bbrc23ch41", //cookie 签名
@@ -64,7 +64,7 @@ var config = {
         host: redisHost,
         port: redisPort,
         db:10,
-        password:"123456",
+        password:"ipinredis",
         timeout:3000
     }
 };
