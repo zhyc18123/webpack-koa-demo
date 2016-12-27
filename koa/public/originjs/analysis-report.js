@@ -113,7 +113,7 @@ var _init = (function () {
 
 			offsetY = lowestPercent < 0.01 ? 140 :
 				lowestPercent < 0.1 ? 130 : 100;
-			
+
 			if(window.dpr == 1) {
 				labelWidth = labelWidth/2;
 				lineChartCanvas.height = lineChartCanvas.height / 2;
