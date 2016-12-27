@@ -531,7 +531,6 @@ var _renderAnalysisReportPage = function _renderAnalysisReportPage(reportData) {
 		canvas.width = trapezoidParentNodeWidth - 60;
 		var context = canvas.getContext('2d');
 		var width = canvas.width * (360 / 750);
-		canvas.height = canvas.width / 2 * (64 / 286) * trapezoidCount + 10 * trapezoidCount + 55; // 286/750 为梯形宽度占比，64/286为高度占比， 50为每个梯形的间隙， 20为标题高度
 		var height = width * (64 / 286);
 		var trapezoidStyle = ["#f9be00", "#fac724", "#fbd149", "#fcda6d", "#fce392"],
 		    schoolNumNameStyle = {
@@ -564,6 +563,10 @@ var _renderAnalysisReportPage = function _renderAnalysisReportPage(reportData) {
 		} else if (window.dpr == 1) {
 			titleOffsetX = 0;
 		}
+
+		context.font = contextFontStyle;
+		var titleStrHeight = context.measureText("数").width * 1.21;
+		canvas.height = height * trapezoidCount + 6 * trapezoidCount + titleStrHeight * 1.5;
 
 		_canvasGraph2.default.drawTrapezoid(canvas, context, width, height, reportData.goto_schs_list, trapezoidStyle, schoolNumNameStyle, lineDotStyle, contextFontStyle, titleOffsetX, "（考生数量）", 6);
 	}
