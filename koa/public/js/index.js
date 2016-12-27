@@ -77,11 +77,11 @@ var _url = __webpack_require__(2);
 
 var _url2 = _interopRequireDefault(_url);
 
-var _canvasGraph = __webpack_require__(7);
+var _canvasGraph = __webpack_require__(8);
 
 var _canvasGraph2 = _interopRequireDefault(_canvasGraph);
 
-var _loc = __webpack_require__(3);
+var _loc = __webpack_require__(4);
 
 var _loc2 = _interopRequireDefault(_loc);
 
@@ -89,7 +89,7 @@ var _changeUrl = __webpack_require__(1);
 
 var _changeUrl2 = _interopRequireDefault(_changeUrl);
 
-var _ejsTpl = __webpack_require__(9);
+var _ejsTpl = __webpack_require__(10);
 
 var _ejsTpl2 = _interopRequireDefault(_ejsTpl);
 
@@ -97,7 +97,7 @@ var _scollEvent = __webpack_require__(12);
 
 var _scollEvent2 = _interopRequireDefault(_scollEvent);
 
-var _provinceList = __webpack_require__(10);
+var _provinceList = __webpack_require__(11);
 
 var _provinceList2 = _interopRequireDefault(_provinceList);
 
@@ -221,14 +221,17 @@ var _init = function () {
 			if (window.dpr == 1) {
 				labelWidth = labelWidth / 2;
 				lineChartCanvas.height = lineChartCanvas.height / 2;
-				startY = startY / 2;
-				offsetY = offsetY / 2;
+				startY = startY / 1.5;
+				offsetY = offsetY / 1.5;
 				lineDotStyle.lineWidth = 1;
 				lineDotStyle.dotRadius = 5;
 				triangleSide = 5;
 				labelBorderRadius /= 2;
 			} else if (window.dpr == 2) {
 				triangleSide = 10;
+			}
+			if (window.dpr == 1 && lineChartCanvas.parentNode.parentNode.clientWidth == 750) {
+				lineChartCanvas.height = 400;
 			}
 
 			_canvasGraph2.default.drawCoordinate(context, coordData, yearColor, historyColor, currentColor, labelWidth, lineChartCanvas.width, lineChartCanvas.height, startY, offsetY, lineChartFontStyle, lineDotStyle, window.dpr);
@@ -490,14 +493,17 @@ var _renderAnalysisReportPage = function _renderAnalysisReportPage(reportData) {
 		if (window.dpr == 1) {
 			labelWidth = labelWidth / 2;
 			lineChartCanvas.height = lineChartCanvas.height / 2;
-			startY = startY / 2;
-			offsetY = offsetY / 2;
+			startY = startY / 1.5;
+			offsetY = offsetY / 1.5;
 			lineDotStyle.lineWidth = 1;
 			lineDotStyle.dotRadius = 5;
 			triangleSide = 5;
 			labelBorderRadius /= 2;
 		} else if (window.dpr == 2) {
 			triangleSide = 10;
+		}
+		if (window.dpr == 1 && lineChartCanvas.parentNode.parentNode.clientWidth == 750) {
+			lineChartCanvas.height = 400;
 		}
 
 		_canvasGraph2.default.drawCoordinate(context, coordData, yearColor, historyColor, currentColor, labelWidth, lineChartCanvas.width, lineChartCanvas.height, startY, offsetY, lineChartFontStyle, lineDotStyle, window.dpr);
@@ -664,6 +670,38 @@ module.exports = {
 
 /***/ },
 /* 3 */
+/***/ function(module, exports) {
+
+"use strict";
+"use strict";
+
+///获取url中的参数
+var getQueryString = function getQueryString(name) {
+  var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+  var result = window.location.search.substr(1).match(reg);
+  return result ? decodeURIComponent(result[2]) : null;
+};
+var getQueryObj = function getQueryObj() {
+  var str = window.location.search;
+  var num = str.indexOf("?");
+  if (num < 0) {
+    return false;
+  };
+  str = decodeURIComponent(str.substr(num + 1)); //取得所有参数   stringvar.substr(start [, length ]
+  var arr = str.split("&"); //各个参数放到数组里
+  var lastArr = {};
+  for (var i = 0; i < arr.length; i++) {
+    lastArr[arr[i].split("=")[0]] = arr[i].split("=")[1];
+  };
+  return lastArr;
+};
+module.exports = {
+  getQueryString: getQueryString,
+  getQueryObj: getQueryObj
+};
+
+/***/ },
+/* 4 */
 /***/ function(module, exports) {
 
 "use strict";
@@ -1510,7 +1548,7 @@ module.exports.isNoData2015 = isNoData2015;
 module.exports.isDataDealing = isDataDealing;
 
 /***/ },
-/* 4 */
+/* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1524,7 +1562,7 @@ var _changeUrl = __webpack_require__(1);
 
 var _changeUrl2 = _interopRequireDefault(_changeUrl);
 
-var _changeTitle = __webpack_require__(8);
+var _changeTitle = __webpack_require__(9);
 
 var _changeTitle2 = _interopRequireDefault(_changeTitle);
 
@@ -1694,7 +1732,7 @@ module.exports = {
 };
 
 /***/ },
-/* 5 */
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1704,11 +1742,11 @@ var _url = __webpack_require__(2);
 
 var _url2 = _interopRequireDefault(_url);
 
-var _loc = __webpack_require__(3);
+var _loc = __webpack_require__(4);
 
 var _loc2 = _interopRequireDefault(_loc);
 
-var _queryString = __webpack_require__(11);
+var _queryString = __webpack_require__(3);
 
 var _queryString2 = _interopRequireDefault(_queryString);
 
@@ -1983,7 +2021,7 @@ module.exports = {
 };
 
 /***/ },
-/* 6 */
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2755,7 +2793,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ },
-/* 7 */
+/* 8 */
 /***/ function(module, exports) {
 
 "use strict";
@@ -2893,7 +2931,7 @@ function drawCoordinate(ctx, coord, yearColor, historyColor, currentColor, label
 		yearTextWidth = ctx.measureText(year).width;
 
 		if (!yearTextHeight) {
-			yearTextHeight = ctx.measureText("年").width * 1.2;
+			yearTextHeight = ctx.measureText("年").width * 1.21;
 		}
 
 		ctx.fillText(year, x + labelWidth / 2 - yearTextWidth / 2, startY);
@@ -3213,7 +3251,7 @@ module.exports = {
 };
 
 /***/ },
-/* 8 */
+/* 9 */
 /***/ function(module, exports) {
 
 "use strict";
@@ -3222,7 +3260,7 @@ module.exports = {
 module.exports = function (title) {};
 
 /***/ },
-/* 9 */
+/* 10 */
 /***/ function(module, exports) {
 
 "use strict";
@@ -3234,7 +3272,7 @@ module.exports = {
 };
 
 /***/ },
-/* 10 */
+/* 11 */
 /***/ function(module, exports) {
 
 "use strict";
@@ -3271,38 +3309,6 @@ module.exports = {
         "650000000000": { "loc_id": "650000000000", "loc_namecn": "新疆", "available_val": false },
         "530000000000": { "loc_id": "530000000000", "loc_namecn": "云南", "available_val": false }
     }
-};
-
-/***/ },
-/* 11 */
-/***/ function(module, exports) {
-
-"use strict";
-"use strict";
-
-///获取url中的参数
-var getQueryString = function getQueryString(name) {
-  var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
-  var result = window.location.search.substr(1).match(reg);
-  return result ? decodeURIComponent(result[2]) : null;
-};
-var getQueryObj = function getQueryObj() {
-  var str = window.location.search;
-  var num = str.indexOf("?");
-  if (num < 0) {
-    return false;
-  };
-  str = decodeURIComponent(str.substr(num + 1)); //取得所有参数   stringvar.substr(start [, length ]
-  var arr = str.split("&"); //各个参数放到数组里
-  var lastArr = {};
-  for (var i = 0; i < arr.length; i++) {
-    lastArr[arr[i].split("=")[0]] = arr[i].split("=")[1];
-  };
-  return lastArr;
-};
-module.exports = {
-  getQueryString: getQueryString,
-  getQueryObj: getQueryObj
 };
 
 /***/ },
@@ -3604,16 +3610,16 @@ var _changeUrl = __webpack_require__(1);
 
 var _changeUrl2 = _interopRequireDefault(_changeUrl);
 
-var _queryString = __webpack_require__(10);
+var _queryString = __webpack_require__(3);
 
 var _queryString2 = _interopRequireDefault(_queryString);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-__webpack_require__(6);
+__webpack_require__(7);
 __webpack_require__(0);
-var getVip = __webpack_require__(4);
-var input = __webpack_require__(5);
+var getVip = __webpack_require__(5);
+var input = __webpack_require__(6);
 var analysisReport = __webpack_require__(0);
 
 $(function () {

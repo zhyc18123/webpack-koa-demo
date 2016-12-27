@@ -133,7 +133,7 @@ function drawCoordinate(ctx, coord, yearColor, historyColor, currentColor, label
 		yearTextWidth = ctx.measureText(year).width;
 
 		if (!yearTextHeight) {
-			yearTextHeight = ctx.measureText("年").width * 1.2;
+			yearTextHeight = ctx.measureText("年").width * 1.21;
 		}
 
 		ctx.fillText(year, x + labelWidth/2 - yearTextWidth/2, startY);

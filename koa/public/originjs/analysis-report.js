@@ -113,18 +113,21 @@ var _init = (function () {
 
 			offsetY = lowestPercent < 0.01 ? 140 :
 				lowestPercent < 0.1 ? 130 : 100;
-
+			
 			if(window.dpr == 1) {
 				labelWidth = labelWidth/2;
 				lineChartCanvas.height = lineChartCanvas.height / 2;
-				startY = startY / 2;
-				offsetY = offsetY / 2;
+				startY = startY / 1.5;
+				offsetY = offsetY / 1.5;
 				lineDotStyle.lineWidth = 1;
 				lineDotStyle.dotRadius = 5;
 				triangleSide = 5;
 				labelBorderRadius /= 2;
 			}else if(window.dpr ==2 ){
 				triangleSide = 10;
+			}
+			if (window.dpr == 1 && lineChartCanvas.parentNode.parentNode.clientWidth == 750 ){
+				lineChartCanvas.height = 400;
 			}
 
 			drawCanvas.drawCoordinate(context, coordData, yearColor,historyColor, currentColor, labelWidth,
@@ -393,14 +396,17 @@ var _renderAnalysisReportPage = function (reportData) {
 		if(window.dpr == 1) {
 			labelWidth = labelWidth/2;
 			lineChartCanvas.height = lineChartCanvas.height / 2;
-			startY = startY / 2;
-			offsetY = offsetY / 2;
+			startY = startY / 1.5;
+			offsetY = offsetY / 1.5;
 			lineDotStyle.lineWidth = 1;
 			lineDotStyle.dotRadius = 5;
 			triangleSide = 5;
 			labelBorderRadius /= 2;
 		}else if(window.dpr ==2 ){
 			triangleSide = 10;
+		}
+		if (window.dpr == 1 && lineChartCanvas.parentNode.parentNode.clientWidth == 750 ){
+			lineChartCanvas.height = 400;
 		}
 
 		drawCanvas.drawCoordinate(context, coordData, yearColor,historyColor, currentColor, labelWidth,
