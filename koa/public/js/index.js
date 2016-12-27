@@ -159,6 +159,7 @@ var _init = function () {
 
 			renderEjsTplWithData("#line-chart-wmzy-link-modal-tpl", "#line-chart-wmzy-link-modal-wrap", schoolData);
 
+			var analyseReportWrap = document.getElementsByClassName('analyse-report-wrap');
 			var lineChartCanvas = document.getElementById('line-chart-modal-canvas'),
 			    context = lineChartCanvas.getContext('2d');
 
@@ -230,7 +231,8 @@ var _init = function () {
 			} else if (window.dpr == 2) {
 				triangleSide = 10;
 			}
-			if (window.dpr == 1 && lineChartCanvas.parentNode.parentNode.clientWidth == 750) {
+
+			if (window.dpr == 1 && analyseReportWrap[0].clientWidth == 750) {
 				lineChartCanvas.height = 400;
 			}
 
