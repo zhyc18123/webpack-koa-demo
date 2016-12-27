@@ -77,11 +77,11 @@ var _url = __webpack_require__(2);
 
 var _url2 = _interopRequireDefault(_url);
 
-var _canvasGraph = __webpack_require__(8);
+var _canvasGraph = __webpack_require__(7);
 
 var _canvasGraph2 = _interopRequireDefault(_canvasGraph);
 
-var _loc = __webpack_require__(4);
+var _loc = __webpack_require__(3);
 
 var _loc2 = _interopRequireDefault(_loc);
 
@@ -89,7 +89,7 @@ var _changeUrl = __webpack_require__(1);
 
 var _changeUrl2 = _interopRequireDefault(_changeUrl);
 
-var _ejsTpl = __webpack_require__(10);
+var _ejsTpl = __webpack_require__(9);
 
 var _ejsTpl2 = _interopRequireDefault(_ejsTpl);
 
@@ -97,7 +97,7 @@ var _scollEvent = __webpack_require__(12);
 
 var _scollEvent2 = _interopRequireDefault(_scollEvent);
 
-var _provinceList = __webpack_require__(11);
+var _provinceList = __webpack_require__(10);
 
 var _provinceList2 = _interopRequireDefault(_provinceList);
 
@@ -677,38 +677,6 @@ module.exports = {
 "use strict";
 "use strict";
 
-///获取url中的参数
-var getQueryString = function getQueryString(name) {
-  var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
-  var result = window.location.search.substr(1).match(reg);
-  return result ? decodeURIComponent(result[2]) : null;
-};
-var getQueryObj = function getQueryObj() {
-  var str = window.location.search;
-  var num = str.indexOf("?");
-  if (num < 0) {
-    return false;
-  };
-  str = decodeURIComponent(str.substr(num + 1)); //取得所有参数   stringvar.substr(start [, length ]
-  var arr = str.split("&"); //各个参数放到数组里
-  var lastArr = {};
-  for (var i = 0; i < arr.length; i++) {
-    lastArr[arr[i].split("=")[0]] = arr[i].split("=")[1];
-  };
-  return lastArr;
-};
-module.exports = {
-  getQueryString: getQueryString,
-  getQueryObj: getQueryObj
-};
-
-/***/ },
-/* 4 */
-/***/ function(module, exports) {
-
-"use strict";
-"use strict";
-
 module.exports = {
     _data: {
         "441600000000": { "loc_id": "441600000000", "loc_namecn": "河源市", "loc_x": 114.697802, "loc_y": 23.746266 },
@@ -1245,30 +1213,18 @@ province.sort(function (a, b) {
 
 function getProvInfoByName(provName) {
     var strMap = [provName, provName.slice(0, -1), provName + "省", provName + "市"];
-    var _iteratorNormalCompletion = true;
-    var _didIteratorError = false;
-    var _iteratorError = undefined;
 
-    try {
-        for (var _iterator = strMap[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-            var str = _step.value;
+    // for (var str of strMap) {
+    //     if (str in provinceMap) {
+    //         return provinceMap[str]
+    //     }
+    // }
 
-            if (str in provinceMap) {
-                return provinceMap[str];
-            }
-        }
-    } catch (err) {
-        _didIteratorError = true;
-        _iteratorError = err;
-    } finally {
-        try {
-            if (!_iteratorNormalCompletion && _iterator.return) {
-                _iterator.return();
-            }
-        } finally {
-            if (_didIteratorError) {
-                throw _iteratorError;
-            }
+    for (var i = 0, len = strMap.length; i < len; i++) {
+        var strMapItem = strMap[i];
+
+        if (strMapItem in provinceMap) {
+            return provinceMap[strMapItem];
         }
     }
 
@@ -1290,29 +1246,29 @@ function getCityInfoByName(cityName) {
     var strMap = [cityName, cityName.slice(0, -1), cityName + "市"];
     var cityInfoMap = _getCityInfoMap();
 
-    var _iteratorNormalCompletion2 = true;
-    var _didIteratorError2 = false;
-    var _iteratorError2 = undefined;
+    var _iteratorNormalCompletion = true;
+    var _didIteratorError = false;
+    var _iteratorError = undefined;
 
     try {
-        for (var _iterator2 = strMap[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-            var str = _step2.value;
+        for (var _iterator = strMap[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+            var str = _step.value;
 
             if (str in cityInfoMap) {
                 return cityInfoMap[str];
             }
         }
     } catch (err) {
-        _didIteratorError2 = true;
-        _iteratorError2 = err;
+        _didIteratorError = true;
+        _iteratorError = err;
     } finally {
         try {
-            if (!_iteratorNormalCompletion2 && _iterator2.return) {
-                _iterator2.return();
+            if (!_iteratorNormalCompletion && _iterator.return) {
+                _iterator.return();
             }
         } finally {
-            if (_didIteratorError2) {
-                throw _iteratorError2;
+            if (_didIteratorError) {
+                throw _iteratorError;
             }
         }
     }
@@ -1323,27 +1279,27 @@ function getCityInfoByName(cityName) {
 var _getTopCity = function getTopCity() {
     var getCityInfoList = function getCityInfoList(cityList) {
         var cityInfos = [];
-        var _iteratorNormalCompletion3 = true;
-        var _didIteratorError3 = false;
-        var _iteratorError3 = undefined;
+        var _iteratorNormalCompletion2 = true;
+        var _didIteratorError2 = false;
+        var _iteratorError2 = undefined;
 
         try {
-            for (var _iterator3 = cityList[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-                var city = _step3.value;
+            for (var _iterator2 = cityList[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+                var city = _step2.value;
 
                 cityInfos.push(getCityInfoByName(city));
             }
         } catch (err) {
-            _didIteratorError3 = true;
-            _iteratorError3 = err;
+            _didIteratorError2 = true;
+            _iteratorError2 = err;
         } finally {
             try {
-                if (!_iteratorNormalCompletion3 && _iterator3.return) {
-                    _iterator3.return();
+                if (!_iteratorNormalCompletion2 && _iterator2.return) {
+                    _iterator2.return();
                 }
             } finally {
-                if (_didIteratorError3) {
-                    throw _iteratorError3;
+                if (_didIteratorError2) {
+                    throw _iteratorError2;
                 }
             }
         }
@@ -1501,29 +1457,29 @@ var isNoData2015 = function isNoData2015(provid) {
 };
 
 var isDataDealing = function isDataDealing(loc_name) {
-    var _iteratorNormalCompletion4 = true;
-    var _didIteratorError4 = false;
-    var _iteratorError4 = undefined;
+    var _iteratorNormalCompletion3 = true;
+    var _didIteratorError3 = false;
+    var _iteratorError3 = undefined;
 
     try {
-        for (var _iterator4 = data_is_dealing_provs[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
-            var item = _step4.value;
+        for (var _iterator3 = data_is_dealing_provs[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+            var item = _step3.value;
 
             if (loc_name.indexOf(item) != -1) {
                 return true;
             }
         }
     } catch (err) {
-        _didIteratorError4 = true;
-        _iteratorError4 = err;
+        _didIteratorError3 = true;
+        _iteratorError3 = err;
     } finally {
         try {
-            if (!_iteratorNormalCompletion4 && _iterator4.return) {
-                _iterator4.return();
+            if (!_iteratorNormalCompletion3 && _iterator3.return) {
+                _iterator3.return();
             }
         } finally {
-            if (_didIteratorError4) {
-                throw _iteratorError4;
+            if (_didIteratorError3) {
+                throw _iteratorError3;
             }
         }
     }
@@ -1550,7 +1506,7 @@ module.exports.isNoData2015 = isNoData2015;
 module.exports.isDataDealing = isDataDealing;
 
 /***/ },
-/* 5 */
+/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1564,7 +1520,7 @@ var _changeUrl = __webpack_require__(1);
 
 var _changeUrl2 = _interopRequireDefault(_changeUrl);
 
-var _changeTitle = __webpack_require__(9);
+var _changeTitle = __webpack_require__(8);
 
 var _changeTitle2 = _interopRequireDefault(_changeTitle);
 
@@ -1734,7 +1690,7 @@ module.exports = {
 };
 
 /***/ },
-/* 6 */
+/* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1744,11 +1700,11 @@ var _url = __webpack_require__(2);
 
 var _url2 = _interopRequireDefault(_url);
 
-var _loc = __webpack_require__(4);
+var _loc = __webpack_require__(3);
 
 var _loc2 = _interopRequireDefault(_loc);
 
-var _queryString = __webpack_require__(3);
+var _queryString = __webpack_require__(11);
 
 var _queryString2 = _interopRequireDefault(_queryString);
 
@@ -2023,7 +1979,7 @@ module.exports = {
 };
 
 /***/ },
-/* 7 */
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2795,7 +2751,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ },
-/* 8 */
+/* 7 */
 /***/ function(module, exports) {
 
 "use strict";
@@ -3253,7 +3209,7 @@ module.exports = {
 };
 
 /***/ },
-/* 9 */
+/* 8 */
 /***/ function(module, exports) {
 
 "use strict";
@@ -3262,7 +3218,7 @@ module.exports = {
 module.exports = function (title) {};
 
 /***/ },
-/* 10 */
+/* 9 */
 /***/ function(module, exports) {
 
 "use strict";
@@ -3274,7 +3230,7 @@ module.exports = {
 };
 
 /***/ },
-/* 11 */
+/* 10 */
 /***/ function(module, exports) {
 
 "use strict";
@@ -3311,6 +3267,38 @@ module.exports = {
         "650000000000": { "loc_id": "650000000000", "loc_namecn": "新疆", "available_val": false },
         "530000000000": { "loc_id": "530000000000", "loc_namecn": "云南", "available_val": false }
     }
+};
+
+/***/ },
+/* 11 */
+/***/ function(module, exports) {
+
+"use strict";
+"use strict";
+
+///获取url中的参数
+var getQueryString = function getQueryString(name) {
+  var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+  var result = window.location.search.substr(1).match(reg);
+  return result ? decodeURIComponent(result[2]) : null;
+};
+var getQueryObj = function getQueryObj() {
+  var str = window.location.search;
+  var num = str.indexOf("?");
+  if (num < 0) {
+    return false;
+  };
+  str = decodeURIComponent(str.substr(num + 1)); //取得所有参数   stringvar.substr(start [, length ]
+  var arr = str.split("&"); //各个参数放到数组里
+  var lastArr = {};
+  for (var i = 0; i < arr.length; i++) {
+    lastArr[arr[i].split("=")[0]] = arr[i].split("=")[1];
+  };
+  return lastArr;
+};
+module.exports = {
+  getQueryString: getQueryString,
+  getQueryObj: getQueryObj
 };
 
 /***/ },
@@ -3612,16 +3600,16 @@ var _changeUrl = __webpack_require__(1);
 
 var _changeUrl2 = _interopRequireDefault(_changeUrl);
 
-var _queryString = __webpack_require__(3);
+var _queryString = __webpack_require__(11);
 
 var _queryString2 = _interopRequireDefault(_queryString);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-__webpack_require__(7);
+__webpack_require__(6);
 __webpack_require__(0);
-var getVip = __webpack_require__(5);
-var input = __webpack_require__(6);
+var getVip = __webpack_require__(4);
+var input = __webpack_require__(5);
 var analysisReport = __webpack_require__(0);
 
 $(function () {

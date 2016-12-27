@@ -534,11 +534,21 @@ province.sort(function (a, b) {
 
 function getProvInfoByName(provName) {
     var strMap = [provName, provName.slice(0, -1), provName + "省", provName + "市"];
-    for (var str of strMap) {
-        if (str in provinceMap) {
-            return provinceMap[str]
+
+    // for (var str of strMap) {
+    //     if (str in provinceMap) {
+    //         return provinceMap[str]
+    //     }
+    // }
+
+    for (var i = 0, len = strMap.length; i < len ; i++) {
+        var strMapItem = strMap[i];
+
+        if (strMapItem in provinceMap) {
+           return provinceMap[strMapItem];
         }
     }
+
     return null
 }
 var getCityInfoMap = function () {
