@@ -140,7 +140,7 @@
                                 <&}&>
                             <&}&>
                             <&if(data.sch_type.length > 0){&>
-                            <span class="school-label-3"><&= data.sch_type[0]&></span>
+                            <span class="<&= data.sch_flag.length>0?'school-label-3':''&>"><&= data.sch_type[0]&></span>
                             <&}&>
                         </li>
                     </ul>

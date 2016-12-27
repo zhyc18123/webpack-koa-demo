@@ -27,7 +27,11 @@ module.exports = {
         '<&}&>'+
         '<&}&>'+
         '<&if(data.sch_type.length > 0){&>'+
-        '<span class="school-label-3"><&= data.sch_type[0]&></span>'+
+            '<&if(data.sch_flag.length > 0){&>'+
+            '<span class="school-label-3"><&= data.sch_type[0]&></span>'+
+            '<&}else{&>'+
+            '<span><&= data.sch_type[0]&></span>'+
+            '<&}&>'+
         '<&}&>'+
         '</li>'+
         '</ul>'+
