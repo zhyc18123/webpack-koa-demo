@@ -42,7 +42,6 @@ module.exports = function (opts) {
   }
 
   //redis client for session
-  console.log("redisOptionddddddddddd",redisOption)
   client = redis.createClient(
     redisOption.port,
     redisOption.host
