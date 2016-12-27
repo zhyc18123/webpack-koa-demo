@@ -83,18 +83,13 @@
                     <&}else{&>
                     <p class="gap-sugest">如果你想稳妥考上 <em class="black-strong"><&= data.exp_sch&></em> ,分数还需要提高 <em class="black-strong"><&= data.score_gap-5&>~<&= data.score_gap+5&></em> 分，省排名提高约 <em class="black-strong"><&= data.rank_gap&></em> 名。</p>
                     <&}&>
-                <&} else if(data.adm_ratio==0){&>
-                    <p class="gap-sugest">如果你想稳妥考上 <em class="black-strong"><&= data.exp_sch&></em> ,分数还需要提高 <em class="black-strong"><&= data.score_gap-5&>~<&= data.score_gap+5&></em> 分，省排名提高约 <em class="black-strong"><&= data.rank_gap&></em> 名。</p>
-                <&}else if(data.exp_sch && data.adm_ratio==null && data.score_gap == null){&>
+                <& }else if(data.exp_sch && data.adm_ratio!=null && data.score_gap==null){&>
+                    <p class="gap-sugest gap-sugest-center"></p>
+                <& }else if(data.exp_sch && data.adm_ratio==null){&>
                     <p class="gap-sugest gap-sugest-center">因数据缺失，暂时无法预测录取概率</p>
-                <& }else if(data.exp_sch == null && data.adm_ratio!=null){ &>
-                    <p class="gap-sugest-none gap-sugest-center">无法查看目标学校的录取概率分析</p>
+                <& }else if(data.exp_sch == null || data.exp_sch == "" ){&>
                     <p class="goto-set-score-school">去设立目标学校 >></p>
-                <& } else if(data.exp_sch != null && data.adm_ratio!=null && data.score_gap == null){&>
-                    <p class="gap-sugest-none gap-sugest-center"></p>
-                <&}else if(data.exp_sch == null && data.adm_ratio==null){&>
-                    <p class="goto-set-score-school">去设立目标学校 >></p>
-                <&}&>
+                <& }&>
             </script>
         </div>
 

@@ -297,11 +297,11 @@ var _renderAnalysisReportPage = function (reportData) {
 	context.textAlign = "center";
 
 	// 分是否设立了目标学校,概率是否存在 三种情况讨论
-	if (reportData.exp_sch && reportData.adm_ratio!=null && reportData.adm_ratio>=0) {
+	if (reportData.exp_sch && reportData.adm_ratio>=0) {
 		drawCanvas.drawCircleText(context, enrollCanvasFontDpr1, '#f9be00', reportData.adm_ratio, enrollCanvas.width*0.46, enrollCanvas.height*0.45);
 		drawCanvas.drawCircleText(context, enrollCanvasFontDpr2, '#f9be00', '%', (""+reportData.adm_ratio).length>1?enrollCanvas.width*0.62:enrollCanvas.width*0.58, enrollCanvas.height*0.5);
 		drawCanvas.drawCircleText(context, enrollCanvasFontDpr3, '#b6b6b6', '录取概率', centerX, enrollCanvas.height*0.65);
-	} else if(reportData.exp_sch == null){
+	} else if(reportData.exp_sch == null || reportData.exp_sch == ""){
 		drawCanvas.drawCircleText(context, enrollCanvasFontDpr3, '#b6b6b6', "未设立", centerX, enrollCanvas.height*0.46);
 		drawCanvas.drawCircleText(context, enrollCanvasFontDpr3, '#b6b6b6', '目标学校', centerX, enrollCanvas.height*0.58);
 	}else{
