@@ -5,6 +5,7 @@ require('./analysis-report');
 var getVip=require("./get-vip");
 var input=require("./input");
 var analysisReport = require('./analysis-report');
+import queryString from "./query-string";
 $(function(){
 	var init=function(){
 		// var swiperHeight=[];
@@ -74,7 +75,16 @@ $(function(){
 		showPage("0","#input");
 		const analyseTpl=$(".analyse-html").html();
 		if ('pushState' in history) {
-			history.pushState("01", "", window.location.pathname+window.location.search+"#input");
+			var search=window.location.search;
+			var pageStr="?p=01";
+			if(search){
+				if(queryString.getQueryString("p")){
+					pageStr="";
+				}else{
+					pageStr="&p=01";
+				};
+			};
+			history.pushState("01", "", window.location.pathname+window.location.search+pageStr+"#input");
 			document.title="升学预测-成绩定位分析";
 		};
 		///浏览器前进后退事件

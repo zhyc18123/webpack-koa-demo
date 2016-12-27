@@ -640,7 +640,7 @@ module.exports = {
 var changeUrl = function changeUrl(state, title, url) {
 	history.go(+1);
 	if ('pushState' in history) {
-		history.pushState(state, title, "/score/analyse" + url);
+		history.pushState(state, title, "/score/analyse?p=" + state + url);
 	};
 };
 module.exports = {
@@ -3604,6 +3604,10 @@ var _changeUrl = __webpack_require__(1);
 
 var _changeUrl2 = _interopRequireDefault(_changeUrl);
 
+var _queryString = __webpack_require__(10);
+
+var _queryString2 = _interopRequireDefault(_queryString);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 __webpack_require__(6);
@@ -3611,6 +3615,7 @@ __webpack_require__(0);
 var getVip = __webpack_require__(4);
 var input = __webpack_require__(5);
 var analysisReport = __webpack_require__(0);
+
 $(function () {
 	var init = function init() {
 		// var swiperHeight=[];
@@ -3680,7 +3685,16 @@ $(function () {
 		showPage("0", "#input");
 		var analyseTpl = $(".analyse-html").html();
 		if ('pushState' in history) {
-			history.pushState("01", "", window.location.pathname + window.location.search + "#input");
+			var search = window.location.search;
+			var pageStr = "?p=01";
+			if (search) {
+				if (_queryString2.default.getQueryString("p")) {
+					pageStr = "";
+				} else {
+					pageStr = "&p=01";
+				};
+			};
+			history.pushState("01", "", window.location.pathname + window.location.search + pageStr + "#input");
 			document.title = "升学预测-成绩定位分析";
 		};
 		///浏览器前进后退事件
