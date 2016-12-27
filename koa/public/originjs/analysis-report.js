@@ -433,8 +433,8 @@ var _renderAnalysisReportPage = function (reportData) {
 		for (var i = 0, len = reportData.goto_schs_list.length; i < len; i++) {
 			var gotoSchListItem = reportData.goto_schs_list[i];
 
-			if (gotoSchListItem.sch_name.length > 12) {
-				reportData.goto_schs_list[i].sch_name = reportData.goto_schs_list[i].sch_name.substring(0,10)+"...";
+			if (gotoSchListItem.sch_name.length >= 10) {
+				reportData.goto_schs_list[i].sch_name = reportData.goto_schs_list[i].sch_name.substring(0,8)+"...";
 			}
 		}
 
