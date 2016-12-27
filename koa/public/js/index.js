@@ -77,11 +77,11 @@ var _url = __webpack_require__(2);
 
 var _url2 = _interopRequireDefault(_url);
 
-var _canvasGraph = __webpack_require__(8);
+var _canvasGraph = __webpack_require__(7);
 
 var _canvasGraph2 = _interopRequireDefault(_canvasGraph);
 
-var _loc = __webpack_require__(4);
+var _loc = __webpack_require__(3);
 
 var _loc2 = _interopRequireDefault(_loc);
 
@@ -89,7 +89,7 @@ var _changeUrl = __webpack_require__(1);
 
 var _changeUrl2 = _interopRequireDefault(_changeUrl);
 
-var _ejsTpl = __webpack_require__(10);
+var _ejsTpl = __webpack_require__(9);
 
 var _ejsTpl2 = _interopRequireDefault(_ejsTpl);
 
@@ -97,7 +97,7 @@ var _scollEvent = __webpack_require__(12);
 
 var _scollEvent2 = _interopRequireDefault(_scollEvent);
 
-var _provinceList = __webpack_require__(11);
+var _provinceList = __webpack_require__(10);
 
 var _provinceList2 = _interopRequireDefault(_provinceList);
 
@@ -526,8 +526,8 @@ var _renderAnalysisReportPage = function _renderAnalysisReportPage(reportData) {
 		for (var i = 0, len = reportData.goto_schs_list.length; i < len; i++) {
 			var gotoSchListItem = reportData.goto_schs_list[i];
 
-			if (gotoSchListItem.sch_name.length > 12) {
-				reportData.goto_schs_list[i].sch_name = reportData.goto_schs_list[i].sch_name.substring(0, 10) + "...";
+			if (gotoSchListItem.sch_name.length >= 10) {
+				reportData.goto_schs_list[i].sch_name = reportData.goto_schs_list[i].sch_name.substring(0, 8) + "...";
 			}
 		}
 
@@ -672,38 +672,6 @@ module.exports = {
 
 /***/ },
 /* 3 */
-/***/ function(module, exports) {
-
-"use strict";
-"use strict";
-
-///获取url中的参数
-var getQueryString = function getQueryString(name) {
-  var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
-  var result = window.location.search.substr(1).match(reg);
-  return result ? decodeURIComponent(result[2]) : null;
-};
-var getQueryObj = function getQueryObj() {
-  var str = window.location.search;
-  var num = str.indexOf("?");
-  if (num < 0) {
-    return false;
-  };
-  str = decodeURIComponent(str.substr(num + 1)); //取得所有参数   stringvar.substr(start [, length ]
-  var arr = str.split("&"); //各个参数放到数组里
-  var lastArr = {};
-  for (var i = 0; i < arr.length; i++) {
-    lastArr[arr[i].split("=")[0]] = arr[i].split("=")[1];
-  };
-  return lastArr;
-};
-module.exports = {
-  getQueryString: getQueryString,
-  getQueryObj: getQueryObj
-};
-
-/***/ },
-/* 4 */
 /***/ function(module, exports) {
 
 "use strict";
@@ -1550,7 +1518,7 @@ module.exports.isNoData2015 = isNoData2015;
 module.exports.isDataDealing = isDataDealing;
 
 /***/ },
-/* 5 */
+/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1564,7 +1532,7 @@ var _changeUrl = __webpack_require__(1);
 
 var _changeUrl2 = _interopRequireDefault(_changeUrl);
 
-var _changeTitle = __webpack_require__(9);
+var _changeTitle = __webpack_require__(8);
 
 var _changeTitle2 = _interopRequireDefault(_changeTitle);
 
@@ -1734,7 +1702,7 @@ module.exports = {
 };
 
 /***/ },
-/* 6 */
+/* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1744,11 +1712,11 @@ var _url = __webpack_require__(2);
 
 var _url2 = _interopRequireDefault(_url);
 
-var _loc = __webpack_require__(4);
+var _loc = __webpack_require__(3);
 
 var _loc2 = _interopRequireDefault(_loc);
 
-var _queryString = __webpack_require__(3);
+var _queryString = __webpack_require__(11);
 
 var _queryString2 = _interopRequireDefault(_queryString);
 
@@ -2023,7 +1991,7 @@ module.exports = {
 };
 
 /***/ },
-/* 7 */
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2795,7 +2763,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ },
-/* 8 */
+/* 7 */
 /***/ function(module, exports) {
 
 "use strict";
@@ -3253,7 +3221,7 @@ module.exports = {
 };
 
 /***/ },
-/* 9 */
+/* 8 */
 /***/ function(module, exports) {
 
 "use strict";
@@ -3262,7 +3230,7 @@ module.exports = {
 module.exports = function (title) {};
 
 /***/ },
-/* 10 */
+/* 9 */
 /***/ function(module, exports) {
 
 "use strict";
@@ -3274,7 +3242,7 @@ module.exports = {
 };
 
 /***/ },
-/* 11 */
+/* 10 */
 /***/ function(module, exports) {
 
 "use strict";
@@ -3311,6 +3279,38 @@ module.exports = {
         "650000000000": { "loc_id": "650000000000", "loc_namecn": "新疆", "available_val": false },
         "530000000000": { "loc_id": "530000000000", "loc_namecn": "云南", "available_val": false }
     }
+};
+
+/***/ },
+/* 11 */
+/***/ function(module, exports) {
+
+"use strict";
+"use strict";
+
+///获取url中的参数
+var getQueryString = function getQueryString(name) {
+  var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+  var result = window.location.search.substr(1).match(reg);
+  return result ? decodeURIComponent(result[2]) : null;
+};
+var getQueryObj = function getQueryObj() {
+  var str = window.location.search;
+  var num = str.indexOf("?");
+  if (num < 0) {
+    return false;
+  };
+  str = decodeURIComponent(str.substr(num + 1)); //取得所有参数   stringvar.substr(start [, length ]
+  var arr = str.split("&"); //各个参数放到数组里
+  var lastArr = {};
+  for (var i = 0; i < arr.length; i++) {
+    lastArr[arr[i].split("=")[0]] = arr[i].split("=")[1];
+  };
+  return lastArr;
+};
+module.exports = {
+  getQueryString: getQueryString,
+  getQueryObj: getQueryObj
 };
 
 /***/ },
@@ -3612,16 +3612,16 @@ var _changeUrl = __webpack_require__(1);
 
 var _changeUrl2 = _interopRequireDefault(_changeUrl);
 
-var _queryString = __webpack_require__(3);
+var _queryString = __webpack_require__(11);
 
 var _queryString2 = _interopRequireDefault(_queryString);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-__webpack_require__(7);
+__webpack_require__(6);
 __webpack_require__(0);
-var getVip = __webpack_require__(5);
-var input = __webpack_require__(6);
+var getVip = __webpack_require__(4);
+var input = __webpack_require__(5);
 var analysisReport = __webpack_require__(0);
 
 $(function () {
