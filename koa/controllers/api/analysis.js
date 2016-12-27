@@ -1,7 +1,6 @@
 
 function* getAnalysisReport() {
     var body = this.request.body;
-
     var postdata = {};
     postdata["req_id"] = body.reqId || "";
     postdata["exam_no"] = body.examNo || "";
