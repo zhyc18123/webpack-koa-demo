@@ -34,14 +34,14 @@ var getHostIpAddress = function() {
 var config = {
     "name": "新东方",
     hosts: getHostIpAddress() || "0.0.0.0",
-    port: 4300, // 端口
+    port: 3005, // 端口
     numCPUs: numCPUs,
     debug: debug,
     "cookieKey": "sf8dsfasd8sd7fsda8a123bbrc23ch41", //cookie 签名
     "expires": 7 * 24 * 60 * 60 * 1000, // 7Day
     "routerDir": "./router/", // 路由所在目录
     "viewDir": path.join(__dirname, "..", "views"), // 模板所在的目录
-    "logDir": path.join(__dirname, "..", "./"), // log所在的目录
+    "logDir": path.join(__dirname, "..", "/log"), // log所在的目录
     "staticDir": path.join(__dirname, "..", "/public/"), // 静态文件所在的目录
     "faviconDir": path.join(__dirname, "..", "/public/faicon.ico"), // logo icon 所在目录
     "interfaceStatus": "online", // 接口状态
