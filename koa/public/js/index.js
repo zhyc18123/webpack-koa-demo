@@ -159,6 +159,7 @@ var _init = function () {
 
 			renderEjsTplWithData("#line-chart-wmzy-link-modal-tpl", "#line-chart-wmzy-link-modal-wrap", schoolData);
 
+			var analyseReportWrap = document.getElementsByClassName('analyse-report-wrap');
 			var lineChartCanvas = document.getElementById('line-chart-modal-canvas'),
 			    context = lineChartCanvas.getContext('2d');
 
@@ -221,14 +222,18 @@ var _init = function () {
 			if (window.dpr == 1) {
 				labelWidth = labelWidth / 2;
 				lineChartCanvas.height = lineChartCanvas.height / 2;
-				startY = startY / 2;
-				offsetY = offsetY / 2;
+				startY = startY / 1.5;
+				offsetY = offsetY / 1.5;
 				lineDotStyle.lineWidth = 1;
 				lineDotStyle.dotRadius = 5;
 				triangleSide = 5;
 				labelBorderRadius /= 2;
 			} else if (window.dpr == 2) {
 				triangleSide = 10;
+			}
+
+			if (window.dpr == 1 && analyseReportWrap[0].clientWidth == 750) {
+				lineChartCanvas.height = 400;
 			}
 
 			_canvasGraph2.default.drawCoordinate(context, coordData, yearColor, historyColor, currentColor, labelWidth, lineChartCanvas.width, lineChartCanvas.height, startY, offsetY, lineChartFontStyle, lineDotStyle, window.dpr);
@@ -490,14 +495,17 @@ var _renderAnalysisReportPage = function _renderAnalysisReportPage(reportData) {
 		if (window.dpr == 1) {
 			labelWidth = labelWidth / 2;
 			lineChartCanvas.height = lineChartCanvas.height / 2;
-			startY = startY / 2;
-			offsetY = offsetY / 2;
+			startY = startY / 1.5;
+			offsetY = offsetY / 1.5;
 			lineDotStyle.lineWidth = 1;
 			lineDotStyle.dotRadius = 5;
 			triangleSide = 5;
 			labelBorderRadius /= 2;
 		} else if (window.dpr == 2) {
 			triangleSide = 10;
+		}
+		if (window.dpr == 1 && lineChartCanvas.parentNode.parentNode.clientWidth == 750) {
+			lineChartCanvas.height = 400;
 		}
 
 		_canvasGraph2.default.drawCoordinate(context, coordData, yearColor, historyColor, currentColor, labelWidth, lineChartCanvas.width, lineChartCanvas.height, startY, offsetY, lineChartFontStyle, lineDotStyle, window.dpr);
@@ -2925,7 +2933,7 @@ function drawCoordinate(ctx, coord, yearColor, historyColor, currentColor, label
 		yearTextWidth = ctx.measureText(year).width;
 
 		if (!yearTextHeight) {
-			yearTextHeight = ctx.measureText("年").width * 1.2;
+			yearTextHeight = ctx.measureText("年").width * 1.21;
 		}
 
 		ctx.fillText(year, x + labelWidth / 2 - yearTextWidth / 2, startY);

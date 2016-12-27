@@ -220,6 +220,12 @@ bottom: -.17rem;
   margin-left: percentage(((750-630)/2)/750);
 }
 
+.rectangular-title-m-w {
+
+  width: 62.73333%;
+  margin-left: 18.6333335%;
+}
+
 .enroll-canvas-wrap {
   position: relative;
   width: 100%;
@@ -259,10 +265,10 @@ bottom: -.17rem;
   position: relative;
   width: percentage(712/750);
   max-width: $m-width;
-  min-height: 300px;
   background: #f3f3f3;
   text-align: center;
   margin: 0 auto;
+  min-height: 300px;
 }
 
 .line-chart-wrap:before, .line-chart-wrap:after {
