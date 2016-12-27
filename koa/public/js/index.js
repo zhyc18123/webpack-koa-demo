@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 13);
+/******/ 	return __webpack_require__(__webpack_require__.s = 14);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -77,11 +77,11 @@ var _url = __webpack_require__(2);
 
 var _url2 = _interopRequireDefault(_url);
 
-var _canvasGraph = __webpack_require__(7);
+var _canvasGraph = __webpack_require__(8);
 
 var _canvasGraph2 = _interopRequireDefault(_canvasGraph);
 
-var _loc = __webpack_require__(3);
+var _loc = __webpack_require__(4);
 
 var _loc2 = _interopRequireDefault(_loc);
 
@@ -89,21 +89,21 @@ var _changeUrl = __webpack_require__(1);
 
 var _changeUrl2 = _interopRequireDefault(_changeUrl);
 
-var _ejsTpl = __webpack_require__(9);
+var _ejsTpl = __webpack_require__(10);
 
 var _ejsTpl2 = _interopRequireDefault(_ejsTpl);
 
-var _scollEvent = __webpack_require__(11);
+var _scollEvent = __webpack_require__(12);
 
 var _scollEvent2 = _interopRequireDefault(_scollEvent);
 
-var _provinceList = __webpack_require__(14);
+var _provinceList = __webpack_require__(11);
 
 var _provinceList2 = _interopRequireDefault(_provinceList);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var Tpl = __webpack_require__(12);
+var Tpl = __webpack_require__(13);
 
 var REQUESTPARAM = {};
 
@@ -664,6 +664,38 @@ module.exports = {
 
 /***/ },
 /* 3 */
+/***/ function(module, exports) {
+
+"use strict";
+"use strict";
+
+///获取url中的参数
+var getQueryString = function getQueryString(name) {
+  var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+  var result = window.location.search.substr(1).match(reg);
+  return result ? decodeURIComponent(result[2]) : null;
+};
+var getQueryObj = function getQueryObj() {
+  var str = window.location.search;
+  var num = str.indexOf("?");
+  if (num < 0) {
+    return false;
+  };
+  str = decodeURIComponent(str.substr(num + 1)); //取得所有参数   stringvar.substr(start [, length ]
+  var arr = str.split("&"); //各个参数放到数组里
+  var lastArr = {};
+  for (var i = 0; i < arr.length; i++) {
+    lastArr[arr[i].split("=")[0]] = arr[i].split("=")[1];
+  };
+  return lastArr;
+};
+module.exports = {
+  getQueryString: getQueryString,
+  getQueryObj: getQueryObj
+};
+
+/***/ },
+/* 4 */
 /***/ function(module, exports) {
 
 "use strict";
@@ -1510,7 +1542,7 @@ module.exports.isNoData2015 = isNoData2015;
 module.exports.isDataDealing = isDataDealing;
 
 /***/ },
-/* 4 */
+/* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1524,7 +1556,7 @@ var _changeUrl = __webpack_require__(1);
 
 var _changeUrl2 = _interopRequireDefault(_changeUrl);
 
-var _changeTitle = __webpack_require__(8);
+var _changeTitle = __webpack_require__(9);
 
 var _changeTitle2 = _interopRequireDefault(_changeTitle);
 
@@ -1694,7 +1726,7 @@ module.exports = {
 };
 
 /***/ },
-/* 5 */
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1704,11 +1736,11 @@ var _url = __webpack_require__(2);
 
 var _url2 = _interopRequireDefault(_url);
 
-var _loc = __webpack_require__(3);
+var _loc = __webpack_require__(4);
 
 var _loc2 = _interopRequireDefault(_loc);
 
-var _queryString = __webpack_require__(10);
+var _queryString = __webpack_require__(3);
 
 var _queryString2 = _interopRequireDefault(_queryString);
 
@@ -1983,7 +2015,7 @@ module.exports = {
 };
 
 /***/ },
-/* 6 */
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2755,7 +2787,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ },
-/* 7 */
+/* 8 */
 /***/ function(module, exports) {
 
 "use strict";
@@ -3213,7 +3245,7 @@ module.exports = {
 };
 
 /***/ },
-/* 8 */
+/* 9 */
 /***/ function(module, exports) {
 
 "use strict";
@@ -3222,7 +3254,7 @@ module.exports = {
 module.exports = function (title) {};
 
 /***/ },
-/* 9 */
+/* 10 */
 /***/ function(module, exports) {
 
 "use strict";
@@ -3234,39 +3266,47 @@ module.exports = {
 };
 
 /***/ },
-/* 10 */
+/* 11 */
 /***/ function(module, exports) {
 
 "use strict";
 "use strict";
 
-///获取url中的参数
-var getQueryString = function getQueryString(name) {
-  var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
-  var result = window.location.search.substr(1).match(reg);
-  return result ? decodeURIComponent(result[2]) : null;
-};
-var getQueryObj = function getQueryObj() {
-  var str = window.location.search;
-  var num = str.indexOf("?");
-  if (num < 0) {
-    return false;
-  };
-  str = decodeURIComponent(str.substr(num + 1)); //取得所有参数   stringvar.substr(start [, length ]
-  var arr = str.split("&"); //各个参数放到数组里
-  var lastArr = {};
-  for (var i = 0; i < arr.length; i++) {
-    lastArr[arr[i].split("=")[0]] = arr[i].split("=")[1];
-  };
-  return lastArr;
-};
 module.exports = {
-  getQueryString: getQueryString,
-  getQueryObj: getQueryObj
+    SCORE_AVAILABLE_PROVINCE: {
+        "340000000000": { "loc_id": "340000000000", "loc_namecn": "安徽", "available_val": false },
+        "110000000000": { "loc_id": "110000000000", "loc_namecn": "北京", "available_val": false },
+        "500000000000": { "loc_id": "500000000000", "loc_namecn": "重庆", "available_val": false },
+        "350000000000": { "loc_id": "350000000000", "loc_namecn": "福建", "available_val": false },
+        "620000000000": { "loc_id": "620000000000", "loc_namecn": "甘肃", "available_val": false },
+        "520000000000": { "loc_id": "520000000000", "loc_namecn": "贵州", "available_val": false },
+        "440000000000": { "loc_id": "440000000000", "loc_namecn": "广东", "available_val": false },
+        "450000000000": { "loc_id": "450000000000", "loc_namecn": "广西", "available_val": false },
+        "420000000000": { "loc_id": "420000000000", "loc_namecn": "湖北", "available_val": false },
+        "460000000000": { "loc_id": "460000000000", "loc_namecn": "海南", "available_val": false },
+        "230000000000": { "loc_id": "230000000000", "loc_namecn": "黑龙江", "available_val": false },
+        "430000000000": { "loc_id": "430000000000", "loc_namecn": "湖南", "available_val": false },
+        "410000000000": { "loc_id": "410000000000", "loc_namecn": "河南", "available_val": false },
+        "130000000000": { "loc_id": "130000000000", "loc_namecn": "河北", "available_val": false },
+        "220000000000": { "loc_id": "220000000000", "loc_namecn": "吉林", "available_val": false },
+        "360000000000": { "loc_id": "360000000000", "loc_namecn": "江西", "available_val": false },
+        "320000000000": { "loc_id": "320000000000", "loc_namecn": "江苏", "available_val": false },
+        "210000000000": { "loc_id": "210000000000", "loc_namecn": "辽宁", "available_val": false },
+        "640000000000": { "loc_id": "640000000000", "loc_namecn": "宁夏", "available_val": false },
+        "150000000000": { "loc_id": "150000000000", "loc_namecn": "内蒙古", "available_val": false },
+        "630000000000": { "loc_id": "630000000000", "loc_namecn": "青海", "available_val": false },
+        "140000000000": { "loc_id": "140000000000", "loc_namecn": "山西", "available_val": false },
+        "370000000000": { "loc_id": "370000000000", "loc_namecn": "山东", "available_val": false },
+        "610000000000": { "loc_id": "610000000000", "loc_namecn": "陕西", "available_val": false },
+        "510000000000": { "loc_id": "510000000000", "loc_namecn": "四川", "available_val": false },
+        "120000000000": { "loc_id": "120000000000", "loc_namecn": "天津", "available_val": false },
+        "650000000000": { "loc_id": "650000000000", "loc_namecn": "新疆", "available_val": false },
+        "530000000000": { "loc_id": "530000000000", "loc_namecn": "云南", "available_val": false }
+    }
 };
 
 /***/ },
-/* 11 */
+/* 12 */
 /***/ function(module, exports) {
 
 "use strict";
@@ -3312,7 +3352,7 @@ module.exports = {
 };
 
 /***/ },
-/* 12 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3554,7 +3594,7 @@ var __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
 }.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
 /***/ },
-/* 13 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3564,16 +3604,16 @@ var _changeUrl = __webpack_require__(1);
 
 var _changeUrl2 = _interopRequireDefault(_changeUrl);
 
-var _queryString = __webpack_require__(10);
+var _queryString = __webpack_require__(3);
 
 var _queryString2 = _interopRequireDefault(_queryString);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-__webpack_require__(6);
+__webpack_require__(7);
 __webpack_require__(0);
-var getVip = __webpack_require__(4);
-var input = __webpack_require__(5);
+var getVip = __webpack_require__(5);
+var input = __webpack_require__(6);
 var analysisReport = __webpack_require__(0);
 
 $(function () {
@@ -3668,46 +3708,6 @@ $(function () {
 	};
 	init();
 });
-
-/***/ },
-/* 14 */
-/***/ function(module, exports) {
-
-"use strict";
-"use strict";
-
-module.exports = {
-    SCORE_AVAILABLE_PROVINCE: {
-        "340000000000": { "loc_id": "340000000000", "loc_namecn": "安徽", "available_val": false },
-        "110000000000": { "loc_id": "110000000000", "loc_namecn": "北京", "available_val": false },
-        "500000000000": { "loc_id": "500000000000", "loc_namecn": "重庆", "available_val": false },
-        "350000000000": { "loc_id": "350000000000", "loc_namecn": "福建", "available_val": false },
-        "620000000000": { "loc_id": "620000000000", "loc_namecn": "甘肃", "available_val": false },
-        "520000000000": { "loc_id": "520000000000", "loc_namecn": "贵州", "available_val": false },
-        "440000000000": { "loc_id": "440000000000", "loc_namecn": "广东", "available_val": false },
-        "450000000000": { "loc_id": "450000000000", "loc_namecn": "广西", "available_val": false },
-        "420000000000": { "loc_id": "420000000000", "loc_namecn": "湖北", "available_val": false },
-        "460000000000": { "loc_id": "460000000000", "loc_namecn": "海南", "available_val": false },
-        "230000000000": { "loc_id": "230000000000", "loc_namecn": "黑龙江", "available_val": false },
-        "430000000000": { "loc_id": "430000000000", "loc_namecn": "湖南", "available_val": false },
-        "410000000000": { "loc_id": "410000000000", "loc_namecn": "河南", "available_val": false },
-        "130000000000": { "loc_id": "130000000000", "loc_namecn": "河北", "available_val": false },
-        "220000000000": { "loc_id": "220000000000", "loc_namecn": "吉林", "available_val": false },
-        "360000000000": { "loc_id": "360000000000", "loc_namecn": "江西", "available_val": false },
-        "320000000000": { "loc_id": "320000000000", "loc_namecn": "江苏", "available_val": false },
-        "210000000000": { "loc_id": "210000000000", "loc_namecn": "辽宁", "available_val": false },
-        "640000000000": { "loc_id": "640000000000", "loc_namecn": "宁夏", "available_val": false },
-        "150000000000": { "loc_id": "150000000000", "loc_namecn": "内蒙古", "available_val": false },
-        "630000000000": { "loc_id": "630000000000", "loc_namecn": "青海", "available_val": false },
-        "140000000000": { "loc_id": "140000000000", "loc_namecn": "山西", "available_val": false },
-        "370000000000": { "loc_id": "370000000000", "loc_namecn": "山东", "available_val": false },
-        "610000000000": { "loc_id": "610000000000", "loc_namecn": "陕西", "available_val": false },
-        "510000000000": { "loc_id": "510000000000", "loc_namecn": "四川", "available_val": false },
-        "120000000000": { "loc_id": "120000000000", "loc_namecn": "天津", "available_val": false },
-        "650000000000": { "loc_id": "650000000000", "loc_namecn": "新疆", "available_val": false },
-        "530000000000": { "loc_id": "530000000000", "loc_namecn": "云南", "available_val": false }
-    }
-};
 
 /***/ }
 /******/ ]);
