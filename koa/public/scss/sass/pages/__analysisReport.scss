@@ -121,6 +121,7 @@ bottom: -.17rem;
   text-align: center;
   li {
     display: inline-block;
+    text-align: left;
   }
 }
 .score-rank-disclaim{
@@ -195,16 +196,13 @@ bottom: -.17rem;
 
 .rectangular-title {
   position: relative;
-  width: percentage(448/750);
-  height: 0.6rem;
-  line-height: 0.6rem;
-  margin-top: percentage(65/750);
-  margin-left: percentage(((750-448)/2)/750);
+  width: 59.73333%;
+  height: 0.8rem;
+  line-height: 0.8rem;
+  margin-top: 8.66667%;
+  margin-left: 20.13333%;
   background: #3e3a39;
-  background: linear-gradient(135deg, transparent 0px, #3e3a39 0) top left,
-  linear-gradient(225deg, transparent 0px, #3e3a39 0) top right,
-  linear-gradient(-45deg, transparent 0.15rem, #3e3a39 0) bottom right,
-  linear-gradient(45deg, transparent 0px, #3e3a39 0) bottom left;
+  background: linear-gradient(135deg, transparent 0px, #3e3a39 0) top left,linear-gradient(225deg, transparent 0px, #3e3a39 0) top right,linear-gradient(-45deg, transparent 0.2rem, #3e3a39 0) bottom right,linear-gradient(45deg, transparent 0.2rem, #3e3a39 0) bottom left;
   background-size: 60% 55%;
   background-repeat: no-repeat;
   text-align: center;
