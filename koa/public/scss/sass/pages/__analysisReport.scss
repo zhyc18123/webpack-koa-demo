@@ -625,6 +625,9 @@ bottom: -.17rem;
     @include font-size(6);
     color: #999999;
     z-index: 30;
+    &:hover{
+      cursor: pointer;
+    }
   }
 }
 
