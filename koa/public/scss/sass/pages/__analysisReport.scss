@@ -54,6 +54,9 @@ $yellowCol: #f9be00;
 }
 
 .report-header {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
   padding-bottom: percentage(20/750);
   .header-bg {
     position: absolute;
