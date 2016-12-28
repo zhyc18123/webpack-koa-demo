@@ -77,6 +77,10 @@
 				border-bottom: $border solid #ab8614;
 				position:relative;
 				top: .15rem;
+				a{
+					color: $red-col;
+					text-decoration: underline;
+				}
 			}
 			.how-down{
 				height: 2.1rem;
@@ -87,7 +91,8 @@
 					margin-top: .2rem;
 				}
 				span{
-					color: $red-col;
+					color: $font-heicol;
+					opacity: .5;
 				}
 			}
 			.how-active{

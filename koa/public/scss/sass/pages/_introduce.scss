@@ -47,7 +47,14 @@
 		margin: .2rem 0;
 	}
 	em{
-		color: $yellow-col;
+		color: $whi-col;
+		a{
+			color: $red-col;
+			text-decoration: underline;
+		}
+	}
+	.free-get{
+		font-weight: bold;
 	}
 }
 .get-vip{
